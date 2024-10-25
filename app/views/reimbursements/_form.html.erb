@@ -1,0 +1,67 @@
+<%= form_with(model: reimbursement) do |form| %>
+  <% if reimbursement.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(reimbursement.errors.count, "error") %> prohibited this reimbursement from being saved:</h2>
+
+      <ul>
+        <% reimbursement.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :employee_id, style: "display: block" %>
+    <%= form.number_field :employee_id %>
+  </div>
+
+  <div>
+    <%= form.label :category, style: "display: block" %>
+    <%= form.text_field :category %>
+  </div>
+
+  <div>
+    <%= form.label :activity_date, style: "display: block" %>
+    <%= form.datetime_field :activity_date %>
+  </div>
+
+  <div>
+    <%= form.label :invoice_reference_number, style: "display: block" %>
+    <%= form.text_field :invoice_reference_number %>
+  </div>
+
+  <div>
+    <%= form.label :invoice_amount, style: "display: block" %>
+    <%= form.text_field :invoice_amount %>
+  </div>
+
+  <div>
+    <%= form.label :reimbursable_amount, style: "display: block" %>
+    <%= form.text_field :reimbursable_amount %>
+  </div>
+
+  <div>
+    <%= form.label :reimbursed_amount, style: "display: block" %>
+    <%= form.text_field :reimbursed_amount %>
+  </div>
+
+  <div>
+    <%= form.label :participated_employee_ids, style: "display: block" %>
+    <%= form.number_field :participated_employee_ids %>
+  </div>
+
+  <div>
+    <%= form.label :supplier, style: "display: block" %>
+    <%= form.text_field :supplier %>
+  </div>
+
+  <div>
+    <%= form.label :status, style: "display: block" %>
+    <%= form.text_field :status %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

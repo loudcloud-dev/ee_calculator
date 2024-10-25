@@ -1,16 +1,13 @@
 ActiveAdmin.register Employee do
-  permit_params :first_name, :last_name, :nickname, :status
+  permit_params :first_name,
+                :last_name,
+                :nickname,
+                :status
 
-  filter :first_name
-  filter :last_name
-  filter :nickname
-  filter :status
-  filter :created_at
-  filter :updated_at
+  remove_filter :reimbursements
+  config.sort_order = 'id_asc'
 
   actions :all, except: [:destroy]
-
-  config.sort_order = 'id_asc'
   
   form do |f|
     f.inputs do
