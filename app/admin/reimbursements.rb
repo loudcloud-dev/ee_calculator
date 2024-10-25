@@ -25,6 +25,14 @@ ActiveAdmin.register Reimbursement do
       link_to reimbursement.employee.nickname, admin_employee_path(reimbursement.employee)
     end
 
+    column "Participated Employees", :participated_employee_ids do |reimbursement|
+      reimbursement.participated_employee_ids.map do |id|
+        employee = Employee.find(id)
+
+        employee.nickname
+      end
+    end
+
     column :category
     column :activity_date
     column :invoice_reference_number
@@ -80,7 +88,7 @@ ActiveAdmin.register Reimbursement do
       f.input :reimbursable_amount
       f.input :reimbursed_amount
       f.input :supplier
-      f.input :status, as: :select, collection: ['Pending', 'Reimbursed', 'Cancelled']
+      f.input :status, as: :select, collection: ['Pending', 'Reimbursed', 'Cancelled'], include_blank: false
     end
   
     f.actions

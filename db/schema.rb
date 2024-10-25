@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_25_025849) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_25_080849) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -49,8 +49,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_025849) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "reimbursement_items", force: :cascade do |t|
+    t.integer "reimbursement_id", null: false
+    t.integer "employee_id", null: false
+    t.decimal "shared_amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "reimbursements", force: :cascade do |t|
-    t.integer "employee_id"
+    t.integer "employee_id", null: false
     t.string "category"
     t.datetime "activity_date"
     t.string "invoice_reference_number"
@@ -59,7 +67,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_025849) do
     t.decimal "reimbursed_amount"
     t.integer "participated_employee_ids", array: true
     t.string "supplier"
-    t.string "status"
+    t.string "status", default: "pending"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
