@@ -11,43 +11,49 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :employee_id %>
-    <%= form.select :employee_id, Employee.order(:nickname).pluck(:nickname, :id), {}, id: 'employee_select', data: { controller: 'select' } %>
-  </div>
+  <div class="container col-12 col-md-6 my-2">
+		<p class="h4">Create Reimbursement</p>
 
+    <div class="row">
+			<div class="col-6">
+				<%= form.label :employee_id %>
+				<%= form.select :employee_id, Employee.order(:nickname).pluck(:nickname, :id), { prompt: "Select an employee" }, id: 'employee_select', data: { controller: 'select' } %>
+			</div>
 
-  <div>
-    <%= form.label :category, style: "display: block" %>
-    <%= form.text_field :category %>
-  </div>
+			<div class="col-6">
+				<%= form.label :category %>
+				<%= form.select :employee_id, Category.order(:name).pluck(:name, :id), { prompt: "Select a category" }, id: 'category_select', data: { controller: 'select' } %>
+			</div>
 
-  <div>
-    <%= form.label :activity_date, style: "display: block" %>
-    <%= form.datetime_field :activity_date %>
-  </div>
+			<div>
+				<%= form.label :activity_date, class: "form-label" %>
+				<%= form.date_field :activity_date, max: 0.days.ago, class: "form-control" %>
+			</div>
 
-  <div>
-    <%= form.label :invoice_reference_number, style: "display: block" %>
-    <%= form.text_field :invoice_reference_number %>
-  </div>
+			<div class="col-6">
+				<%= form.label :invoice_reference_number, class: "form-label" %>
+				<%= form.text_field :invoice_reference_number, class: "form-control" %>
+			</div>
 
-  <div>
-    <%= form.label :invoice_amount, style: "display: block" %>
-    <%= form.text_field :invoice_amount %>
-  </div>
+			<div class="col-6">
+				<%= form.label :invoice_amount, class: "form-label" %>
+				<%= form.text_field :invoice_amount, class: "form-control" %>
+			</div>
 
-  <div>
-    <%= form.label :participated_employee_ids, style: "display: block" %>
-    <%= form.number_field :participated_employee_ids %>
-  </div>
+			<div class="col-6">
+				<%= form.label :participated_employee_ids, class: "form-label" %>
+				<%= form.number_field :participated_employee_ids, class: "form-control" %>
+			</div>
 
-  <div>
-    <%= form.label :supplier, style: "display: block" %>
-    <%= form.text_field :supplier %>
-  </div>
+			<div class="col-6">
+				<%= form.label :supplier, class: "form-label" %>
+				<%= form.text_field :supplier, class: "form-control" %>
+			</div>
 
-  <div>
-    <%= form.submit %>
+			<div class="d-flex justify-content-end my-3">
+				<%= form.submit "Submit", class: "btn btn-primary" %>
+			</div>
+
+    </div>
   </div>
 <% end %>
