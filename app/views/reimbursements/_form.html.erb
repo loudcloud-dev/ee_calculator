@@ -12,9 +12,10 @@
   <% end %>
 
   <div>
-    <%= form.label :employee_id, style: "display: block" %>
-    <%= form.number_field :employee_id %>
+    <%= form.label :employee_id %>
+    <%= form.select :employee_id, Employee.order(:nickname).pluck(:nickname, :id), {}, id: 'employee_select', data: { controller: 'select' } %>
   </div>
+
 
   <div>
     <%= form.label :category, style: "display: block" %>
@@ -34,16 +35,6 @@
   <div>
     <%= form.label :invoice_amount, style: "display: block" %>
     <%= form.text_field :invoice_amount %>
-  </div>
-
-  <div>
-    <%= form.label :reimbursable_amount, style: "display: block" %>
-    <%= form.text_field :reimbursable_amount %>
-  </div>
-
-  <div>
-    <%= form.label :reimbursed_amount, style: "display: block" %>
-    <%= form.text_field :reimbursed_amount %>
   </div>
 
   <div>
