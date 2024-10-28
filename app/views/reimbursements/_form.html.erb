@@ -41,8 +41,8 @@
 			</div>
 
 			<div class="col-6">
-				<%= form.label :participated_employee_ids, class: "form-label" %>
-				<%= form.number_field :participated_employee_ids, class: "form-control" %>
+				<%= form.label :participated_employee_ids, "Participated Employee", class: "form-label" %>
+				<%= form.select :participated_employee_ids, Employee.order(:nickname).pluck(:nickname, :id), { prompt: "Select an employee" }, { id: 'employee_select', multiple: true, data: { controller: 'select' } } %>
 			</div>
 
 			<div class="col-6">
