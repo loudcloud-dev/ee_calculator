@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  employee_id: 1
+  category: MyString
+  activity_date: 2024-10-25 10:58:49
+  invoice_reference_number: MyString
+  invoice_amount: 9.99
+  reimbursable_amount: 9.99
+  reimbursed_amount: 9.99
+  participated_employee_ids: 1
+  supplier: MyString
+  status: MyString
+
+two:
+  employee_id: 1
+  category: MyString
+  activity_date: 2024-10-25 10:58:49
+  invoice_reference_number: MyString
+  invoice_amount: 9.99
+  reimbursable_amount: 9.99
+  reimbursed_amount: 9.99
+  participated_employee_ids: 1
+  supplier: MyString
+  status: MyString

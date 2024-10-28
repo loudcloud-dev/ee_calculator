@@ -1,0 +1,59 @@
+<%= form_with(model: reimbursement) do |form| %>
+  <% if reimbursement.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(reimbursement.errors.count, "error") %> prohibited this reimbursement from being saved:</h2>
+
+      <ul>
+        <% reimbursement.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="container col-12 col-md-6 my-2">
+		<p class="h4">Create Reimbursement</p>
+
+    <div class="row">
+			<div class="col-6">
+				<%= form.label :employee_id %>
+				<%= form.select :employee_id, Employee.order(:nickname).pluck(:nickname, :id), { prompt: "Select an employee" }, id: 'employee_select', data: { controller: 'select' } %>
+			</div>
+
+			<div class="col-6">
+				<%= form.label :category %>
+				<%= form.select :employee_id, Category.order(:name).pluck(:name, :id), { prompt: "Select a category" }, id: 'category_select', data: { controller: 'select' } %>
+			</div>
+
+			<div>
+				<%= form.label :activity_date, class: "form-label" %>
+				<%= form.date_field :activity_date, max: 0.days.ago, class: "form-control" %>
+			</div>
+
+			<div class="col-6">
+				<%= form.label :invoice_reference_number, class: "form-label" %>
+				<%= form.text_field :invoice_reference_number, class: "form-control" %>
+			</div>
+
+			<div class="col-6">
+				<%= form.label :invoice_amount, class: "form-label" %>
+				<%= form.text_field :invoice_amount, class: "form-control" %>
+			</div>
+
+			<div class="col-6">
+				<%= form.label :participated_employee_ids, "Participated Employee", class: "form-label" %>
+				<%= form.select :participated_employee_ids, Employee.order(:nickname).pluck(:nickname, :id), { prompt: "Select an employee" }, { id: 'employee_select', multiple: true, data: { controller: 'select' } } %>
+			</div>
+
+			<div class="col-6">
+				<%= form.label :supplier, class: "form-label" %>
+				<%= form.text_field :supplier, class: "form-control" %>
+			</div>
+
+			<div class="d-flex justify-content-end my-3">
+				<%= form.submit "Submit", class: "btn btn-primary" %>
+			</div>
+
+    </div>
+  </div>
+<% end %>
