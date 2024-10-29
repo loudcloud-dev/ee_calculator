@@ -4,10 +4,10 @@ ActiveAdmin.register Employee do
                 :nickname,
                 :status
 
+  actions :all, except: [:destroy]
+
   remove_filter :reimbursements
   config.sort_order = 'id_asc'
-
-  actions :all, except: [:destroy]
   
   form do |f|
     f.inputs do

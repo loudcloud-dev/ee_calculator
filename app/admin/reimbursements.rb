@@ -10,13 +10,15 @@ ActiveAdmin.register Reimbursement do
                 :status,
                 participated_employee_ids: []
 
+  # Actions
   before_action :participated_employees, only: [:create, :update]
-
-  preserve_default_filters!
-  filter :employee, as: :select, collection: -> { Employee.all.map { |employee| [employee.nickname, employee.id] } }
-  config.sort_order = 'activity_date_desc'
- 
+  before_action :load_collections, only: [:index, :new, :edit]
   actions :all, except: [:destroy]
+
+  # Filters
+  preserve_default_filters!
+  filter :employee, as: :select, collection: -> { @employees }
+  config.sort_order = 'activity_date_desc'
 
   index do
     id_column
@@ -26,14 +28,14 @@ ActiveAdmin.register Reimbursement do
     end
 
     column "Participated Employees", :participated_employee_ids do |reimbursement|
-      reimbursement.participated_employee_ids.map do |id|
-        employee = Employee.find(id)
-
-        employee.nickname
-      end
+      reimbursement.participated_employees.map(&:nickname).join(", ")
     end
 
-    column :category
+    column :category do |reimbursement|
+      category = Category.find_by(id: reimbursement.category, status: "active")
+      category.name
+    end
+
     column :activity_date
     column :invoice_reference_number
     column :invoice_amount
@@ -53,11 +55,7 @@ ActiveAdmin.register Reimbursement do
       end
     
       row :participated_employee_ids do |reimbursement|
-        reimbursement.participated_employee_ids.map do |id|
-          employee = Employee.find(id)
-
-          employee.nickname
-        end
+        reimbursement.participated_employees.map(&:nickname).join(", ")
       end
     
       row :category
@@ -75,26 +73,27 @@ ActiveAdmin.register Reimbursement do
 
   form do |f|
     f.inputs do
-      f.input :employee_id, as: :select, collection: Employee.all.map { |employee| [employee.nickname, employee.id] },
-              prompt: "Select Assigned Employee"
-
-      f.input :participated_employee_ids, as: :select, collection: Employee.all.map { |e| [e.nickname, e.id] }, 
-              input_html: { multiple: true }, label: 'Select Participating Employees'
-
-      f.input :category
-      f.input :activity_date, as: :datepicker
+      f.input :employee_id, as: :select, collection: employees, prompt: "Select Assigned Employee"
+      f.input :participated_employee_ids, as: :select, collection: employees, input_html: { multiple: true }
+      f.input :category, as: :select, collection: categories, prompt: "Select a category"
+      f.input :activity_date, as: :datepicker, input_html: { max: Date.today }
       f.input :invoice_reference_number
       f.input :invoice_amount
       f.input :reimbursable_amount
       f.input :reimbursed_amount
       f.input :supplier
-      f.input :status, as: :select, collection: ['Pending', 'Reimbursed', 'Cancelled'], include_blank: false
+      f.input :status, as: :select, collection: ['Pending', 'Reimbursed'], include_blank: false
     end
   
     f.actions
   end
   
   controller do
+    def load_collections
+      @employees = Employee.where(status: "active").pluck(:nickname, :id)
+      @categories = Category.where(status: "active").pluck(:name, :id)
+    end
+
     def participated_employees
       params[:reimbursement][:participated_employee_ids].reject!(&:blank?) if params[:reimbursement][:participated_employee_ids]
     end
