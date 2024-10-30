@@ -5,11 +5,23 @@ class Reimbursement < ApplicationRecord
   validates :employee_id, presence: true
   validates :category_id, presence: true
   validates :activity_date, presence: true
-  validates :invoice_reference_number, presence: true, uniqueness: true
+  validates :invoice_reference_number, presence: true
   validates :invoice_amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :supplier, presence: true
+  validate :unique_invoice_reference_number
 
   def participated_employees
     Employee.where(id: participated_employee_ids, status: "active")
+  end
+
+  private
+
+  def unique_invoice_reference_number
+    if Reimbursement.where(invoice_reference_number: invoice_reference_number)
+                    .where.not(id: id)
+                    .where.not(status: "cancelled")
+                    .exists?
+      errors.add(:invoice_reference_number, "has already been taken")
+    end
   end
 end

@@ -1,5 +1,7 @@
 ActiveAdmin.register ReimbursementItem do
-  actions :all, except: [:new, :edit, :update, :destroy]
+  actions :all, except: [:new, :destroy]
+
+  config.sort_order = 'id_asc'
 
   index do
     id_column

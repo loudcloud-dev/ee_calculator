@@ -82,7 +82,7 @@ ActiveAdmin.register Reimbursement do
       f.input :reimbursable_amount
       f.input :reimbursed_amount
       f.input :supplier
-      f.input :status, as: :select, collection: ['Pending', 'Reimbursed'], include_blank: false
+      f.input :status, as: :select, collection: [["Pending", "pending"], ["Reimbursed", "reimbursed"], ["Cancelled", "cancelled"]], include_blank: false
     end
   
     f.actions

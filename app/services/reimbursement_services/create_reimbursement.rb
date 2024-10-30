@@ -2,7 +2,7 @@
 module ReimbursementServices
   class CreateReimbursement < ApplicationService
     def initialize(params)
-      @reimbursement_params = params
+      @reimbursement = Reimbursement.new(params)
     end
 
     def perform
@@ -12,90 +12,79 @@ module ReimbursementServices
     private
 
     def process
-      # Create and save the reimbursement record
-      @reimbursement = Reimbursement.new(@reimbursement_params)
+      return @reimbursement.errors.full_messages unless @reimbursement.save
+    
+      employee_budgets = calculate_employee_budget(@reimbursement)
+      distributions = distribute_expenses(@reimbursement.invoice_amount.to_f, employee_budgets)
+    
+      @reimbursement.update(reimbursable_amount: distributions.sum { |item| item[:shared_amount] })
+    
+      create_reimbursement_items(distributions)
+    end    
 
-      remaining_budgets = calculate_remaining_budgets(@reimbursement)
-      distribute_budget(@reimbursement.invoice_amount, remaining_budgets)
-      
-      # if @reimbursement.save
-      #   puts "Reimbursement saved with ID: #{@reimbursement.id}"
-        
-      #   # Call method to calculate and distribute the budget for reimbursement items
-      #   calculate_remaining_budget(@reimbursement)
-      # else
-      #   puts "Failed to save Reimbursement: #{@reimbursement.errors.full_messages}"
-      # end
-    end
+    # Find the participating employees to calculate and save their remaining budget for the current month (from the 6th of the current month to the 5th of the next month)
+    def calculate_employee_budget(reimbursement)
+      category_id = reimbursement.category_id
 
-    def calculate_remaining_budgets(reimbursement)
-      # Retrieve the invoice amount and participating employee IDs from params
-      category = reimbursement.category_id
-      invoice_amount = reimbursement.invoice_amount.to_f
-      
-      monthly_budget = 1000
-      remaining_budgets = {}
+      employee_budgets = {}
+      monthly_budget = ENV['MONTHLY_BUDGET'].to_i
 
-      employees = Employee.where(id: @reimbursement_params[:participated_employee_ids])
+      employees = Employee.where(id: reimbursement.participated_employee_ids)
       employees.each do |employee|
-        total_shared_amount = ReimbursementItem.joins(:reimbursement)
-                                               .where(employee_id: employee.id)
-                                               .where(reimbursements: { category_id: category })
-                                               .sum(:shared_amount)
+        used_budget = ReimbursementItem.used_budget_sum(employee.id, category_id)
 
-        remaining_budget = monthly_budget - total_shared_amount
-        remaining_budgets[employee.id] = remaining_budget if remaining_budget > 0
+        employee_budget = monthly_budget - used_budget
+        employee_budgets[employee.id] = employee_budget > 0 ? employee_budget : 0
       end
 
-      remaining_budgets
+      employee_budgets
     end
 
-    def distribute_budget(invoice_amount, remaining_budgets)
-      num_employees = remaining_budgets.length
-      return if num_employees.zero?
+    def distribute_expenses(invoice_amount, employee_budgets)
+      distributions = allocate_initial_amount(invoice_amount, employee_budgets)
+      allocate_excess_amount(invoice_amount, employee_budgets, distributions)
+    end    
 
-      initial_share = invoice_amount / num_employees
-      reimbursement_items = []
+    # Check if employee can shoulder the initial shared amount or just their remaining budget.
+    def allocate_initial_amount(invoice_amount, employee_budgets)
+      initial_share = invoice_amount / employee_budgets.length
+      distributions = []
 
-      remaining_budgets.each do |employee_id, remaining_budget|
-        shared_amount = [initial_share, remaining_budget].min
-        reimbursement_items << { employee_id: employee_id, shared_amount: shared_amount }
+      employee_budgets.each do |employee_id, employee_budget|
+        shared_amount = [initial_share, employee_budget].min
+        distributions << { employee_id: employee_id, shared_amount: shared_amount }
       end
 
-      # Adjust if total allocated exceeds invoice amount
-      total_allocated = reimbursement_items.sum { |item| item[:shared_amount] }
-      if total_allocated < invoice_amount
-        excess_needed = invoice_amount - total_allocated
+      distributions
+    end
 
-        # Distribute excess to employees with remaining budgets
-        reimbursement_items.each do |item|
+    # Check if there's an excess amount. Distribute the excess amount to those employees that still have available budget.
+    def allocate_excess_amount(invoice_amount, employee_budgets, distributions)
+      total_allocated = distributions.sum { |item| item[:shared_amount] }
+      if total_allocated < invoice_amount
+        excess_amount = invoice_amount - total_allocated
+
+        distributions.each do |item|
           employee_id = item[:employee_id]
-          additional_share = [excess_needed, remaining_budgets[employee_id] - item[:shared_amount]].min
+          additional_share = [excess_amount, employee_budgets[employee_id] - item[:shared_amount]].min
 
           item[:shared_amount] += additional_share
-          excess_needed -= additional_share
-          break if excess_needed <= 0
+          excess_amount -= additional_share
+          break if excess_amount <= 0
         end
       end
 
-      puts "Invoice Amount: #{invoice_amount}"
-      puts "Reimbursement Items: #{reimbursement_items}"
-      puts "Reimbursable Amount: #{reimbursement_items.sum { |item| item[:shared_amount] }}"
-      
-      reimbursement_items.each do |item|
-        puts "Employee ID: #{item[:employee_id]}, Shared Amount: #{item[:shared_amount]}"
+      distributions
+    end
+
+    def create_reimbursement_items(distributions)
+      distributions.each do |item|
+        ReimbursementItem.create!(
+          reimbursement_id: @reimbursement.id,
+          employee_id: item[:employee_id],
+          shared_amount: item[:shared_amount]
+        )
       end
-
-      # Save reimbursement items
-      # reimbursement_items.each do |item|
-      #   ReimbursementItem.create(
-      #     reimbursement_id: @reimbursement.id,
-      #     employee_id: item[:employee_id],
-      #     shared_amount: item[:shared_amount]
-      #   )
-      # end
-
-      # puts "Reimbursement Items created: #{reimbursement_items}"
     end
   end
 end
