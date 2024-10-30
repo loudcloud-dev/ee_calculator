@@ -2,7 +2,7 @@ class CreateReimbursements < ActiveRecord::Migration[7.2]
   def change
     create_table :reimbursements do |t|
       t.integer :employee_id, null: false
-      t.string :category
+      t.string :category_id
       t.datetime :activity_date
       t.string :invoice_reference_number
       t.decimal :invoice_amount
