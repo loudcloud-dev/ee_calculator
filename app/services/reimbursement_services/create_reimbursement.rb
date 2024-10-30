@@ -15,8 +15,8 @@ module ReimbursementServices
       # Create and save the reimbursement record
       @reimbursement = Reimbursement.new(@reimbursement_params)
 
-			remaining_budgets = calculate_remaining_budgets(@reimbursement)
-			distribute_budget(@reimbursement.invoice_amount, remaining_budgets)
+      remaining_budgets = calculate_remaining_budgets(@reimbursement)
+      distribute_budget(@reimbursement.invoice_amount, remaining_budgets)
       
       # if @reimbursement.save
       #   puts "Reimbursement saved with ID: #{@reimbursement.id}"
@@ -78,13 +78,13 @@ module ReimbursementServices
         end
       end
 
-			puts "Invoice Amount: #{invoice_amount}"
-			puts "Reimbursement Items: #{reimbursement_items}"
-			puts "Reimbursable Amount: #{reimbursement_items.sum { |item| item[:shared_amount] }}"
-			
-			reimbursement_items.each do |item|
-				puts "Employee ID: #{item[:employee_id]}, Shared Amount: #{item[:shared_amount]}"
-			end
+      puts "Invoice Amount: #{invoice_amount}"
+      puts "Reimbursement Items: #{reimbursement_items}"
+      puts "Reimbursable Amount: #{reimbursement_items.sum { |item| item[:shared_amount] }}"
+      
+      reimbursement_items.each do |item|
+        puts "Employee ID: #{item[:employee_id]}, Shared Amount: #{item[:shared_amount]}"
+      end
 
       # Save reimbursement items
       # reimbursement_items.each do |item|
