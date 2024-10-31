@@ -1,5 +1,6 @@
 class Reimbursement < ApplicationRecord
   belongs_to :employee
+  belongs_to :category
   has_many :reimbursement_items
 
   validates :employee_id, presence: true
@@ -17,11 +18,11 @@ class Reimbursement < ApplicationRecord
   private
 
   def unique_invoice_reference_number
-    if Reimbursement.where(invoice_reference_number: invoice_reference_number)
-                    .where.not(id: id)
-                    .where.not(status: "cancelled")
-                    .exists?
-      errors.add(:invoice_reference_number, "has already been taken")
-    end
+    unique_reimbursement = Reimbursement.where(invoice_reference_number: invoice_reference_number)
+                                        .where.not(id: id)
+                                        .where.not(status: "cancelled")
+                                        .exists?
+    
+    errors.add(:invoice_reference_number, "has already been taken") if unique_reimbursement
   end
 end

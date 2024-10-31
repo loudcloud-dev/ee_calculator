@@ -6,6 +6,7 @@ class ReimbursementItem < ApplicationRecord
     ReimbursementItem.joins(:reimbursement)
                      .where(employee_id: employee_id)
                      .where(reimbursements: { category_id: category_id })
+                     .where.not(reimbursements: { status: 'cancelled' })
                      .where('reimbursements.activity_date >= ?', Date.today.at_beginning_of_month + 5.days)
                      .where('reimbursements.activity_date <= ?', Date.today.at_beginning_of_month.next_month + 4.days)
                      .sum(:shared_amount)
