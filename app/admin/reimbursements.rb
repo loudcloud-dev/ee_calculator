@@ -42,7 +42,7 @@ ActiveAdmin.register Reimbursement do
     column :reimbursable_amount
     column :reimbursed_amount
     column :supplier
-    column :status
+    column :status do |employee| employee.status.capitalize end
 
     actions
   end

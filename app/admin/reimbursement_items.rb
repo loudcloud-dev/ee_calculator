@@ -14,6 +14,8 @@ ActiveAdmin.register ReimbursementItem do
     end
 
     column :shared_amount
+    column :created_at
+    column :updated_at
 
     actions
   end
