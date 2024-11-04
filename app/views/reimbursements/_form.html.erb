@@ -15,12 +15,12 @@
     <h2>EE Program Benefit Request Form</h2>
     <div class="row">
       <div class="col-6">
-        <%= form.label :employee_id %>
+        <%= form.label :employee_id, class: "form-label" %>
         <%= form.select :employee_id, @employee, { prompt: "Select an employee" }, id: 'employee_select', data: { controller: 'select' }, required: true %>
       </div>
 
       <div class="col-6">
-        <%= form.label :category_id %>
+        <%= form.label :category_id, class: "form-label" %>
         <%= form.select :category_id, @category, { prompt: "Select a category" }, id: 'category_select', data: { controller: 'select' }, required: true %>
       </div>
 
@@ -30,7 +30,7 @@
       </div>
 
       <div class="col-6">
-        <%= form.label :invoice_reference_number, class: "form-label" %>
+        <%= form.label :invoice_reference_number, "Reference Number", class: "form-label" %>
         <%= form.text_field :invoice_reference_number, class: "form-control", placeholder: "e.g., INV-12345-#{Date.today.year}", required: true %>
       </div>
 
