@@ -1,91 +1,11 @@
 <div class="container col-12 col-md-8 my-2">
   <h4>Employee Engagement</h4>
 
-  <!-- Move to a partial -->
-  <%= form_with(url: reimbursements_path, method: :get) do |form| %>
-    <div class="row">
-      <div class="col-10">
-        <%= form.select :employee_id, @employee, { selected: params[:employee_id], prompt: "Select an employee" }, { id: 'employee_select', data: { controller: 'select' } } %>
-      </div>
-      <div class="col-2">
-        <%= form.submit "Submit", class: "btn btn-primary" %>
-      </div>
-    </div>
-  <%end%>
+  <%= render 'employee_search_form' %>
 
   <% if params[:employee_id].present? %>
-    <!-- Usage -->
-    <div class="my-3">
-      <h6>Usage:</h6>
-      <% Category.where(status: 'active').each do |category| %>
-        <% total_shared_amount = @reimbursement_items.find { |item| item.category_id == category.id }&.total_shared_amount || 0 %>
-        <p><%= category.name %>: ₱<%= ENV['MONTHLY_BUDGET'].to_i - total_shared_amount %> left</p>
-      <% end %>
-    </div>
-
-    <!-- Reimbursement items -->
-    <div class="my-3">
-      <p class="d-inline-flex gap-1">
-        <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#breakdown_collapse" aria-expanded="false" aria-controls="breakdown_collapse">
-          Show more
-          <i class="bi bi-arrow-down-short"></i>
-        </button>
-      </p>
-
-      <div class="collapse" id="breakdown_collapse">
-        <div class="card card-body">
-          <table class="table">
-            <thead>
-              <th scope="col">Date</th>
-              <th scope="col">Activity</th>
-              <th scope="col">People</th>
-              <th scope="col">Consumption</th>
-            </thead>
-            <tbody>
-              <% @item_breakdown.each do |item| %>
-                <tr>
-                  <td><%= item.activity_date.strftime("%B %d, %Y") %></td>
-                  <td><%= item.name %></td>
-                  <td><%= item.participated_employees.map(&:nickname).join(", ") %></td>
-                  <td>₱<%= item.shared_amount %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- Reimbursements -->
-    <% if @filed_reimbursements.present? %>
-      <div class="my-3">
-        <h6>Filed Reimbursements</h6>
-        
-        <table class="table">
-          <thead>
-            <th scope="col">Date</th>
-            <th scope="col">Activity</th>
-            <th scope="col">People</th>
-            <th scope="col">Invoice Reference Number</th>
-            <th scope="col">Invoice Amount</th>
-            <th scope="col">Reimbursed Amount</th>
-            <th scope="col">Status</th>
-          </thead>
-          <tbody>
-            <% @filed_reimbursements.each do |reimbursement| %>
-              <tr>
-                <td><%= reimbursement.activity_date.strftime("%B %d, %Y") %></td>
-                <td><%= reimbursement.name %></td>
-                <td><%= reimbursement.participated_employees.map(&:nickname).join(", ") %></td>
-                <td><%= reimbursement.invoice_reference_number %></td>
-                <td>₱<%= reimbursement.invoice_amount %></td>
-                <td><%= "₱#{reimbursement.reimbursed_amount.to_s}" if reimbursement.reimbursed_amount.present? %></td>
-                <td><span class="badge text-bg-<%= set_status_badge(reimbursement.status) %>"><%= reimbursement.status.capitalize %></span></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    <% end %>
+    <%= render 'usage' %>
+    <%= render 'item_breakdown' %>    
+    <%= render 'filed_reimbursements' %>
   <% end %>
 </div>

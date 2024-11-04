@@ -1,0 +1,15 @@
+<%= form_with(url: reimbursements_path, method: :get) do |form| %>
+  <div class="row">
+    <div class="col-7">
+      <%= form.select :employee_id, @employee, { selected: params[:employee_id], prompt: "Select an employee" }, { id: 'employee_select', data: { controller: 'select' } } %>
+    </div>
+    
+    <div class="col-4">
+      <%= select_month(params.dig(:date, :month).to_i || Date.today, { prompt: 'Choose month', field_name: 'month' }, { id: 'month_select', data: { controller: 'select' } }) %>
+    </div>
+
+    <div class="col">
+      <%= form.submit "Submit", class: "btn btn-primary" %>
+    </div>
+  </div>
+<%end%>
