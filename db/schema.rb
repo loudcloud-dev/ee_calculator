@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_28_070105) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_04_075139) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -63,11 +63,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_070105) do
     t.decimal "shared_amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_reimbursement_items_on_employee_id"
   end
 
   create_table "reimbursements", force: :cascade do |t|
     t.integer "employee_id", null: false
-    t.string "category"
+    t.integer "category_id"
     t.datetime "activity_date"
     t.string "invoice_reference_number"
     t.decimal "invoice_amount"
@@ -78,5 +79,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_070105) do
     t.string "status", default: "pending"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["activity_date"], name: "index_reimbursements_on_activity_date"
+    t.index ["category_id"], name: "index_reimbursements_on_category_id"
+    t.index ["employee_id"], name: "index_reimbursements_on_employee_id"
+    t.index ["status"], name: "index_reimbursements_on_status"
   end
 end
