@@ -15,6 +15,14 @@ class Reimbursement < ApplicationRecord
     Employee.where(id: participated_employee_ids, status: "active")
   end
 
+  def self.filed_reimbursements(employee_id)
+    Reimbursement.select('reimbursements.*, categories.name')
+                 .joins(:category)
+                 .where(employee_id: employee_id)
+                 .where.not(status: 'cancelled')
+                 .order('reimbursements.activity_date DESC')
+  end
+
   private
 
   def unique_invoice_reference_number

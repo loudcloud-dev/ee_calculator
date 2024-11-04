@@ -1,4 +1,3 @@
-# app/services/reimbursement_services/create_reimbursement.rb
 module ReimbursementServices
   class CreateReimbursement < ApplicationService
     def initialize(params)
@@ -31,7 +30,11 @@ module ReimbursementServices
 
       employees = Employee.where(id: reimbursement.participated_employee_ids)
       employees.each do |employee|
-        used_budget = ReimbursementItem.used_budget_sum(employee.id, category_id)
+        used_budget = ReimbursementItem.used_budget_sum(
+          employee_id: employee.id,
+          category_id: category_id,
+          activity_date: @reimbursement.activity_date
+        )
 
         employee_budget = monthly_budget - used_budget
         employee_budgets[employee.id] = employee_budget > 0 ? employee_budget : 0
