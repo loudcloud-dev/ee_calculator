@@ -16,11 +16,22 @@ class Reimbursement < ApplicationRecord
   end
 
   def self.filed_reimbursements(employee_id)
-    Reimbursement.select('reimbursements.*, categories.name')
-                 .joins(:category)
-                 .where(employee_id: employee_id)
-                 .where.not(status: 'cancelled')
-                 .order('reimbursements.activity_date DESC')
+    self.select('reimbursements.*, categories.name')
+        .joins(:category)
+        .where(employee_id: employee_id)
+        .where.not(status: 'cancelled')
+        .order('reimbursements.activity_date DESC')
+  end
+  
+  def self.item_breakdown(employee_id:, start_date:, end_date:)
+    self.select('categories.name, reimbursements.activity_date, reimbursements.participated_employee_ids, reimbursement_items.shared_amount')
+        .joins(:reimbursement_items)
+        .joins(:category)
+        .where(reimbursement_items: { employee_id: employee_id })
+        .where('reimbursements.activity_date >= ?', start_date)
+        .where('reimbursements.activity_date <= ?', end_date)
+        .where.not(status: 'cancelled')
+        .order('reimbursements.activity_date DESC')
   end
 
   private

@@ -18,7 +18,7 @@ module ReimbursementServices
           start_date: start_date,
           end_date: end_date
         ),
-        item_breakdown: ReimbursementItem.item_breakdown(
+        item_breakdown: Reimbursement.item_breakdown(
           employee_id: @reimbursement[:employee_id],
           start_date: start_date,
           end_date: end_date
