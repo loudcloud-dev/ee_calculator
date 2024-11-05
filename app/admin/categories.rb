@@ -1,6 +1,7 @@
 ActiveAdmin.register Category do
   permit_params :name,
-                :description
+                :description,
+                :status
 
   form do |f|
     f.inputs do

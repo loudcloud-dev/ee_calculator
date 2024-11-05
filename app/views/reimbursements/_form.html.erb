@@ -1,59 +1,59 @@
 <%= form_with(model: reimbursement) do |form| %>
-  <% if reimbursement.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(reimbursement.errors.count, "error") %> prohibited this reimbursement from being saved:</h2>
-
-      <ul>
-        <% reimbursement.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <div class="container col-12 col-md-6 my-2">
-		<p class="h4">Create Reimbursement</p>
+    <%= render 'shared/flashes' %>
 
+    <h2>Before we begin</h2>
+    <p>Please ensure all requirements are fulfilled before filing your benefit request:</p>
+
+    <ol>
+      <li>Have an invoice from the establishment ready. This invoice must be named to  <strong>LOUDCLOUD INC.</strong>, <strong>TIN# 008-052-609-000</strong>, with address at <strong>1 Champaca St., Roxas District, Quezon City 1103</strong>.</li>
+      <li>Make sure to check the invoice date! An invoice related to the EE Program must be filed no later than the 5th day of the month following the Invoice Date.</li>
+    </ol>
+
+    <p>Note that Benefit Requests with insufficient or erroneous requirements may be denied. For questions and clarifications, contact any member of HR & Admin.</p>
+
+    <hr>
+    
+    <h2>EE Program Benefit Request Form</h2>
     <div class="row">
-			<div class="col-6">
-				<%= form.label :employee_id %>
-				<%= form.select :employee_id, Employee.order(:nickname).pluck(:nickname, :id), { prompt: "Select an employee" }, id: 'employee_select', data: { controller: 'select' } %>
-			</div>
+      <div class="col-6">
+        <%= form.label :employee_id, class: "form-label" %>
+        <%= form.select :employee_id, @employees, { prompt: "Select an employee" }, id: 'employee_select', data: { controller: 'select' }, required: true %>
+      </div>
 
-			<div class="col-6">
-				<%= form.label :category %>
-				<%= form.select :employee_id, Category.order(:name).pluck(:name, :id), { prompt: "Select a category" }, id: 'category_select', data: { controller: 'select' } %>
-			</div>
+      <div class="col-6">
+        <%= form.label :category_id, class: "form-label" %>
+        <%= form.select :category_id, @categories, { prompt: "Select a category" }, id: 'category_select', data: { controller: 'select' }, required: true %>
+      </div>
 
-			<div>
-				<%= form.label :activity_date, class: "form-label" %>
-				<%= form.date_field :activity_date, max: 0.days.ago, class: "form-control" %>
-			</div>
+      <div>
+        <%= form.label :activity_date, class: "form-label" %>
+        <%= form.date_field :activity_date, min: start_date(Date.today), max: Date.today, class: "form-control", required: true %>
+      </div>
 
-			<div class="col-6">
-				<%= form.label :invoice_reference_number, class: "form-label" %>
-				<%= form.text_field :invoice_reference_number, class: "form-control" %>
-			</div>
+      <div class="col-6">
+        <%= form.label :invoice_reference_number, "Reference Number", class: "form-label" %>
+        <%= form.text_field :invoice_reference_number, class: "form-control", placeholder: "e.g., INV-12345-#{Date.today.year}", required: true %>
+      </div>
 
-			<div class="col-6">
-				<%= form.label :invoice_amount, class: "form-label" %>
-				<%= form.text_field :invoice_amount, class: "form-control" %>
-			</div>
+      <div class="col-6">
+        <%= form.label :invoice_amount, class: "form-label" %>
+        <%= form.text_field :invoice_amount, class: "form-control", placeholder: "Enter invoice amount", required: true %>
+      </div>
 
-			<div class="col-6">
-				<%= form.label :participated_employee_ids, "Participated Employee", class: "form-label" %>
-				<%= form.select :participated_employee_ids, Employee.order(:nickname).pluck(:nickname, :id), { prompt: "Select an employee" }, { id: 'employee_select', multiple: true, data: { controller: 'select' } } %>
-			</div>
+      <div>
+        <%= form.label :participated_employee_ids, "Participated Employees", class: "form-label" %>
+        <%= form.select :participated_employee_ids, @employees, { prompt: "Select employees" }, { id: 'employee_select', multiple: true, data: { controller: 'select' }, required: true } %>
+      </div>
 
-			<div class="col-6">
-				<%= form.label :supplier, class: "form-label" %>
-				<%= form.text_field :supplier, class: "form-control" %>
-			</div>
+      <div>
+        <%= form.label :supplier, class: "form-label" %>
+        <%= form.text_field :supplier, class: "form-control", placeholder: "Enter supplier", required: true %>
+      </div>
 
-			<div class="d-flex justify-content-end my-3">
-				<%= form.submit "Submit", class: "btn btn-primary" %>
-			</div>
-
+      <div class="d-flex justify-content-end my-3">
+        <%= form.submit "Submit", class: "btn btn-success col-12 col-md-auto" %>
+      </div>
     </div>
   </div>
 <% end %>

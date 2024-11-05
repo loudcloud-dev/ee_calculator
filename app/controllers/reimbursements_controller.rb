@@ -1,9 +1,49 @@
 class ReimbursementsController < InheritedResources::Base
+  before_action :categories, only: [:index, :new, :create]
+  before_action :employees, only: [:index, :new, :create]
+  before_action :participated_employees, only: [:create, :update]
 
-  private
+  def index
+    reimbursement_service = ReimbursementServices::GetReimbursements.call(params)
 
-    def reimbursement_params
-      params.require(:reimbursement).permit(:employee_id, :category, :activity_date, :invoice_reference_number, :invoice_amount, :reimbursable_amount, :reimbursed_amount, :participated_employee_ids, :supplier, :status)
+    @filed_reimbursements = reimbursement_service[:filed_reimbursements]
+    @reimbursement_items = reimbursement_service[:reimbursement_items]
+    @item_breakdown = reimbursement_service[:item_breakdown]
+  end
+
+  def new
+    @reimbursement = Reimbursement.new
+  end
+
+  def create
+    # TO DO
+    # Unit tests for create action
+    service = ReimbursementServices::CreateReimbursement.call(reimbursement_params)
+
+    if service[:success]
+      flash[:success] = "Reimbursement created successfully."
+    else
+      flash[:error] = service[:errors].join(", ")
     end
 
+    redirect_to new_reimbursement_path
+  end
+  
+  private
+
+  def reimbursement_params
+    params.require(:reimbursement).permit(:employee_id, :category_id, :activity_date, :invoice_reference_number, :invoice_amount, :reimbursable_amount, :reimbursed_amount, :supplier, :status, participated_employee_ids: [])
+  end
+
+  def participated_employees
+    params[:reimbursement][:participated_employee_ids].reject!(&:blank?) if params[:reimbursement][:participated_employee_ids]
+  end
+
+  def categories
+    @categories = Category.where(status: 'active').order(:name).pluck(:name, :id)
+  end
+
+  def employees
+    @employees = Employee.where(status: 'active').order(:nickname).pluck(:nickname, :id)
+  end
 end

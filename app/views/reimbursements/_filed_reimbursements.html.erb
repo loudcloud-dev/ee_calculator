@@ -1,0 +1,35 @@
+<% if @filed_reimbursements.present? %>
+  <div class="my-3">
+    <h5>Filed Reimbursements</h5>
+
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <th scope="col">Date</th>
+          <th scope="col">Category</th>
+          <th scope="col">Employees</th>
+          <th scope="col">Reference Number</th>
+          <th scope="col">Invoice Amount</th>
+          <th scope="col">Reimbursable Amount</th>
+          <th scope="col">Reimbursed Amount</th>
+          <th scope="col">Status</th>
+        </thead>
+        <tbody>
+          <% @filed_reimbursements.each do |reimbursement| %>
+            <% participated_employees = reimbursement.participated_employees.map(&:nickname).join(", ") %>
+            <tr>
+              <td><%= reimbursement.activity_date.strftime("%B %d, %Y") %></td>
+              <td><%= reimbursement.name %></td>
+              <td class="text-truncate table-width-150" title="<%= participated_employees %>"><%= participated_employees %></td>
+              <td><%= reimbursement.invoice_reference_number %></td>
+              <td>₱<%= reimbursement.invoice_amount %></td>
+              <td><%= reimbursement.reimbursable_amount %></td>
+              <td><%= "₱#{reimbursement.reimbursed_amount.to_s}" if reimbursement.reimbursed_amount.present? %></td>
+              <td><span class="badge text-bg-<%= set_status_badge(reimbursement.status) %>"><%= reimbursement.status.capitalize %></span></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

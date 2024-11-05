@@ -39,16 +39,18 @@ gem 'dotenv', groups: [:development, :test]
 
 gem 'pg'
 
+# Admin interface
 gem 'activeadmin'
 
-# Plus integrations with:
 gem 'devise'
 gem 'cancancan'
 gem 'draper'
 gem 'pundit'
 
 gem "sassc-rails"
+gem 'arctic_admin', '~> 4.3', '>= 4.3.1'
 
+# bundlers
 gem "cssbundling-rails", "~> 1.4"
 
 gem "jsbundling-rails", "~> 1.3"
