@@ -1,7 +1,7 @@
 <%= form_with(url: reimbursements_path, method: :get) do |form| %>
   <div class="row">
     <div class="col-8 col-md-7 mb-2 mb-md-0">
-      <%= form.select :employee_id, @employee, { selected: params[:employee_id], prompt: "Select an employee" }, { id: 'employee_select', data: { controller: 'select' } } %>
+      <%= form.select :employee_id, @employees, { selected: params[:employee_id], prompt: "Select an employee" }, { id: 'employee_select', data: { controller: 'select' } } %>
     </div>
     
     <div class="col-4">

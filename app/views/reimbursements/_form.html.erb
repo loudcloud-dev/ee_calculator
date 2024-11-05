@@ -1,5 +1,7 @@
 <%= form_with(model: reimbursement) do |form| %>
   <div class="container col-12 col-md-6 my-2">
+    <%= render 'shared/flashes' %>
+
     <h2>Before we begin</h2>
     <p>Please ensure all requirements are fulfilled before filing your benefit request:</p>
 
@@ -16,12 +18,12 @@
     <div class="row">
       <div class="col-6">
         <%= form.label :employee_id, class: "form-label" %>
-        <%= form.select :employee_id, @employee, { prompt: "Select an employee" }, id: 'employee_select', data: { controller: 'select' }, required: true %>
+        <%= form.select :employee_id, @employees, { prompt: "Select an employee" }, id: 'employee_select', data: { controller: 'select' }, required: true %>
       </div>
 
       <div class="col-6">
         <%= form.label :category_id, class: "form-label" %>
-        <%= form.select :category_id, @category, { prompt: "Select a category" }, id: 'category_select', data: { controller: 'select' }, required: true %>
+        <%= form.select :category_id, @categories, { prompt: "Select a category" }, id: 'category_select', data: { controller: 'select' }, required: true %>
       </div>
 
       <div>
@@ -41,7 +43,7 @@
 
       <div>
         <%= form.label :participated_employee_ids, "Participated Employees", class: "form-label" %>
-        <%= form.select :participated_employee_ids, @employee, { prompt: "Select employees" }, { id: 'employee_select', multiple: true, data: { controller: 'select' }, required: true } %>
+        <%= form.select :participated_employee_ids, @employees, { prompt: "Select employees" }, { id: 'employee_select', multiple: true, data: { controller: 'select' }, required: true } %>
       </div>
 
       <div>

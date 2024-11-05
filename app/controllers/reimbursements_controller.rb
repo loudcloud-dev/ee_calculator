@@ -1,5 +1,6 @@
 class ReimbursementsController < InheritedResources::Base
-  before_action :employees, only: [:index, :new]
+  before_action :categories, only: [:index, :new, :create]
+  before_action :employees, only: [:index, :new, :create]
   before_action :participated_employees, only: [:create, :update]
 
   def index
@@ -12,13 +13,20 @@ class ReimbursementsController < InheritedResources::Base
 
   def new
     @reimbursement = Reimbursement.new
-    @category = Category.where(status: 'active').order(:name).pluck(:name, :id)
   end
 
   def create
     # TO DO
     # Unit tests for create action
-    ReimbursementServices::CreateReimbursement.call(reimbursement_params)
+    service = ReimbursementServices::CreateReimbursement.call(reimbursement_params)
+
+    if service[:success]
+      flash[:success] = "Reimbursement created successfully."
+    else
+      flash[:error] = service[:errors].join(", ")
+    end
+
+    redirect_to new_reimbursement_path
   end
   
   private
@@ -31,7 +39,11 @@ class ReimbursementsController < InheritedResources::Base
     params[:reimbursement][:participated_employee_ids].reject!(&:blank?) if params[:reimbursement][:participated_employee_ids]
   end
 
+  def categories
+    @categories = Category.where(status: 'active').order(:name).pluck(:name, :id)
+  end
+
   def employees
-    @employee = Employee.where(status: 'active').order(:nickname).pluck(:nickname, :id)
+    @employees = Employee.where(status: 'active').order(:nickname).pluck(:nickname, :id)
   end
 end

@@ -11,7 +11,7 @@ module ReimbursementServices
     private
 
     def process
-      return @reimbursement.errors.full_messages unless @reimbursement.save
+      return { success: false, errors: @reimbursement.errors.full_messages } unless @reimbursement.save
     
       employee_budgets = calculate_employee_budget(@reimbursement)
       distributions = distribute_expenses(@reimbursement.invoice_amount.to_f, employee_budgets)
@@ -19,6 +19,8 @@ module ReimbursementServices
       @reimbursement.update(reimbursable_amount: distributions.sum { |item| item[:shared_amount] })
     
       create_reimbursement_items(distributions)
+
+      { success: true, reimbursement: @reimbursement }
     end    
 
     # Find the participating employees to calculate and save their remaining budget for the current month (from the 6th of the current month to the 5th of the next month)
