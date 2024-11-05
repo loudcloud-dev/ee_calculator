@@ -56,7 +56,7 @@ module ReimbursementServices
       distributions = []
 
       employee_budgets.each do |employee_id, employee_budget|
-        shared_amount = [initial_share, employee_budget].min
+        shared_amount = [initial_share.round(2), employee_budget].min
         distributions << { employee_id: employee_id, shared_amount: shared_amount }
       end
 
