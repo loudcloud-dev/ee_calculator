@@ -1,6 +1,6 @@
 <div class="my-3">
-  <h5>Usage:</h5>
-  <% Category.where(status: 'active').each do |category| %>
+  <h5>Usage</h5>
+  <% @categories.each do |category| %>
     <% total_shared_amount = @reimbursement_items.find { |item| item.category_id == category.id }&.total_shared_amount || 0 %>
     <p><%= category.name %>: ₱<%= ENV['MONTHLY_BUDGET'].to_i - total_shared_amount %> left</p>
   <% end %>

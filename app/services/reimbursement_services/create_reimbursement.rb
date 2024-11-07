@@ -16,7 +16,7 @@ module ReimbursementServices
       employee_budgets = calculate_employee_budget(@reimbursement)
       distributions = distribute_expenses(@reimbursement.invoice_amount.to_f, employee_budgets)
     
-      reimbursable_amount = (distributions.sum { |item| item[:shared_amount] }).round
+      reimbursable_amount = (distributions.sum { |item| item[:shared_amount] }).round(2)
       @reimbursement.update(reimbursable_amount: reimbursable_amount)
     
       create_reimbursement_items(distributions)

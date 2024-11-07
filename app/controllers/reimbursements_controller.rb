@@ -40,7 +40,7 @@ class ReimbursementsController < InheritedResources::Base
   end
 
   def categories
-    @categories = Category.where(status: 'active').order(:name).pluck(:name, :id)
+    @categories = Category.where(status: 'active').order(:name)
   end
 
   def employees

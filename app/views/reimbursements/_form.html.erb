@@ -23,7 +23,7 @@
 
       <div class="col-6">
         <%= form.label :category_id, class: "form-label" %>
-        <%= form.select :category_id, @categories, { prompt: "Select a category" }, id: 'category_select', data: { controller: 'select' }, required: true %>
+        <%= form.select :category_id, @categories.map { |category| [category.name, category.id] }, { prompt: "Select a category" }, id: 'category_select', data: { controller: 'select' }, required: true %>
       </div>
 
       <div>

@@ -16,7 +16,7 @@
               <th scope="col">Date</th>
               <th scope="col">Category</th>
               <th scope="col">Employees</th>
-              <th scope="col">Consumption</th>
+              <th class="text-end" scope="col">Consumption</th>
             </thead>
             <tbody>
               <% @item_breakdown.each do |item| %>
@@ -25,7 +25,7 @@
                   <td><%= item.activity_date.strftime("%B %d, %Y") %></td>
                   <td><%= item.name %></td>
                   <td class="text-truncate table-width-150" title="<%= participated_employees %>"><%= participated_employees %></td>
-                  <td>₱<%= item.shared_amount %></td>
+                  <td class="text-end">₱<%= number_with_delimiter(item.shared_amount) %></td>
                 </tr>
               <% end %>
             </tbody>
