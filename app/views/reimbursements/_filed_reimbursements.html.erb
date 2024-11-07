@@ -13,6 +13,7 @@
           <th class="text-end" scope="col">Reimbursable Amount</th>
           <th class="text-end" scope="col">Reimbursed Amount</th>
           <th scope="col">Supplier</th>
+          <th scope="col">Invoice Image</th>
           <th scope="col">Status</th>
         </thead>
         <tbody>
@@ -27,6 +28,7 @@
               <td class="text-end">₱<%= number_with_delimiter(reimbursement.reimbursable_amount) %></td>
               <td class="text-end"><%= "₱#{number_with_delimiter(reimbursement.reimbursed_amount)}" if reimbursement.reimbursed_amount.present? %></td>
               <td><%= reimbursement.supplier %></td>
+              <td class="table-width-150 text-truncate"><%= link_to reimbursement.image.filename, url_for(reimbursement.image), target: "_blank", rel: "noopener" %></td>
               <td><span class="badge text-bg-<%= set_status_badge(reimbursement.status) %>"><%= reimbursement.status.capitalize %></span></td>
             </tr>
           <% end %>

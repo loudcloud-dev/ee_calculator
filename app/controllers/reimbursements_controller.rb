@@ -32,7 +32,7 @@ class ReimbursementsController < InheritedResources::Base
   private
 
   def reimbursement_params
-    params.require(:reimbursement).permit(:employee_id, :category_id, :activity_date, :invoice_reference_number, :invoice_amount, :reimbursable_amount, :reimbursed_amount, :supplier, :status, participated_employee_ids: [])
+    params.require(:reimbursement).permit(:employee_id, :category_id, :activity_date, :invoice_reference_number, :invoice_amount, :image, :reimbursable_amount, :reimbursed_amount, :supplier, :status, participated_employee_ids: [])
   end
 
   def participated_employees

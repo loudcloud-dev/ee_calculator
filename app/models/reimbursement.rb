@@ -2,6 +2,7 @@ class Reimbursement < ApplicationRecord
   belongs_to :employee
   belongs_to :category
   has_many :reimbursement_items
+  has_one_attached :image
 
   validates :employee_id, presence: true
   validates :category_id, presence: true

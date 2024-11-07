@@ -4,6 +4,7 @@ ActiveAdmin.register Reimbursement do
                 :activity_date,
                 :invoice_reference_number,
                 :invoice_amount,
+                :image,
                 :reimbursable_amount,
                 :reimbursed_amount,
                 :supplier,
@@ -17,6 +18,7 @@ ActiveAdmin.register Reimbursement do
 
   # Filters
   preserve_default_filters!
+  remove_filter :image_attachment, :image_blob
   filter :employee, as: :select, collection: -> { @employees }
   config.sort_order = 'activity_date_desc'
 
@@ -39,6 +41,11 @@ ActiveAdmin.register Reimbursement do
     column :activity_date
     column :invoice_reference_number
     column :invoice_amount
+    column "Invoice Image", :image do |reimbursement|
+      if reimbursement.image.attached?
+        link_to "View Image", url_for(reimbursement.image), target: "_blank", class: "text-primary"
+      end
+    end
     column :reimbursable_amount
     column :reimbursed_amount
     column :supplier
@@ -64,6 +71,11 @@ ActiveAdmin.register Reimbursement do
       row :invoice_amount
       row :reimbursable_amount
       row :reimbursed_amount
+      row "Invoice Image", :image do |reimbursement|
+        if reimbursement.image.attached?
+          link_to "View Image", url_for(reimbursement.image), target: "_blank", class: "text-primary"
+        end
+      end
       row :supplier
       row :status
       row :created_at
