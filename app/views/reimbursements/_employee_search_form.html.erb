@@ -1,15 +1,30 @@
 <%= form_with(url: reimbursements_path, method: :get) do |form| %>
-  <div class="row">
-    <div class="col-8 col-md-7 mb-2 mb-md-0">
-      <%= form.select :employee_id, @employees, { selected: params[:employee_id], prompt: "Select an employee" }, { id: 'employee_select', data: { controller: 'select' } } %>
-    </div>
-    
-    <div class="col-4">
-      <%= select_month(params.dig(:date, :month)&.to_i || Date.today, { prompt: 'Choose month', field_name: 'month' }, { id: 'month_select', data: { controller: 'select' } }) %>
+  <!-- dropdownds -->
+  <div class="row justify-content-between">
+    <div class="col-12 col-md-8 col-lg-9 row mb-2 md-md-0">
+      <div class="col-7">
+        <%= form.select :employee_id, @employees, { selected: params[:employee_id], prompt: "Select an employee" }, { id: 'employee_select', data: { controller: 'select' } } %>
+      </div>
+      
+      <div class="col-5">
+        <%= select_month(params.dig(:date, :month)&.to_i || Date.today, { prompt: 'Choose month', field_name: 'month' }, { id: 'month_select', data: { controller: 'select' } }) %>
+      </div>
     </div>
 
-    <div class="col-12 col-md-1">
-      <%= form.submit "Search", class: "btn btn-success col-12 col-md-auto" %>
+    <!-- buttons -->
+    <div class="col-12 col-md-auto row justify-content-end">
+      <div class="d-none d-md-block col-auto">
+        <%= link_to "File Reimbursement", new_reimbursement_path(employee_id: params[:employee_id]), class: "btn btn-outline-primary" %>
+        <%= form.submit "Search", class: "btn btn-success" %>
+      </div>
+
+      <div class="d-md-none col-12">
+        <%= link_to "File Reimbursement", new_reimbursement_path(employee_id: params[:employee_id]), class: "btn btn-outline-primary col-12 mb-2" %>
+      </div>
+
+      <div class="d-md-none col-12">
+        <%= form.submit "Search", class: "btn btn-success col-12" %>
+      </div>
     </div>
   </div>
 <%end%>
