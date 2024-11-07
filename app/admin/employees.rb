@@ -14,6 +14,7 @@ ActiveAdmin.register Employee do
 
     column :first_name
     column :last_name
+    column :nickname
     column :status do |employee| employee.status.capitalize end
     column :created_at
     column :updated_at

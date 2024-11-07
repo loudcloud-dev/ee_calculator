@@ -16,7 +16,8 @@ module ReimbursementServices
       employee_budgets = calculate_employee_budget(@reimbursement)
       distributions = distribute_expenses(@reimbursement.invoice_amount.to_f, employee_budgets)
     
-      @reimbursement.update(reimbursable_amount: distributions.sum { |item| item[:shared_amount] })
+      reimbursable_amount = (distributions.sum { |item| item[:shared_amount] }).round
+      @reimbursement.update(reimbursable_amount: reimbursable_amount)
     
       create_reimbursement_items(distributions)
 
@@ -26,11 +27,15 @@ module ReimbursementServices
     # Find the participating employees to calculate and save their remaining budget for the current month (from the 6th of the current month to the 5th of the next month)
     def calculate_employee_budget(reimbursement)
       category_id = reimbursement.category_id
+      employee_ids = reimbursement.participated_employee_ids
 
       employee_budgets = {}
       monthly_budget = ENV['MONTHLY_BUDGET'].to_i
 
-      employees = Employee.where(id: reimbursement.participated_employee_ids)
+      order_by_clause = employee_ids.each_with_index.map { |id, index| "WHEN #{id} THEN #{index}" }.join(" ")
+      employees = Employee.where(id: employee_ids)
+                          .order(Arel.sql("CASE id #{order_by_clause} END"))
+
       employees.each do |employee|
         used_budget = ReimbursementItem.used_budget_sum(
           employee_id: employee.id,
@@ -56,7 +61,7 @@ module ReimbursementServices
       distributions = []
 
       employee_budgets.each do |employee_id, employee_budget|
-        shared_amount = [initial_share.round(2), employee_budget].min
+        shared_amount = [initial_share, employee_budget].min
         distributions << { employee_id: employee_id, shared_amount: shared_amount }
       end
 
@@ -87,7 +92,7 @@ module ReimbursementServices
         ReimbursementItem.create!(
           reimbursement_id: @reimbursement.id,
           employee_id: item[:employee_id],
-          shared_amount: item[:shared_amount]
+          shared_amount: item[:shared_amount].round(2)
         )
       end
     end

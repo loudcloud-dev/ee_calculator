@@ -12,6 +12,7 @@
           <th scope="col">Invoice Amount</th>
           <th scope="col">Reimbursable Amount</th>
           <th scope="col">Reimbursed Amount</th>
+          <th scope="col">Supplier</th>
           <th scope="col">Status</th>
         </thead>
         <tbody>
@@ -23,8 +24,9 @@
               <td class="text-truncate table-width-150" title="<%= participated_employees %>"><%= participated_employees %></td>
               <td><%= reimbursement.invoice_reference_number %></td>
               <td>₱<%= reimbursement.invoice_amount %></td>
-              <td><%= reimbursement.reimbursable_amount %></td>
+              <td>₱<%= reimbursement.reimbursable_amount %></td>
               <td><%= "₱#{reimbursement.reimbursed_amount.to_s}" if reimbursement.reimbursed_amount.present? %></td>
+              <td><%= reimbursement.supplier %></td>
               <td><span class="badge text-bg-<%= set_status_badge(reimbursement.status) %>"><%= reimbursement.status.capitalize %></span></td>
             </tr>
           <% end %>
