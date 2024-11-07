@@ -1,4 +1,6 @@
 class ReimbursementsController < InheritedResources::Base
+  http_basic_authenticate_with name: "ee_loudcloud", password: "Default123!"
+
   before_action :categories, only: [:index, :new, :create]
   before_action :employees, only: [:index, :new, :create]
   before_action :participated_employees, only: [:create, :update]
@@ -16,8 +18,6 @@ class ReimbursementsController < InheritedResources::Base
   end
 
   def create
-    # TO DO
-    # Unit tests for create action
     service = ReimbursementServices::CreateReimbursement.call(reimbursement_params)
 
     if service[:success]
