@@ -6,7 +6,7 @@
       <table class="table">
         <thead>
           <th scope="col">Date</th>
-          <th scope="col">Category</th>
+          <th scope="col">Activity</th>
           <th scope="col">Employees</th>
           <th scope="col">Reference Number</th>
           <th class="text-end" scope="col">Invoice Amount</th>
@@ -28,7 +28,11 @@
               <td class="text-end">₱<%= number_with_delimiter(reimbursement.reimbursable_amount) %></td>
               <td class="text-end"><%= "₱#{number_with_delimiter(reimbursement.reimbursed_amount)}" if reimbursement.reimbursed_amount.present? %></td>
               <td><%= reimbursement.supplier %></td>
-              <td class="table-width-150 text-truncate"><%= link_to reimbursement.image.filename, url_for(reimbursement.image), target: "_blank", rel: "noopener" %></td>
+              <td class="table-width-150 text-truncate">
+                <% if reimbursement.image.attached? %>
+                  <%= link_to reimbursement.image.filename, url_for(reimbursement.image), target: "_blank", rel: "noopener" %>
+                <% end %>
+              </td>
               <td><span class="badge text-bg-<%= set_status_badge(reimbursement.status) %>"><%= reimbursement.status.capitalize %></span></td>
             </tr>
           <% end %>
