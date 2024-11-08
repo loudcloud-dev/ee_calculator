@@ -15,7 +15,7 @@ class Reimbursement < ApplicationRecord
   def participated_employees
     order_by_clause = participated_employee_ids.each_with_index.map { |id, index| "WHEN #{id} THEN #{index}" }.join(" ")
     Employee.where(id: participated_employee_ids, status: "active")
-            .order(Arel.sql("CASE id #{order_by_clause} END"))
+            .order(Arel.sql(ActiveRecord::Base.sanitize_sql_array("CASE id #{order_by_clause} END")))
   end
 
   def self.filed_reimbursements(employee_id)

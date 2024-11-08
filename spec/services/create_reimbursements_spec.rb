@@ -49,8 +49,6 @@ RSpec.describe ReimbursementServices::CreateReimbursement do
         service = ReimbursementServices::CreateReimbursement.new(reimbursement_params)
         result = service.perform
 
-        puts result
-
         expect(result[:success]).to be false
         expect(result[:errors]).to include("Activity date can't be blank")
       end

@@ -34,7 +34,7 @@ module ReimbursementServices
 
       order_by_clause = employee_ids.each_with_index.map { |id, index| "WHEN #{id} THEN #{index}" }.join(" ")
       employees = Employee.where(id: employee_ids)
-                          .order(Arel.sql("CASE id #{order_by_clause} END"))
+                          .order(Arel.sql(ActiveRecord::Base.sanitize_sql_array("CASE id #{order_by_clause} END")))
 
       employees.each do |employee|
         used_budget = ReimbursementItem.used_budget_sum(
