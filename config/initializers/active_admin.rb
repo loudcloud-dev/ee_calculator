@@ -174,7 +174,7 @@ ActiveAdmin.setup do |config|
   # You can exclude possibly sensitive model attributes from being displayed,
   # added to forms, or exported by default by ActiveAdmin
   #
-  config.filter_attributes = [:encrypted_password, :password, :password_confirmation]
+  config.filter_attributes = [ :encrypted_password, :password, :password_confirmation ]
 
   # == Localize Date/Time Format
   #
@@ -194,7 +194,7 @@ ActiveAdmin.setup do |config|
   # == Meta Tags
   #
   # Add additional meta tags to the head element of active admin pages.
-  meta_tags_options = { viewport: 'width=device-width, initial-scale=1' }
+  meta_tags_options = { viewport: "width=device-width, initial-scale=1" }
   #
   # Add tags to all pages logged in users see:
   config.meta_tags = meta_tags_options

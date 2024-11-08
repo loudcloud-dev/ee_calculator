@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ReimbursementServices::CreateReimbursement do
-  let(:employee) { 
+  let(:employee) {
     Employee.create!(
       first_name: 'Juan',
       last_name: 'Dela Cruz',
@@ -19,7 +19,7 @@ RSpec.describe ReimbursementServices::CreateReimbursement do
       invoice_reference_number: 'INV-12345-2024',
       invoice_amount: 1000.0,
       supplier: 'Barkery Shop',
-      participated_employee_ids: [employee.id]
+      participated_employee_ids: [ employee.id ]
     }
   end
 
@@ -58,7 +58,7 @@ RSpec.describe ReimbursementServices::CreateReimbursement do
   end
 
   describe '#allocate_initial_amount' do
-    let(:employee2) { 
+    let(:employee2) {
       Employee.create!(
         first_name: 'John',
         last_name: 'Doe',
@@ -75,7 +75,7 @@ RSpec.describe ReimbursementServices::CreateReimbursement do
       employee_budgets = service.send(:calculate_employee_budget, service.instance_variable_get(:@reimbursement))
 
       distributions = service.send(:allocate_initial_amount, reimbursement_params[:invoice_amount], employee_budgets)
-      
+
       expect(distributions.length).to eq(2)
       expect(distributions.map { |item| item[:shared_amount] }).to all(be <= 1000)
     end
@@ -87,14 +87,14 @@ RSpec.describe ReimbursementServices::CreateReimbursement do
       employee_budgets = service.send(:calculate_employee_budget, service.instance_variable_get(:@reimbursement))
 
       distributions = service.send(:allocate_initial_amount, reimbursement_params[:invoice_amount], employee_budgets)
-      
+
       expect(distributions.length).to eq(2)
       expect(distributions.map { |item| item[:shared_amount].to_f }).to all(be >= 1000)
     end
   end
 
   describe '#allocate_excess_amount' do
-    let(:employee2) { 
+    let(:employee2) {
       Employee.create!(
         first_name: 'John',
         last_name: 'Doe',

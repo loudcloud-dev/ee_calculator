@@ -12,17 +12,17 @@ module ReimbursementServices
 
     def process
       return { success: false, errors: @reimbursement.errors.full_messages } unless @reimbursement.save
-    
+
       employee_budgets = calculate_employee_budget(@reimbursement)
       distributions = distribute_expenses(@reimbursement.invoice_amount.to_f, employee_budgets)
-    
+
       reimbursable_amount = (distributions.sum { |item| item[:shared_amount] }).round(2)
       @reimbursement.update(reimbursable_amount: reimbursable_amount)
-    
+
       create_reimbursement_items(distributions)
 
       { success: true, reimbursement: @reimbursement }
-    end    
+    end
 
     # Find the participating employees to calculate and save their remaining budget for the current month (from the 6th of the current month to the 5th of the next month)
     def calculate_employee_budget(reimbursement)
@@ -30,7 +30,7 @@ module ReimbursementServices
       employee_ids = reimbursement.participated_employee_ids
 
       employee_budgets = {}
-      monthly_budget = ENV['MONTHLY_BUDGET'].to_i
+      monthly_budget = ENV["MONTHLY_BUDGET"].to_i
 
       order_by_clause = employee_ids.each_with_index.map { |id, index| "WHEN #{id} THEN #{index}" }.join(" ")
       employees = Employee.where(id: employee_ids)
@@ -53,7 +53,7 @@ module ReimbursementServices
     def distribute_expenses(invoice_amount, employee_budgets)
       distributions = allocate_initial_amount(invoice_amount, employee_budgets)
       allocate_excess_amount(invoice_amount, employee_budgets, distributions)
-    end    
+    end
 
     # Check if employee can shoulder the initial shared amount or just their remaining budget.
     def allocate_initial_amount(invoice_amount, employee_budgets)
@@ -61,7 +61,7 @@ module ReimbursementServices
       distributions = []
 
       employee_budgets.each do |employee_id, employee_budget|
-        shared_amount = [initial_share, employee_budget].min
+        shared_amount = [ initial_share, employee_budget ].min
         distributions << { employee_id: employee_id, shared_amount: shared_amount }
       end
 
@@ -76,7 +76,7 @@ module ReimbursementServices
 
         distributions.each do |item|
           employee_id = item[:employee_id]
-          additional_share = [excess_amount, employee_budgets[employee_id] - item[:shared_amount]].min
+          additional_share = [ excess_amount, employee_budgets[employee_id] - item[:shared_amount] ].min
 
           item[:shared_amount] += additional_share
           excess_amount -= additional_share

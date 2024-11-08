@@ -1,9 +1,9 @@
 class ReimbursementsController < InheritedResources::Base
   http_basic_authenticate_with name: "ee_loudcloud", password: "Default123!"
 
-  before_action :categories, only: [:index, :new, :create]
-  before_action :employees, only: [:index, :new, :create]
-  before_action :participated_employees, only: [:create, :update]
+  before_action :categories, only: [ :index, :new, :create ]
+  before_action :employees, only: [ :index, :new, :create ]
+  before_action :participated_employees, only: [ :create, :update ]
 
   def index
     reimbursement_service = ReimbursementServices::GetReimbursements.call(params)
@@ -28,7 +28,7 @@ class ReimbursementsController < InheritedResources::Base
 
     redirect_to new_reimbursement_path
   end
-  
+
   private
 
   def reimbursement_params
@@ -40,10 +40,10 @@ class ReimbursementsController < InheritedResources::Base
   end
 
   def categories
-    @categories = Category.where(status: 'active').order(:name)
+    @categories = Category.where(status: "active").order(:name)
   end
 
   def employees
-    @employees = Employee.where(status: 'active').order(:nickname).pluck(:nickname, :id)
+    @employees = Employee.where(status: "active").order(:nickname).pluck(:nickname, :id)
   end
 end
