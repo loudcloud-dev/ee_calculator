@@ -1,5 +1,5 @@
 class ReimbursementsController < InheritedResources::Base
-  http_basic_authenticate_with name: "ee_loudcloud", password: "Default123!"
+  http_basic_authenticate_with name: ENV["HTTP_AUTH_USERNAME"], password: ENV["HTTP_AUTH_PASSWORD"]
 
   before_action :categories, only: [ :index, :new, :create ]
   before_action :employees, only: [ :index, :new, :create ]
