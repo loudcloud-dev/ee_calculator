@@ -1,19 +1,11 @@
 <% if @item_breakdown.present? %>
-  <div class="my-3" data-controller="toggle">
-    <p class="d-inline-flex gap-1">
-      <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#breakdown_collapse" aria-expanded="false" aria-controls="breakdown_collapse" data-action="click->toggle#toggle" data-toggle-target="button">
-        <span data-toggle-target="text">Show more</span>
-        <i class="bi bi-arrow-down-short" data-toggle-target="icon"></i>
-      </button>
-    </p>
-
+  <div class="my-3">
     <div class="collapse" id="breakdown_collapse">
       <h5>Breakdown</h5>
       <div class="card card-body">
         <div class="table-responsive">
           <table class="table">
             <thead>
-              <th scope="col">Date</th>
               <th scope="col">Activity</th>
               <th scope="col">Employees</th>
               <th class="text-end" scope="col">Consumption</th>
@@ -22,8 +14,19 @@
               <% @item_breakdown.each do |item| %>
                 <% participated_employees = item.participated_employees.map(&:nickname).join(", ") %>
                 <tr>
-                  <td><%= item.activity_date.strftime("%B %d, %Y") %></td>
-                  <td><%= item.name %></td>
+                  <td>
+                    <div class="d-flex">
+                      <div>
+                        <%= item.name %>
+                        <div class="text-muted fs-7">
+                          <%= item.activity_date.strftime("%B %d, %Y") %>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  
+
+
                   <td class="text-truncate table-width-150" title="<%= participated_employees %>"><%= participated_employees %></td>
                   <td class="text-end">₱<%= number_with_delimiter(item.shared_amount) %></td>
                 </tr>

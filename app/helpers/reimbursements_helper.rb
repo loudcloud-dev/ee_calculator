@@ -17,4 +17,8 @@ module ReimbursementsHelper
       date.beginning_of_month.change(day: 6)
     end
   end
+
+  def format_amount(amount)
+    number_to_currency(amount, unit: "₱")
+  end
 end
