@@ -12,7 +12,7 @@ class ReimbursementsController < InheritedResources::Base
     @reimbursement_items = reimbursement_service[:reimbursement_items]
     @item_breakdown = reimbursement_service[:item_breakdown]
 
-    @icons = [ ['fa-cookie-bite', '#fcc497'], ['fa-person-running', '#74C0FC'] ]
+    @icons = [ [ "fa-cookie-bite", "#fcc497" ], [ "fa-person-running", "#74C0FC" ] ]
   end
 
   def new
