@@ -18,7 +18,7 @@ ActiveAdmin.register Reimbursement do
 
   # Filters
   preserve_default_filters!
-  remove_filter :image_attachment, :image_blob
+  remove_filter :image_attachment, :image_blob, :reimbursement_items
   filter :employee, as: :select, collection: -> { @employees }
   config.sort_order = "activity_date_desc"
 

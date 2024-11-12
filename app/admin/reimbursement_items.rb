@@ -1,6 +1,10 @@
 ActiveAdmin.register ReimbursementItem do
   actions :all, except: [ :new, :destroy ]
+  before_action :load_collections, only: [ :index ]
 
+  preserve_default_filters!
+  remove_filter :reimbursement
+  filter :employee, as: :select, collection: -> { @employees }
   config.sort_order = "id_asc"
 
   index do
@@ -18,5 +22,11 @@ ActiveAdmin.register ReimbursementItem do
     column :updated_at
 
     actions
+  end
+
+  controller do
+    def load_collections
+      @employees = Employee.where(status: "active").pluck(:nickname, :id)
+    end
   end
 end

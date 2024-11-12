@@ -1,10 +1,13 @@
-<div class="container-fluid col-12">
+<div class="container-md-fluid col-12 px-md-4">
   <%= render 'employee_search_form' %>
 
   <% if params[:employee_id].present? %>
     <div class="col-11 mx-auto">
-      <%= render 'usage' %>
-      <%= render 'item_breakdown' %>    
+      <div class="row my-3">
+        <h5>Usage</h5>
+        <%= render 'usage' %>
+        <%= render 'item_breakdown' %>   
+      </div>
       <%= render 'filed_reimbursements' %>
     </div>
   <% end %>
