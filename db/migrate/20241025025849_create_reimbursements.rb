@@ -8,7 +8,7 @@ class CreateReimbursements < ActiveRecord::Migration[7.2]
       t.decimal :invoice_amount
       t.decimal :reimbursable_amount
       t.decimal :reimbursed_amount
-      t.integer :participated_employee_ids, array:true
+      t.integer :participated_employee_ids, array: true
       t.string :supplier
       t.string :status, default: 'pending'
 

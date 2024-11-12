@@ -1,12 +1,12 @@
 module ReimbursementsHelper
   def set_status_badge(status)
     case status
-    when 'pending'
-      'secondary'
-    when 'reimbursed'
-      'success'
+    when "pending"
+      "secondary"
+    when "reimbursed"
+      "success"
     else
-      'danger'
+      "danger"
     end
   end
 
@@ -16,5 +16,9 @@ module ReimbursementsHelper
     else
       date.beginning_of_month.change(day: 6)
     end
+  end
+
+  def format_amount(amount)
+    number_to_currency(amount, unit: "₱")
   end
 end

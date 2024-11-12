@@ -1,15 +1,30 @@
-<%= form_with(url: reimbursements_path, method: :get) do |form| %>
-  <div class="row">
-    <div class="col-8 col-md-7 mb-2 mb-md-0">
-      <%= form.select :employee_id, @employees, { selected: params[:employee_id], prompt: "Select an employee" }, { id: 'employee_select', data: { controller: 'select' } } %>
-    </div>
-    
-    <div class="col-4">
-      <%= select_month(params.dig(:date, :month)&.to_i || Date.today, { prompt: 'Choose month', field_name: 'month' }, { id: 'month_select', data: { controller: 'select' } }) %>
-    </div>
-
-    <div class="col-12 col-md-1">
-      <%= form.submit "Search", class: "btn btn-success col-12 col-md-auto" %>
-    </div>
+<div class="py-5 px-2 px-md-0 card border-0 rounded-1 hero-section">
+  <div class="text-center">
+    <%= image_tag("loudcloud_logo.png", width: 230, height: 95) %>
+    <h1 class="display-6 fw-bold">EE Program - Monitoring and Usage Overview</h1>
   </div>
-<%end%>
+
+  <%= form_with(url: reimbursements_path, method: :get) do |form| %>
+    <div class="col-12 col-md-7 mx-auto">
+      <div class="row d-flex justify-content-center">
+        <div class="col-12 col-md-7 mb-2 mb-md-0">
+          <%= form.select :employee_id, @employees, { selected: params[:employee_id], prompt: "Select an employee" }, { id: 'employee_select', data: { controller: 'select' } } %>
+        </div>
+        
+        <div class="col-12 col-md-3 px-md-0 mb-2 mb-md-0">
+          <%= select_month(params.dig(:date, :month)&.to_i || Date.today, { prompt: 'Choose month', field_name: 'month' }, { id: 'month_select', data: { controller: 'select' } }) %>
+        </div>
+
+        <div class="d-none d-md-block col-auto">
+          <%= form.button class: "btn btn-success" do %>
+            <i class="fa-solid fa-magnifying-glass"></i>
+          <% end %>
+        </div>
+
+        <div class="d-md-none col-12">
+          <%= form.submit "Search", class: "btn btn-success col-12" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

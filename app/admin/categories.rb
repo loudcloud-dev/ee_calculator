@@ -8,7 +8,7 @@ ActiveAdmin.register Category do
       f.input :name
       f.input :description
 
-      f.input :status, as: :select, collection: ['active', 'inactive'], include_blank: false
+      f.input :status, as: :select, collection: [ "active", "inactive" ], include_blank: false
 
       f.actions
     end

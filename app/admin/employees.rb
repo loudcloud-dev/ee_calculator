@@ -4,29 +4,30 @@ ActiveAdmin.register Employee do
                 :nickname,
                 :status
 
-  actions :all, except: [:destroy]
+  actions :all, except: [ :destroy ]
 
   remove_filter :reimbursements, :reimbursement_items
-  config.sort_order = 'id_asc'
+  config.sort_order = "id_asc"
 
   index do
     id_column
 
     column :first_name
     column :last_name
+    column :nickname
     column :status do |employee| employee.status.capitalize end
     column :created_at
     column :updated_at
 
     actions
   end
-  
+
   form do |f|
     f.inputs do
       f.input :first_name
       f.input :last_name
       f.input :nickname
-      f.input :status, as: :select, collection: [["Active", 'active'], ["Inactive", 'inactive']], include_blank: false
+      f.input :status, as: :select, collection: [ [ "Active", "active" ], [ "Inactive", "inactive" ] ], include_blank: false
 
       f.actions
     end

@@ -35,25 +35,32 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 # env var
-gem 'dotenv', groups: [:development, :test]
+gem "dotenv", groups: [ :development, :test ]
 
-gem 'pg'
+gem "pg"
 
 # Admin interface
-gem 'activeadmin'
+gem "activeadmin"
 
-gem 'devise'
-gem 'cancancan'
-gem 'draper'
-gem 'pundit'
+gem "devise"
+gem "cancancan"
+gem "draper"
+gem "pundit"
 
 gem "sassc-rails"
-gem 'arctic_admin', '~> 4.3', '>= 4.3.1'
+gem "arctic_admin", "~> 4.3", ">= 4.3.1"
 
 # bundlers
 gem "cssbundling-rails", "~> 1.4"
 
 gem "jsbundling-rails", "~> 1.3"
+
+#
+gem "rspec", "~> 3.13"
+gem "rubocop", "~> 1.68"
+
+# Active Storage
+gem "image_processing", "~> 1.13"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -75,4 +82,5 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem "rspec-rails", "~> 7.0", ">= 7.0.1"
 end

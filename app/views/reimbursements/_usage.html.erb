@@ -1,7 +1,50 @@
 <div class="my-3">
-  <h5>Usage:</h5>
-  <% Category.where(status: 'active').each do |category| %>
-    <% total_shared_amount = @reimbursement_items.find { |item| item.category_id == category.id }&.total_shared_amount || 0 %>
-    <p><%= category.name %>: ₱<%= ENV['MONTHLY_BUDGET'].to_i - total_shared_amount %> left</p>
-  <% end %>
+  <div class="d-flex justify-content-between" data-controller="toggle">
+    <h5>Usage</h5>
+    
+    <% if @item_breakdown.present? %>
+      <p class="d-inline-flex gap-1">
+        <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#breakdown_collapse" aria-expanded="false" aria-controls="breakdown_collapse" data-action="click->toggle#toggle" data-toggle-target="button">
+          <span data-toggle-target="text">Show more</span>
+          <i class="bi bi-arrow-down-short" data-toggle-target="icon"></i>
+        </button>
+      </p>
+    <% end %>
+  </div>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <% total_spent = 0 %>
+    <% @categories.each_with_index do |category, index| %>
+      <% total_shared_amount = @reimbursement_items.find { |item| item.category_id == category.id }&.total_shared_amount || 0 %>
+      <% total_spent += total_shared_amount %>
+      <div class="col">
+        <div class="card usage-card">
+          <div class="card-body d-flex justify-content-between">
+            <div>
+              <i class="fa-solid <%= @icons[index][0] %> fa-3x" style="color: <%= @icons[index][1] %>"></i>
+            </div>
+      
+            <div class="text-end">
+              <h5 class="card-title"><%= format_amount(ENV['MONTHLY_BUDGET'].to_i - total_shared_amount) %></h5>
+              <p class="card-text"><%= category.name %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="col">
+      <div class="card usage-card">
+        <div class="card-body d-flex justify-content-between">
+          <div>
+            <i class="fa-solid fa-money-bills fa-3x" style="color: #a3fc97"></i>
+          </div>
+     
+          <div class="text-end">
+            <h5 class="card-title"><%= format_amount(total_spent) %></h5>
+            <p class="card-text">Total Spent</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

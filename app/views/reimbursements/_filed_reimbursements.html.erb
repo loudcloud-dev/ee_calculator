@@ -6,12 +6,14 @@
       <table class="table">
         <thead>
           <th scope="col">Date</th>
-          <th scope="col">Category</th>
+          <th scope="col">Activity</th>
           <th scope="col">Employees</th>
           <th scope="col">Reference Number</th>
-          <th scope="col">Invoice Amount</th>
-          <th scope="col">Reimbursable Amount</th>
-          <th scope="col">Reimbursed Amount</th>
+          <th class="text-end" scope="col">Invoice Amount</th>
+          <th class="text-end" scope="col">Reimbursable Amount</th>
+          <th class="text-end" scope="col">Reimbursed Amount</th>
+          <th scope="col">Supplier</th>
+          <th scope="col">Invoice Image</th>
           <th scope="col">Status</th>
         </thead>
         <tbody>
@@ -22,9 +24,15 @@
               <td><%= reimbursement.name %></td>
               <td class="text-truncate table-width-150" title="<%= participated_employees %>"><%= participated_employees %></td>
               <td><%= reimbursement.invoice_reference_number %></td>
-              <td>₱<%= reimbursement.invoice_amount %></td>
-              <td><%= reimbursement.reimbursable_amount %></td>
-              <td><%= "₱#{reimbursement.reimbursed_amount.to_s}" if reimbursement.reimbursed_amount.present? %></td>
+              <td class="text-end">₱<%= number_with_delimiter(reimbursement.invoice_amount) %></td>
+              <td class="text-end">₱<%= number_with_delimiter(reimbursement.reimbursable_amount) %></td>
+              <td class="text-end"><%= "₱#{number_with_delimiter(reimbursement.reimbursed_amount)}" if reimbursement.reimbursed_amount.present? %></td>
+              <td><%= reimbursement.supplier %></td>
+              <td class="table-width-150 text-truncate">
+                <% if reimbursement.image.attached? %>
+                  <%= link_to reimbursement.image.filename, url_for(reimbursement.image), target: "_blank", rel: "noopener" %>
+                <% end %>
+              </td>
               <td><span class="badge text-bg-<%= set_status_badge(reimbursement.status) %>"><%= reimbursement.status.capitalize %></span></td>
             </tr>
           <% end %>

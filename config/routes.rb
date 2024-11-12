@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :reimbursements
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -14,4 +13,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "reimbursements#index"
+  resources :reimbursements, only: [ :index, :new, :create ]
+
+  post "admin/reimbursements/import_data", to: "reimbursements#import_data", as: "admin_import_reimbursement_data"
 end
