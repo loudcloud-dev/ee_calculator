@@ -76,6 +76,12 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  gem "capistrano"
+  gem "capistrano-bundler"
+  gem "capistrano-db-tasks", require: false, git: "https://github.com/rystraum/capistrano-db-tasks", branch: "master"
+  gem "capistrano-rails"
+  gem "capistrano-rbenv"
 end
 
 group :test do
