@@ -16,30 +16,25 @@
       <% total_spent += total_shared_amount %>
       <div class="col">
         <div class="card usage-card equal-height">
-          <div class="card-body d-flex justify-content-between">
-            <div>
-              <i class="<%= category.icon %>" style="color: <%= category.icon_color %>"></i>
-            </div>
-            <div class="text-end">
-              <h5 class="card-title"><%= format_amount(ENV['MONTHLY_BUDGET'].to_i - total_shared_amount) %></h5>
-              <p class="card-text"><%= category.name %></p>
-            </div>
+          <div class="icon-background">
+            <i class="<%= category.icon %>" style="color: <%= category.icon_color %>;"></i>
+          </div>
+          <div class="card-body text-end">
+            <h5 class="card-title"><%= format_amount(ENV['MONTHLY_BUDGET'].to_i - total_shared_amount) %></h5>
+            <p class="card-text"><%= category.name %></p>
           </div>
         </div>
       </div>
     <% end %>
 
     <div class="col">
-      <div class="card usage-card">
-        <div class="card-body d-flex justify-content-between">
-          <div>
-            <i class="fa-solid fa-money-bills fa-3x" style="color: #a3fc97"></i>
-          </div>
-     
-          <div class="text-end">
-            <h5 class="card-title"><%= format_amount(total_spent) %></h5>
-            <p class="card-text">Total Spent</p>
-          </div>
+      <div class="card usage-card equal-height">
+        <div class="icon-background">
+          <i class="fa-solid fa-money-bills fa-3x" style="color: #a3fc97;"></i>
+        </div>
+        <div class="card-body text-end">
+          <h5 class="card-title"><%= format_amount(total_spent) %></h5>
+          <p class="card-text">Total Spent</p>
         </div>
       </div>
     </div>

@@ -82,6 +82,10 @@ group :development do
   gem "capistrano-db-tasks", require: false, git: "https://github.com/rystraum/capistrano-db-tasks", branch: "master"
   gem "capistrano-rails"
   gem "capistrano-rbenv"
+
+  gem 'net-ssh', '>= 6.0.2'
+  gem 'ed25519', '>= 1.2', '< 2.0'
+  gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 end
 
 group :test do

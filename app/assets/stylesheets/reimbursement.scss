@@ -41,6 +41,29 @@
   overflow-y: auto;
 }
 
+.usage-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.icon-background {
+  position: absolute;
+  top: 75%;
+  left: 15px;
+  transform: translateY(-50%);
+  font-size: 36px;
+  opacity: 0.6;
+  z-index: 0;
+}
+
+.usage-card .card-body {
+  position: relative;
+  z-index: 1;
+  padding-left: 60px;
+  padding-right: 10px;
+}
+
+
 @media only screen and (min-width: 992px) {
   .hero-section {
     background-image: url(Vector-01.svg), url(Vector-02.svg);

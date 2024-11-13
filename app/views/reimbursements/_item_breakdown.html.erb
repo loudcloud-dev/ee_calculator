@@ -25,7 +25,7 @@
                     </div>
                   </td>
                   <td class="text-truncate table-width-180" title="<%= participated_employees %>"><%= participated_employees %></td>
-                  <td class="text-end">₱<%= number_with_delimiter(item.shared_amount) %></td>
+                  <td class="text-end"><%= format_amount(item.shared_amount) %></td>
                 </tr>
               <% end %>
             </tbody>
