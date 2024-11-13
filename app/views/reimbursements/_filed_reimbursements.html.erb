@@ -7,10 +7,10 @@
       <thead>
         <th scope="col">Activity</th>
         <th scope="col">Supplier</th>
+        <th scope="col">Status</th>
         <th scope="col">Employees</th>
         <th class="text-end" scope="col">Invoice Amount</th>
         <th class="text-end" scope="col">Reimbursable Amount</th>
-        <th class="text-center" scope="col">Status</th>
       </thead>
       <tbody>
         <% @filed_reimbursements.each do |reimbursement| %>
@@ -26,7 +26,7 @@
                 </div>
               </div>
             </td>
-            <td>
+            <td title="<%= reimbursement.invoice_reference_number %>">
               <div class="d-flex">
                 <div class="text-truncate table-width-180">
                   <%= reimbursement.supplier %>
@@ -40,10 +40,10 @@
                 </div>
               </div>
             </td>
+            <td><span class="badge rounded-pill text-bg-<%= set_status_badge(reimbursement.status) %>"><%= reimbursement.status.capitalize %></span></td>
             <td class="text-truncate table-width-150" title="<%= participated_employees %>"><%= participated_employees %></td>
             <td class="text-end"><%= format_amount(reimbursement.invoice_amount) %></td>
             <td class="text-end"><%= format_amount(reimbursement.reimbursable_amount) %></td>
-            <td class="text-center"><span class="badge rounded-pill text-bg-<%= set_status_badge(reimbursement.status) %>"><%= reimbursement.status.capitalize %></span></td>
           </tr>
         <% end %>
       </tbody>

@@ -6,10 +6,10 @@
 # gem 'capistrano-db-tasks', require: false
 
 # config valid only for Capistrano 3.10
-lock '~> 3.10'
+lock "~> 3.10"
 
 # switches that affect where to get the code
-set :repo_url, 'git@github.com:loudcloud-dev/ee_calculator.git'
+set :repo_url, "git@github.com:loudcloud-dev/ee_calculator.git"
 set :keep_releases, 5
 set :pty, true
 
@@ -19,9 +19,9 @@ set :pty, true
 set :bundle_binstubs, nil # do not use shared bundle path between releases
 set :bundle_path,     nil # trust bundle config to set the path
 set :bundle_flags,    nil # be verbose, don't use deployment mode
-set :rvm_map_bins, %w{ gem rake ruby rails bundle }
+set :rvm_map_bins, %w[ gem rake ruby rails bundle ]
 
-set :precompile_env, 'production'
+set :precompile_env, "production"
 set :assets_dir, "public/assets"
 set :packs_dir, "public/packs"
 set :rsync_cmd, "rsync -av --delete"
@@ -32,8 +32,7 @@ set :db_local_clean, true
 set :db_remote_truncate_db, true
 
 namespace :deploy do
-
-  desc 'Restart application'
+  desc "Restart application"
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
@@ -51,7 +50,6 @@ namespace :deploy do
       # end
     end
   end
-
 end
 
 namespace :db do
@@ -133,8 +131,8 @@ namespace :storage do
         server = servers.detect { |s| s.roles.include?(:app) }
         port = server.netssh_options[:port] || 22
         user = server.netssh_options[:user] || server.properties.fetch(:user)
-        dirs = [fetch(:storage_dir)].flatten
-        local_dirs = [fetch(:storage_dir)].flatten
+        dirs = [ fetch(:storage_dir) ].flatten
+        local_dirs = [ fetch(:storage_dir) ].flatten
 
         dirs.each_index do |idx|
           system("rsync -a --del -L -K -vv --progress --rsh='ssh -p #{port}' #{user}@#{server}:#{current_path}/#{dirs[idx]} #{local_dirs[idx]}")
@@ -149,8 +147,8 @@ namespace :storage do
       server = servers.detect { |s| s.roles.include?(:app) }
       port = server.netssh_options[:port] || 22
       user = server.netssh_options[:user] || server.properties.fetch(:user)
-      dirs = [fetch(:storage_dir)].flatten
-      local_dirs = [fetch(:storage_dir)].flatten
+      dirs = [ fetch(:storage_dir) ].flatten
+      local_dirs = [ fetch(:storage_dir) ].flatten
 
       puts "Manually run this:"
       dirs.each_index do |idx|
