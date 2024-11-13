@@ -1,8 +1,8 @@
-require 'capistrano/rails/assets'
+require "capistrano/rails/assets"
 
 namespace :load do
   task :defaults do
-    set :precompile_env,   fetch(:rails_env) || 'production'
+    set :precompile_env,   fetch(:rails_env) || "production"
     set :assets_dir,       "public/assets"
     set :assets_cache_dir, "tmp/cache/assets/sprockets"
     set :packs_dir,        "public/packs"
@@ -10,7 +10,7 @@ namespace :load do
     set :assets_role,      "web"
 
     after "bundler:install", "deploy:assets:prepare"
-    #before "deploy:assets:symlink", "deploy:assets:remove_manifest"
+    # before "deploy:assets:symlink", "deploy:assets:remove_manifest"
     after "deploy:assets:prepare", "deploy:assets:cleanup"
   end
 end
@@ -20,7 +20,6 @@ namespace :deploy do
   Rake::Task["deploy:compile_assets"].clear
 
   namespace :assets do
-
     # desc "Remove manifest file from remote server"
     # task :remove_manifest do
     #   with rails_env: fetch(:assets_dir) do
