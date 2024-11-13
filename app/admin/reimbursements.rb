@@ -100,14 +100,6 @@ ActiveAdmin.register Reimbursement do
     f.actions
   end
 
-  action_item only: :index do
-    link_to "Import Data", admin_import_reimbursement_data_path, method: :post
-  end
-
-  collection_action :import_data, method: :post do
-    import_data
-  end
-
   controller do
     def load_collections
       @employees = Employee.where(status: "active").pluck(:nickname, :id)
@@ -116,61 +108,6 @@ ActiveAdmin.register Reimbursement do
 
     def participated_employees
       params[:reimbursement][:participated_employee_ids].reject!(&:blank?) if params[:reimbursement][:participated_employee_ids]
-    end
-
-    def import_data
-      file_path = File.read("AllResponses.csv")
-      return unless file_path.present?
-
-      rows = CSV.parse(file_path, headers: true, col_sep: ";")
-      sorted_rows = rows.sort_by { |row| DateTime.strptime(row["Date"], "%m/%d/%y") }
-
-      sorted_rows.each do |row|
-        activity = row["Activity"]
-        activity_date = DateTime.strptime(row["Date"], "%m/%d/%y")
-        participated_employees = row["Employee Names"].split(", ")
-        supplier = row["Supplier"]
-        invoice_reference_number = row["Invoice Ref #"]
-        invoice_amount = row["Invoice Total"].gsub(/[^\d.]/, "").to_f
-
-        # Populate employees table and collect IDs
-        participated_employee_ids = find_or_create_employee_on_import(participated_employees)
-
-        # Create reimbursement record
-        csv_data = {
-          activity: activity,
-          activity_date: activity_date,
-          participated_employees: participated_employee_ids,
-          supplier: supplier,
-          invoice_reference_number: invoice_reference_number,
-          invoice_amount: invoice_amount
-        }
-
-        create_reimbursement_on_import(csv_data)
-      end
-    end
-
-    def find_or_create_employee_on_import(employees)
-      employees.map do |nickname|
-        Employee.find_or_create_by!(nickname: nickname).id
-      end
-    end
-
-    def create_reimbursement_on_import(data)
-      filing_employee = Employee.find_by(id: data[:participated_employees].first)
-      category = Category.find_by(name: data[:activity])
-
-      reimbursement_params = {
-        employee_id: filing_employee.id,
-        category_id: category.id,
-        activity_date: data[:activity_date],
-        invoice_reference_number: data[:invoice_reference_number],
-        invoice_amount: data[:invoice_amount],
-        participated_employee_ids: data[:participated_employees],
-        supplier: data[:supplier]
-      }
-
-      ReimbursementServices::CreateReimbursement.call(reimbursement_params)
     end
   end
 end
