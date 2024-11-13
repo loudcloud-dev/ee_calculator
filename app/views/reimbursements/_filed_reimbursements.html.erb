@@ -26,11 +26,11 @@
                 </div>
               </div>
             </td>
-            <td title="<%= reimbursement.invoice_reference_number %>">
+            <td>
               <div class="d-flex">
-                <div class="text-truncate table-width-180">
+                <div class="text-truncate table-width-180" title="<%= reimbursement.supplier %>">
                   <%= reimbursement.supplier %>
-                  <div class="text-muted fs-7">
+                  <div class="text-muted fs-7" title="<%= reimbursement.invoice_reference_number %>">
                     <% if reimbursement.image.attached? %>
                       <%= link_to "Reference Number: #{reimbursement.invoice_reference_number}", url_for(reimbursement.image), target: "_blank", rel: "noopener" %>
                     <% else %>
