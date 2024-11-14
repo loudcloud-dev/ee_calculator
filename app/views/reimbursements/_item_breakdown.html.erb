@@ -19,13 +19,13 @@
                       <div>
                         <%= item.name %>
                         <div class="text-muted fs-7">
-                          <%= item.activity_date.strftime("%B %d, %Y") %>
+                          <%= item.formatted_activity_date %>
                         </div>
                       </div>
                     </div>
                   </td>
                   <td class="text-truncate table-width-180" title="<%= participated_employees %>"><%= participated_employees %></td>
-                  <td class="text-end"><%= format_amount(item.shared_amount) %></td>
+                  <td class="text-end"><%= item.formatted_shared_amount %></td>
                 </tr>
               <% end %>
             </tbody>

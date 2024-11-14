@@ -21,7 +21,7 @@
           </div>
           <div class="card-body text-end">
             <h5 class="card-title"><%= format_amount(ENV['MONTHLY_BUDGET'].to_i - total_shared_amount) %></h5>
-            <p class="card-text"><%= category.name %></p>
+            <p class="card-text text-muted"><%= category.name %></p>
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@
         </div>
         <div class="card-body text-end">
           <h5 class="card-title"><%= format_amount(total_spent) %></h5>
-          <p class="card-text">Total Spent</p>
+          <p class="card-text text-muted">Total Spent</p>
         </div>
       </div>
     </div>
