@@ -19,6 +19,7 @@ ActiveAdmin.register Reimbursement do
   # Filters
   preserve_default_filters!
   remove_filter :image_attachment, :image_blob, :reimbursement_items
+
   filter :employee, as: :select, collection: -> { @employees }
   config.sort_order = "activity_date_desc"
 
@@ -122,6 +123,54 @@ ActiveAdmin.register Reimbursement do
     end
 
     f.actions
+  end
+
+  csv do
+    column "Activity" do |reimbursement|
+      category = Category.find_by(id: reimbursement.category_id, status: "active")
+      category.name
+    end
+
+    column "Date" do |reimbursement|
+      reimbursement.formatted_activity_date
+    end
+
+    column "Employee" do |reimbursement|
+      reimbursement.employee.nickname
+    end
+
+    column :supplier
+    column :invoice_reference_number
+    column :invoice_amount do |reimbursement|
+      reimbursement.formatted_invoice_amount
+    end
+      
+    column :reimbursable_amount do |reimbursement|
+      reimbursement.formatted_reimbursable_amount
+    end
+
+    column :reimbursed_amount do |reimbursement|
+      reimbursement.formatted_reimbursed_amount
+    end
+
+    column "Participated Employees" do |reimbursement|
+      reimbursement.participated_employees.map do |employee|
+        reimbursement_items = ReimbursementItem.where(reimbursement_id: reimbursement.id, employee_id: employee.id)
+
+        reimbursement_items.map do |item|
+          "#{employee.nickname} - #{item.formatted_shared_amount}"
+        end.join(", ")
+      end.join(", ")
+    end
+
+    column "Invoice Image" do |reimbursement|
+      if reimbursement.image.attached?
+        base_url = request.original_url.split("/")[0..2].join("/")
+        image_url = url_for(reimbursement.image)
+
+        "#{base_url}#{image_url}"
+      end
+    end
   end
 
   controller do
