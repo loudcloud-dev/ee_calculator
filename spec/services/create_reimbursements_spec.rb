@@ -12,12 +12,15 @@ RSpec.describe ReimbursementServices::CreateReimbursement do
   let(:category) { Category.create!(name: 'Eat Takes Two') }
 
   let(:reimbursement_params) do
+    image_path = Rails.root.join('app', 'assets', 'images', 'loudcloud_logo.png')
+
     {
       employee_id: employee.id,
       category_id: category.id,
       activity_date: Date.today,
       invoice_reference_number: 'INV-12345-2024',
       invoice_amount: 1000.0,
+      image: image_path,
       supplier: 'Barkery Shop',
       participated_employee_ids: [ employee.id ]
     }

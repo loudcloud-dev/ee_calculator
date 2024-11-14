@@ -25,14 +25,14 @@ ActiveAdmin.register Reimbursement do
 
   index do
     id_column
-    column "Activity", :category_id, class: 'admin-table-width-150 text-truncate' do |reimbursement|
+    column "Activity", :category_id, class: "admin-table-width-150 text-truncate" do |reimbursement|
       category = Category.find_by(id: reimbursement.category_id, status: "active")
       div do
         span category.name
         div class: "text-muted" do
           span reimbursement.formatted_activity_date
         end
-      end      
+      end
     end
 
     column :supplier do |reimbursement|
@@ -41,21 +41,21 @@ ActiveAdmin.register Reimbursement do
         div class: "text-muted" do
           span "Reference number: #{reimbursement.invoice_reference_number}"
         end
-      end 
+      end
     end
 
     column :employee_id do |reimbursement|
       link_to reimbursement.employee.nickname, admin_employee_path(reimbursement.employee)
     end
 
-    column "Participated Employees", :participated_employee_ids, class: 'admin-table-width-180 text-break' do |reimbursement|
+    column "Participated Employees", :participated_employee_ids, class: "admin-table-width-180 text-break" do |reimbursement|
       reimbursement.participated_employees.map(&:nickname).join(", ")
     end
 
     column :invoice_amount, class: "text-end" do |reimbursement|
       reimbursement.formatted_invoice_amount
     end
-      
+
     column :reimbursable_amount, class: "text-end" do |reimbursement|
       reimbursement.formatted_reimbursable_amount
     end
@@ -144,7 +144,7 @@ ActiveAdmin.register Reimbursement do
     column :invoice_amount do |reimbursement|
       reimbursement.formatted_invoice_amount
     end
-      
+
     column :reimbursable_amount do |reimbursement|
       reimbursement.formatted_reimbursable_amount
     end
