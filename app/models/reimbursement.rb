@@ -1,4 +1,6 @@
 class Reimbursement < ApplicationRecord
+  include ActionView::Helpers::NumberHelper
+
   belongs_to :employee
   belongs_to :category
   has_many :reimbursement_items
@@ -40,6 +42,26 @@ class Reimbursement < ApplicationRecord
         .order("reimbursements.activity_date DESC")
   end
 
+  def formatted_activity_date
+    activity_date.strftime("%B %d, %Y") if activity_date.present?
+  end
+
+  def formatted_invoice_amount
+    format_amount(invoice_amount) if invoice_amount.present?
+  end
+
+  def formatted_reimbursable_amount
+    format_amount(reimbursable_amount) if reimbursable_amount.present?
+  end
+
+  def formatted_reimbursed_amount
+    format_amount(reimbursed_amount) if reimbursed_amount.present?
+  end
+
+  def formatted_shared_amount
+    format_amount(shared_amount) if shared_amount.present?
+  end
+
   private
 
   def unique_invoice_reference_number
@@ -49,5 +71,9 @@ class Reimbursement < ApplicationRecord
                                         .exists?
 
     errors.add(:invoice_reference_number, "has already been taken") if unique_reimbursement
+  end
+
+  def format_amount(amount)
+    number_to_currency(amount, unit: "₱")
   end
 end

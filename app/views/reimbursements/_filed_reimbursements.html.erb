@@ -21,7 +21,7 @@
                 <div>
                   <%= reimbursement.name %>
                   <div class="text-muted fs-7">
-                    <%= reimbursement.activity_date.strftime("%B %d, %Y") %>
+                    <%= reimbursement.formatted_activity_date %>
                   </div>
                 </div>
               </div>
@@ -42,8 +42,8 @@
             </td>
             <td><span class="badge rounded-pill text-bg-<%= set_status_badge(reimbursement.status) %>"><%= reimbursement.status.capitalize %></span></td>
             <td class="text-truncate table-width-150" title="<%= participated_employees %>"><%= participated_employees %></td>
-            <td class="text-end"><%= format_amount(reimbursement.invoice_amount) %></td>
-            <td class="text-end"><%= format_amount(reimbursement.reimbursable_amount) %></td>
+            <td class="text-end"><%= reimbursement.formatted_invoice_amount %></td>
+            <td class="text-end"><%= reimbursement.formatted_reimbursable_amount %></td>
           </tr>
         <% end %>
       </tbody>

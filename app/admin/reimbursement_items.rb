@@ -17,7 +17,10 @@ ActiveAdmin.register ReimbursementItem do
       link_to item.employee.nickname, admin_employee_path(item.employee.id)
     end
 
-    column :shared_amount
+    column :shared_amount, class: "text-end" do |item|
+      item.formatted_shared_amount
+    end
+
     column :created_at
     column :updated_at
 

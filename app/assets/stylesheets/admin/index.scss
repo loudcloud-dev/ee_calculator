@@ -1,0 +1,35 @@
+.text-primary{
+  color: rgb(95, 95, 254);
+}
+
+.text-muted {
+  color: rgba(33, 37, 41, 0.75);
+}
+
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-break {
+  white-space: normal;
+  word-wrap: break-word;
+  overflow: hidden;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-end {
+  text-align: right;
+}
+
+.admin-table-width-150 {
+  max-width: 150px;
+}
+
+.admin-table-width-180 {
+  max-width: 180px;
+}

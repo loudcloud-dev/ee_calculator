@@ -1,4 +1,6 @@
 class ReimbursementItem < ApplicationRecord
+  include ActionView::Helpers::NumberHelper
+
   belongs_to :employee
   belongs_to :reimbursement
 
@@ -28,5 +30,9 @@ class ReimbursementItem < ApplicationRecord
         .where("reimbursements.activity_date >= ?", start_date)
         .where("reimbursements.activity_date <= ?", end_date)
         .group("reimbursements.category_id")
+  end
+
+  def formatted_shared_amount
+    number_to_currency(shared_amount, unit: "₱")
   end
 end
