@@ -94,19 +94,41 @@ ActiveAdmin.register Reimbursement do
         reimbursement.participated_employees.map(&:nickname).join(", ")
       end
 
-      row :category_id
-      row :activity_date
+      row :category_id do |reimbursement|
+        category = Category.find_by(id: reimbursement.category_id, status: "active")
+        category.name
+      end
+
+      row :activity_date do |reimbursement|
+        reimbursement.formatted_activity_date
+      end
+
       row :invoice_reference_number
-      row :invoice_amount
-      row :reimbursable_amount
-      row :reimbursed_amount
+
+      row :invoice_amount do |reimbursement|
+        reimbursement.formatted_invoice_amount
+      end
+  
+      row :reimbursable_amount do |reimbursement|
+        reimbursement.formatted_reimbursable_amount
+      end
+  
+      row :reimbursed_amount do |reimbursement|
+        reimbursement.formatted_reimbursed_amount
+      end
+
       row "Invoice Image", :image do |reimbursement|
         if reimbursement.image.attached?
-          link_to "View Image", url_for(reimbursement.image), target: "_blank", class: "text-primary"
+          div do
+            link_to "View", url_for(reimbursement.image), target: "_blank", class: "text-primary"
+          end
+          div do
+            link_to "Download", url_for(reimbursement.image), download: true, target: "_blank", class: "text-primary"
+          end
         end
       end
       row :supplier
-      row :status
+      row :status do |employee| employee.status.capitalize end
       row :created_at
       row :updated_at
     end
