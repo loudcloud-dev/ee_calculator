@@ -516,6 +516,7 @@ DEPENDENCIES
   rspec-rails (~> 7.0, >= 7.0.1)
   rubocop (~> 1.68)
   rubocop-rails-omakase
+  rubyzip (~> 2.3, >= 2.3.2)
   sassc-rails
   selenium-webdriver
   sprockets-rails
