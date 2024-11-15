@@ -1,6 +1,6 @@
 ActiveAdmin.register ReimbursementItem do
   actions :all, except: [ :new, :destroy ]
-  before_action :load_collections, only: [ :index ]
+  before_action :load_collections, only: [ :index, :edit ]
 
   preserve_default_filters!
   remove_filter :reimbursement
@@ -25,6 +25,28 @@ ActiveAdmin.register ReimbursementItem do
     column :updated_at
 
     actions
+  end
+
+  show do
+    attributes_table do
+      row :employee_id do |item|
+        link_to item.employee.nickname, admin_employee_path(item.employee.id)
+      end
+
+      row :shared_amount do |item|
+        item.formatted_shared_amount
+      end
+
+      row :created_at
+      row :updated_at
+    end
+  end
+
+  form do |f|
+    f.inputs do
+      f.input :employee_id, as: :select, collection: employees, prompt: "Select Assigned Employee"
+      f.input :shared_amount
+    end
   end
 
   controller do
