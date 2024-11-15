@@ -221,28 +221,30 @@ ActiveAdmin.register Reimbursement do
     end
 
     def handle_reimbursements_filter(params)
-      return unless params.present?
-
       reimbursements = Reimbursement.where.not(status: "cancelled").with_attached_image
 
-      if params[:employee_id].present?
-        reimbursements = reimbursements.where(employee_id: params[:employee_id])
+      if params.present?
+        if params[:employee_id].present?
+          reimbursements = reimbursements.where(employee_id: params[:employee_id])
+        end
+  
+        if params[:category_id].present?
+          reimbursements = reimbursements.where(category_id: params[:category_id])
+        end
+  
+        if params[:status_eq].present?
+          reimbursements = reimbursements.where(status: params[:status_eq])
+        end
+  
+        if params[:activity_date_gteq].present? && params[:activity_date_lteq].present?
+          start_date = Date.parse(params[:activity_date_gteq])
+          end_date = Date.parse(params[:activity_date_lteq])
+  
+          reimbursements = Reimbursement.where(activity_date: start_date..end_date)
+        end
       end
 
-      if params[:category_id].present?
-        reimbursements = reimbursements.where(category_id: params[:category_id])
-      end
-
-      if params[:status_eq].present?
-        reimbursements = reimbursements.where(status: params[:status_eq])
-      end
-
-      if params[:activity_date_gteq].present? && params[:activity_date_lteq].present?
-        start_date = Date.parse(params[:activity_date_gteq])
-        end_date = Date.parse(params[:activity_date_lteq])
-
-        reimbursements = Reimbursement.where(activity_date: start_date..end_date)
-      end
+      reimbursements
     end
 
     def create_temp_zip(reimbursements)
@@ -251,7 +253,6 @@ ActiveAdmin.register Reimbursement do
       FileUtils.rm_rf(temp_dir) if Dir.exist?(temp_dir)
       FileUtils.mkdir_p(temp_dir)
 
-      # reimbursements = Reimbursement.where.not(status: "cancelled").with_attached_image
       zip_file_path = temp_dir.join("images.zip")
 
       download_zip(zip_file_path, reimbursements)
