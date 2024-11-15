@@ -61,7 +61,7 @@ gem "rubocop", "~> 1.68"
 
 # Active Storage
 gem "image_processing", "~> 1.13"
-gem "active_storage_validations", "~> 1.3", ">= 1.3.3"
+gem "active_storage_validations", "~> 1.3"
 gem "rubyzip", "~> 2.3", ">= 2.3.2"
 
 group :development, :test do
