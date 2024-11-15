@@ -1,5 +1,5 @@
 ActiveAdmin.register Reimbursement do
-  require 'zip'
+  require "zip"
 
   permit_params :employee_id,
                 :category_id,
@@ -108,11 +108,11 @@ ActiveAdmin.register Reimbursement do
       row :invoice_amount do |reimbursement|
         reimbursement.formatted_invoice_amount
       end
-  
+
       row :reimbursable_amount do |reimbursement|
         reimbursement.formatted_reimbursable_amount
       end
-  
+
       row :reimbursed_amount do |reimbursement|
         reimbursement.formatted_reimbursed_amount
       end
@@ -202,7 +202,7 @@ ActiveAdmin.register Reimbursement do
 
   action_item :export_images, only: :index do
     link_to "Export Images", export_images_admin_reimbursements_path(filter_params: params.permit(q: {}).to_h[:q])
-  end  
+  end
 
   collection_action :export_images, method: :get do
     reimbursements = handle_reimbursements_filter(params[:filter_params])
@@ -213,7 +213,7 @@ ActiveAdmin.register Reimbursement do
     def load_collections
       @employees = Employee.where(status: "active").pluck(:nickname, :id)
       @categories = Category.where(status: "active").pluck(:name, :id)
-      @status = { 'Pending' => 'pending', 'Reimbursed' => 'reimbursed', 'Cancelled' => 'cancelled' }
+      @status = { "Pending" => "pending", "Reimbursed" => "reimbursed", "Cancelled" => "cancelled" }
     end
 
     def participated_employees
@@ -240,7 +240,7 @@ ActiveAdmin.register Reimbursement do
       if params[:activity_date_gteq].present? && params[:activity_date_lteq].present?
         start_date = Date.parse(params[:activity_date_gteq])
         end_date = Date.parse(params[:activity_date_lteq])
-      
+
         reimbursements = Reimbursement.where(activity_date: start_date..end_date)
       end
     end
@@ -250,7 +250,7 @@ ActiveAdmin.register Reimbursement do
 
       FileUtils.rm_rf(temp_dir) if Dir.exist?(temp_dir)
       FileUtils.mkdir_p(temp_dir)
-  
+
       # reimbursements = Reimbursement.where.not(status: "cancelled").with_attached_image
       zip_file_path = temp_dir.join("images.zip")
 
@@ -263,12 +263,12 @@ ActiveAdmin.register Reimbursement do
           if reimbursement.image.attached?
             image_path = ActiveStorage::Blob.service.path_for(reimbursement.image.key)
             image_filename = "#{reimbursement.formatted_activity_date}_#{reimbursement.supplier.upcase}.#{reimbursement.image.filename.extension}"
-  
+
             zipfile.add(image_filename, image_path)
           end
         end
       end
-  
+
       send_file file_path, type: "application/zip", disposition: "attachment", filename: "Invoice Images.zip"
     end
   end
