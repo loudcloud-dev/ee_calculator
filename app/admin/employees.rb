@@ -22,6 +22,21 @@ ActiveAdmin.register Employee do
     actions
   end
 
+  show do
+    attributes_table do
+      row :first_name
+      row :last_name
+      row :nickname
+
+      row :status do |employee|
+        employee.status.capitalize
+      end
+
+      row :created_at
+      row :updated_at
+    end
+  end
+
   form do |f|
     f.inputs do
       f.input :first_name
