@@ -262,8 +262,10 @@ ActiveAdmin.register Reimbursement do
       Zip::File.open(file_path, Zip::File::CREATE) do |zipfile|
         reimbursements.each_with_index do |reimbursement, index|
           if reimbursement.image.attached?
+            date = reimbursement.activity_date.strftime("%m%d%Y")
+
             image_path = ActiveStorage::Blob.service.path_for(reimbursement.image.key)
-            image_filename = "#{reimbursement.formatted_activity_date}_#{reimbursement.supplier.upcase}.#{reimbursement.image.filename.extension}"
+            image_filename = "#{date}_#{reimbursement.supplier.upcase}.#{reimbursement.image.filename.extension}"
 
             zipfile.add(image_filename, image_path)
           end
