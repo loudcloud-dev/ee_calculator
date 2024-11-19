@@ -1,24 +1,33 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Requirements
+- Ruby >= v3.3.5
+- Rails >= v7.2.1
 
-Things you may want to cover:
+## Installation 
+```bash
+$ git clone https://github.com/loudcloud-dev/ee_calculator.git
+```
+```bash
+$ cd ee_calculator
+```
+```bash
+$ gem install bundler
+```
+```bash
+$ bundle install
+```
 
-* Ruby version
+## Database Setup
+```bash
+$ rails db:migrate
+```
+```bash
+$ rails db:seed
+```
 
-* System dependencies
+## Run the app
+```bash
+$ bin/dev
+```
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
