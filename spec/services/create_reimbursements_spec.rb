@@ -26,6 +26,8 @@ RSpec.describe ReimbursementServices::CreateReimbursement do
     }
   end
 
+  let(:service) { described_class.new(reimbursement_params) }
+
   before do
     allow(ENV).to receive(:[]).with('MONTHLY_BUDGET').and_return('1000')
   end
@@ -36,7 +38,7 @@ RSpec.describe ReimbursementServices::CreateReimbursement do
         reimbursement = Reimbursement.create!(reimbursement_params)
         ReimbursementItem.create!(employee: employee, reimbursement: reimbursement, shared_amount: 200)
 
-        service = ReimbursementServices::CreateReimbursement.new(reimbursement_params)
+        # service = ReimbursementServices::CreateReimbursement.new(reimbursement_params)
         service.perform
 
         employee_budget = service.send(:calculate_employee_budget, service.instance_variable_get(:@reimbursement))
@@ -49,7 +51,7 @@ RSpec.describe ReimbursementServices::CreateReimbursement do
       it 'returns an error' do
         invalid_params = reimbursement_params[:activity_date] = nil
 
-        service = ReimbursementServices::CreateReimbursement.new(reimbursement_params)
+        # service = ReimbursementServices::CreateReimbursement.new(reimbursement_params)
         result = service.perform
 
         expect(result[:success]).to be false
