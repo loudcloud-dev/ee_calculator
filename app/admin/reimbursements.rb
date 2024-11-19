@@ -48,7 +48,7 @@ ActiveAdmin.register Reimbursement do
       end
     end
 
-    column :employee_id do |reimbursement|
+    column "Reimbursed To", :employee_id do |reimbursement|
       link_to reimbursement.employee.nickname, admin_employee_path(reimbursement.employee)
     end
 
@@ -227,19 +227,19 @@ ActiveAdmin.register Reimbursement do
         if params[:employee_id].present?
           reimbursements = reimbursements.where(employee_id: params[:employee_id])
         end
-  
+
         if params[:category_id].present?
           reimbursements = reimbursements.where(category_id: params[:category_id])
         end
-  
+
         if params[:status_eq].present?
           reimbursements = reimbursements.where(status: params[:status_eq])
         end
-  
+
         if params[:activity_date_gteq].present? && params[:activity_date_lteq].present?
           start_date = Date.parse(params[:activity_date_gteq])
           end_date = Date.parse(params[:activity_date_lteq])
-  
+
           reimbursements = Reimbursement.where(activity_date: start_date..end_date)
         end
       end

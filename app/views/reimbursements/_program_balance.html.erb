@@ -1,26 +1,16 @@
 <div class="col-12 col-md-6">
-  <div class="d-flex justify-content-between" data-controller="toggle">
-    <!--<% if @item_breakdown.present? %>
-      <p class="mb-2">
-        <button class="btn btn-outline-secondary btn-sm border-0" type="button" data-bs-toggle="collapse" data-bs-target="#breakdown_collapse" aria-expanded="false" aria-controls="breakdown_collapse" data-action="click->toggle#toggle" data-toggle-target="button">
-          <span data-toggle-target="text">Show more</span>
-          <i class="bi bi-arrow-down-short" data-toggle-target="icon"></i>
-        </button>
-      </p>
-    <% end %>-->
-  </div>
   <div class="row row-cols-1 g-4">
     <% total_spent = 0 %>
     <% @categories.each_with_index do |category, index| %>
       <% total_shared_amount = @reimbursement_items.find { |item| item.category_id == category.id }&.total_shared_amount || 0 %>
       <% total_spent += total_shared_amount %>
       <div class="col">
-        <div class="card usage-card equal-height">
+        <div class="card usage-card card-box-shadow">
           <div class="icon-background">
             <i class="<%= category.icon %>" style="color: <%= category.icon_color %>;"></i>
           </div>
           <div class="card-body text-end">
-            <h5 class="card-title"><%= format_amount(ENV['MONTHLY_BUDGET'].to_i - total_shared_amount) %></h5>
+            <h5 class="card-title"><%= format_amount(ENV['MONTHLY_BUDGET'].to_i - total_shared_amount) %> <span class="fs-6 fw-normal text-muted">left</span></h5>
             <p class="card-text text-muted"><%= category.name %></p>
           </div>
         </div>
@@ -28,7 +18,7 @@
     <% end %>
 
     <div class="col">
-      <div class="card usage-card equal-height">
+      <div class="card usage-card card-box-shadow">
         <div class="icon-background">
           <i class="fa-solid fa-money-bills fa-3x" style="color: #a3fc97;"></i>
         </div>

@@ -38,8 +38,8 @@ RSpec.describe ReimbursementServices::GetReimbursements do
   before do
     reimbursement = Reimbursement.create!(reimbursement_params)
     ReimbursementItem.create!(employee: employee, reimbursement: reimbursement, shared_amount: 1000)
-    allow(Reimbursement).to receive(:filed_reimbursements).and_return([:mocked_filed_reimbursement])
-    allow(ReimbursementItem).to receive(:reimbursement_items).and_return([:mocked_reimbursement_item])
+    allow(Reimbursement).to receive(:filed_reimbursements).and_return([ :mocked_filed_reimbursement ])
+    allow(ReimbursementItem).to receive(:reimbursement_items).and_return([ :mocked_reimbursement_item ])
     allow(Reimbursement).to receive(:item_breakdown).and_return(
       {
         name: 'Eat Takes Two',
@@ -56,8 +56,8 @@ RSpec.describe ReimbursementServices::GetReimbursements do
 
       expect(result).to be_a(Hash)
       expect(result.keys).to contain_exactly(:filed_reimbursements, :reimbursement_items, :item_breakdown)
-      expect(result[:filed_reimbursements]).to eq([:mocked_filed_reimbursement])
-      expect(result[:reimbursement_items]).to eq([:mocked_reimbursement_item])
+      expect(result[:filed_reimbursements]).to eq([ :mocked_filed_reimbursement ])
+      expect(result[:reimbursement_items]).to eq([ :mocked_reimbursement_item ])
       expect(result[:item_breakdown]).to eq(
         {
           name: 'Eat Takes Two',
