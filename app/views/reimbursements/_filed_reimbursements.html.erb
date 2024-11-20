@@ -41,8 +41,14 @@
                   </div>
                 </td>
                 <td>
-                  <%= reimbursement.employee.nickname %>
-                  <a tabindex="0" class="btn btn-sm p-0 border-0 fs-7" data-bs-custom-class="custom-popover" role="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="focus" data-bs-title="Benefit Per Employee" data-bs-content="<%= participated_employees_shares %>"><i class="fa-solid fa-circle-info text-black-50"></i></a>
+                  <div class="d-flex">
+                    <div>
+                      <%= reimbursement.employee.nickname %>
+                    </div>
+                    <div class="ms-1" data-controller="popover">
+                      <a tabindex="0" class="btn btn-sm p-0 border-0 fs-7" data-bs-custom-class="custom-popover" role="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="focus" data-bs-title="Benefit Per Employee" data-bs-content="<%= participated_employees_shares %>"><i class="fa-solid fa-circle-info text-black-50"></i></a>
+                    </div>
+                  </div>
                 </td>
                 <td class="text-truncate table-width-150" title="<%= participated_employees %>">
                   <%= participated_employees %>
