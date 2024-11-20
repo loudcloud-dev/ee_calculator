@@ -10,7 +10,7 @@ export default class extends Controller {
   toggle() {
     this.expanded = !this.expanded;
 
-    this.textTarget.textContent = this.expanded ? "Show less" : "Show more";
+    this.textTarget.textContent = this.expanded ? "Hide Reimbursements" : "View All Reimbursements";
     this.iconTarget.className = this.expanded ? "bi bi-arrow-up-short" : "bi bi-arrow-down-short";
   }
 }

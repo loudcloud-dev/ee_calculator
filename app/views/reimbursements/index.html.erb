@@ -4,9 +4,15 @@
   <% if params[:employee_id].present? %>
     <div class="col-11 mx-auto">
       <div class="row my-3">
-        <h5>Usage</h5>
-        <%= render 'usage' %>
-        <%= render 'item_breakdown' %>   
+        <div>
+          <h4 class="fw-bold mb-0"> <%= dynamic_greeting %>, <%= @employee.nickname %>! <%= image_tag("wave.gif", height: 25, width: 25 )%></h4>
+          <p class="fs-6 text-muted">
+            <%= "#{@employee.nickname}#{@employee.nickname.end_with?('s') ? '’' : '’s'} activity in #{Date::MONTHNAMES[params[:date][:month].to_i]} #{Date.today.year}" %>
+          </p>
+        </div>
+
+        <%= render 'program_balance' %>
+        <%= render 'availed_activities' %>
       </div>
       <%= render 'filed_reimbursements' %>
     </div>

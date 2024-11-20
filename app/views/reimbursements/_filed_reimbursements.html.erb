@@ -1,53 +1,71 @@
 <% if @filed_reimbursements.present? %>
-<div class="card card-body">
-  <h5>Filed Reimbursements</h5>
-
-  <div class="table-responsive">
-    <table class="table">
-      <thead class="table-light">
-        <th scope="col">Activity</th>
-        <th scope="col">Supplier</th>
-        <th scope="col">Status</th>
-        <th scope="col">Employees</th>
-        <th class="text-end" scope="col">Invoice Amount</th>
-        <th class="text-end" scope="col">Reimbursable Amount</th>
-      </thead>
-      <tbody>
-        <% @filed_reimbursements.each do |reimbursement| %>
-          <% participated_employees = reimbursement.participated_employees.map(&:nickname).join(", ") %>
-          <tr>
-            <td class="text-truncate table-width-150">
-              <div class="d-flex">
-                <div>
-                  <%= reimbursement.name %>
-                  <div class="text-muted fs-7">
-                    <%= reimbursement.formatted_activity_date %>
+  <div class="card collapse" id="filed_reimbursements_collapse">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table caption-top">
+          <caption class="pt-0">Filed Reimbursements</caption>
+          <thead class="table-light">
+            <th scope="col">Activity</th>
+            <th scope="col">Supplier</th>
+            <th scope="col">Reimbursed To</th>
+            <th scope="col">Engaged Employees</th>
+            <th class="text-end" scope="col">Invoice Amount</th>
+          </thead>
+          <tbody>
+            <% @filed_reimbursements.each do |reimbursement| %>
+              <% participated_employees_shares = reimbursement.participated_employees_shares.map { |item| "#{item.employee.nickname}: #{format_amount(item.shared_amount)}" }.join("<br>").html_safe %>
+              <% participated_employees = reimbursement.participated_employees.map(&:nickname).join(", ") %>
+              <tr>
+                <td class="text-truncate table-width-150">
+                  <div class="d-flex">
+                    <div>
+                      <%= reimbursement.name %>
+                      <div class="text-muted fs-7">
+                        <%= reimbursement.formatted_activity_date %>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div class="d-flex">
-                <div class="text-truncate table-width-180" title="<%= reimbursement.supplier %>">
-                  <%= reimbursement.supplier %>
-                  <div class="text-muted fs-7" title="<%= reimbursement.invoice_reference_number %>">
-                    <% if reimbursement.image.attached? %>
-                      <%= link_to "Reference Number: #{reimbursement.invoice_reference_number}", url_for(reimbursement.image), target: "_blank", rel: "noopener" %>
-                    <% else %>
-                      Reference Number: <%= reimbursement.invoice_reference_number %>
-                    <% end %>
+                </td>
+                <td class="text-truncate table-width-200">
+                  <div class="d-flex">
+                    <div title="<%= reimbursement.supplier %>">
+                      <%= reimbursement.supplier %>
+                      <div class="text-muted fs-7" title="<%= reimbursement.invoice_reference_number %>">
+                        <% if reimbursement.image.attached? %>
+                          <%= link_to "Reference Number: #{reimbursement.invoice_reference_number}", url_for(reimbursement.image), target: "_blank", rel: "noopener" %>
+                        <% else %>
+                          Reference Number: <%= reimbursement.invoice_reference_number %>
+                        <% end %>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </td>
-            <td><span class="badge rounded-pill text-bg-<%= set_status_badge(reimbursement.status) %>"><%= reimbursement.status.capitalize %></span></td>
-            <td class="text-truncate table-width-150" title="<%= participated_employees %>"><%= participated_employees %></td>
-            <td class="text-end"><%= reimbursement.formatted_invoice_amount %></td>
-            <td class="text-end"><%= reimbursement.formatted_reimbursable_amount %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+                </td>
+                <td>
+                  <%= reimbursement.employee.nickname %>
+                  <a tabindex="0" class="btn btn-sm p-0 border-0 fs-7" data-bs-custom-class="custom-popover" role="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="focus" data-bs-title="Benefit Per Employee" data-bs-content="<%= participated_employees_shares %>"><i class="fa-solid fa-circle-info text-black-50"></i></a>
+                </td>
+                <td class="text-truncate table-width-150" title="<%= participated_employees %>">
+                  <%= participated_employees %>
+                </td>
+                <td class="text-end"><%= reimbursement.formatted_invoice_amount %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-</div>
+
+  <div class="d-flex align-items-center" data-controller="toggle">
+    <div class="flex-grow-1 border-bottom"></div>
+
+    <p class="mx-3 my-2">
+      <button class="btn btn-primary btn-sm border-0 rounded-pill px-3" type="button" data-bs-toggle="collapse" data-bs-target="#filed_reimbursements_collapse" aria-expanded="false" aria-controls="filed_reimbursements_collapse" data-action="click->toggle#toggle" data-toggle-target="button">
+        <span data-toggle-target="text">View All Reimbursements</span>
+        <i class="bi bi-arrow-down-short" data-toggle-target="icon"></i>
+      </button>
+    </p>
+
+    <div class="flex-grow-1 border-bottom"></div>
+  </div>
 <% end %>

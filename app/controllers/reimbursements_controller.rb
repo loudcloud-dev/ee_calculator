@@ -11,6 +11,8 @@ class ReimbursementsController < InheritedResources::Base
     @filed_reimbursements = reimbursement_service[:filed_reimbursements]
     @reimbursement_items = reimbursement_service[:reimbursement_items]
     @item_breakdown = reimbursement_service[:item_breakdown]
+
+    @employee = Employee.find(params[:employee_id]) if params[:employee_id].present?
   end
 
   def new

@@ -21,4 +21,15 @@ module ReimbursementsHelper
   def format_amount(amount)
     number_to_currency(amount, unit: "₱")
   end
+
+  def dynamic_greeting
+    current_hour = Time.now.hour
+    greeting = if current_hour < 12
+                "Good Morning"
+    elsif current_hour < 18
+                "Good Afternoon"
+    else
+                "Good Evening"
+    end
+  end
 end

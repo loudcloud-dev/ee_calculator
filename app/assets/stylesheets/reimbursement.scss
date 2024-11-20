@@ -1,5 +1,5 @@
-.table-width-150 {
-  max-width: 150px;
+.table-width-120 {
+  max-width: 120px;
 }
 
 .table-width-150 {
@@ -8,6 +8,10 @@
 
 .table-width-180 {
   max-width: 180px;
+}
+
+.table-width-200 {
+  max-width: 200px;
 }
 
 .ts-control > input {
@@ -20,7 +24,7 @@
   margin-left: 4px !important;
 }
 
-.usage-card {
+.card-box-shadow {
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
@@ -41,7 +45,7 @@
 }
 
 .equal-height {
-  max-height: 320px;
+  max-height: 317px;
   overflow-y: auto;
 }
 
@@ -67,6 +71,20 @@
   padding-right: 10px;
 }
 
+.btn-primary {
+  color: white;
+  background-color: rgb(48, 146, 192);
+
+  &:hover {
+    background-color: rgb(23, 119, 163);
+  }
+}
+
+.custom-popover {
+  --bs-popover-border-color: rgb(48, 146, 192);
+  --bs-popover-header-bg: rgb(48, 146, 192);
+  --bs-popover-header-color: var(--bs-white);
+}
 
 @media only screen and (min-width: 992px) {
   .hero-section {
@@ -77,6 +95,6 @@
   }
 
   .item-breakdown-card{
-    min-height: 320px;
+    min-height: 317px;
   }
 }

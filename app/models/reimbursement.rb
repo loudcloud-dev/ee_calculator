@@ -23,6 +23,13 @@ class Reimbursement < ApplicationRecord
             .order(Arel.sql(ActiveRecord::Base.sanitize_sql_array("CASE id #{order_by_clause} END")))
   end
 
+  def participated_employees_shares
+    order_by_clause = participated_employee_ids.each_with_index.map { |id, index| "WHEN #{id} THEN #{index}" }.join(" ")
+    ReimbursementItem.joins(:employee)
+                     .where(reimbursement_id: id, employee_id: participated_employee_ids)
+                     .order(Arel.sql(ActiveRecord::Base.sanitize_sql_array("CASE employees.id #{order_by_clause} END")))
+  end
+
   def self.filed_reimbursements(employee_id)
     self.select("reimbursements.*, categories.name")
         .joins(:category)

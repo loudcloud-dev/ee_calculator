@@ -48,7 +48,7 @@ ActiveAdmin.register Reimbursement do
       end
     end
 
-    column :employee_id do |reimbursement|
+    column "Reimbursed To", :employee_id do |reimbursement|
       link_to reimbursement.employee.nickname, admin_employee_path(reimbursement.employee)
     end
 
@@ -227,19 +227,19 @@ ActiveAdmin.register Reimbursement do
         if params[:employee_id].present?
           reimbursements = reimbursements.where(employee_id: params[:employee_id])
         end
-  
+
         if params[:category_id].present?
           reimbursements = reimbursements.where(category_id: params[:category_id])
         end
-  
+
         if params[:status_eq].present?
           reimbursements = reimbursements.where(status: params[:status_eq])
         end
-  
+
         if params[:activity_date_gteq].present? && params[:activity_date_lteq].present?
           start_date = Date.parse(params[:activity_date_gteq])
           end_date = Date.parse(params[:activity_date_lteq])
-  
+
           reimbursements = Reimbursement.where(activity_date: start_date..end_date)
         end
       end
@@ -262,8 +262,10 @@ ActiveAdmin.register Reimbursement do
       Zip::File.open(file_path, Zip::File::CREATE) do |zipfile|
         reimbursements.each_with_index do |reimbursement, index|
           if reimbursement.image.attached?
+            date = reimbursement.activity_date.strftime("%m%d%Y")
+
             image_path = ActiveStorage::Blob.service.path_for(reimbursement.image.key)
-            image_filename = "#{reimbursement.formatted_activity_date}_#{reimbursement.supplier.upcase}.#{reimbursement.image.filename.extension}"
+            image_filename = "#{date}_#{reimbursement.supplier.upcase}.#{reimbursement.image.filename.extension}"
 
             zipfile.add(image_filename, image_path)
           end
