@@ -13,6 +13,7 @@
           </thead>
           <tbody>
             <% @filed_reimbursements.each do |reimbursement| %>
+              <% participated_employees_shares = reimbursement.participated_employees_shares.map { |item| "#{item.employee.nickname}: #{format_amount(item.shared_amount)}" }.join("<br>").html_safe %>
               <% participated_employees = reimbursement.participated_employees.map(&:nickname).join(", ") %>
               <tr>
                 <td class="text-truncate table-width-150">
@@ -39,8 +40,13 @@
                     </div>
                   </div>
                 </td>
-                <td><%= reimbursement.employee.nickname %></td>
-                <td class="text-truncate table-width-150" title="<%= participated_employees %>"><%= participated_employees %></td>
+                <td>
+                  <%= reimbursement.employee.nickname %>
+                  <a tabindex="0" class="btn btn-sm p-0 border-0 fs-7" data-bs-custom-class="custom-popover" role="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="focus" data-bs-title="Benefit Per Employee" data-bs-content="<%= participated_employees_shares %>"><i class="fa-solid fa-circle-info text-black-50"></i></a>
+                </td>
+                <td class="text-truncate table-width-150" title="<%= participated_employees %>">
+                  <%= participated_employees %>
+                </td>
                 <td class="text-end"><%= reimbursement.formatted_invoice_amount %></td>
               </tr>
             <% end %>

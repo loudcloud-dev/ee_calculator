@@ -80,6 +80,12 @@
   }
 }
 
+.custom-popover {
+  --bs-popover-border-color: rgb(48, 146, 192);
+  --bs-popover-header-bg: rgb(48, 146, 192);
+  --bs-popover-header-color: var(--bs-white);
+}
+
 @media only screen and (min-width: 992px) {
   .hero-section {
     background-image: url(Vector-01.svg), url(Vector-02.svg);
