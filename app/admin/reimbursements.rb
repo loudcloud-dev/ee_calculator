@@ -15,7 +15,7 @@ ActiveAdmin.register Reimbursement do
 
   # Actions
   before_action :participated_employees, only: [ :create, :update ]
-  before_action :load_collections, only: [ :index, :new, :edit ]
+  before_action :load_collections, only: [ :index, :new, :edit, :update ]
   actions :all, except: [ :destroy ]
 
   # Filters
@@ -27,8 +27,20 @@ ActiveAdmin.register Reimbursement do
 
   config.sort_order = "activity_date_desc"
 
+  batch_action :update_status, confirm: "Are you sure you want to update the selected reimbursements?", form: {
+    status: [ [ "Pending", "pending" ], [ "Reimbursed", "reimbursed" ] , [ "Cancelled", "cancelled" ]]
+  } do |ids, inputs|
+
+    batch_action_collection.find(ids).each do |reimbursement|
+      reimbursement.update(status: inputs[:status])
+    end
+  
+    redirect_to admin_reimbursements_path, notice: "Selected reimbursements have been updated to #{inputs[:status]}."
+  end  
+
   index do
     id_column
+    selectable_column
     column "Activity", :category_id, class: "admin-table-width-150 text-truncate" do |reimbursement|
       category = Category.find_by(id: reimbursement.category_id, status: "active")
       div do
