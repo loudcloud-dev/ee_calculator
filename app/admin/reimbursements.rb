@@ -28,15 +28,14 @@ ActiveAdmin.register Reimbursement do
   config.sort_order = "activity_date_desc"
 
   batch_action :update_status, confirm: "Are you sure you want to update the selected reimbursements?", form: {
-    status: [ [ "Pending", "pending" ], [ "Reimbursed", "reimbursed" ] , [ "Cancelled", "cancelled" ]]
+    status: [ [ "Pending", "pending" ], [ "Reimbursed", "reimbursed" ], [ "Cancelled", "cancelled" ] ]
   } do |ids, inputs|
-
     batch_action_collection.find(ids).each do |reimbursement|
       reimbursement.update(status: inputs[:status])
     end
-  
+
     redirect_to admin_reimbursements_path, notice: "Selected reimbursements have been updated to #{inputs[:status]}."
-  end  
+  end
 
   index do
     id_column
