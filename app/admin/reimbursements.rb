@@ -97,7 +97,7 @@ ActiveAdmin.register Reimbursement do
       reimbursements = Reimbursement.all
 
       if params[:q].present?
-        reimbursements = reimbursements.where(employee_id: params[:q][:employee_id]) if params[:q][:employee_id_eq].present?
+        reimbursements = reimbursements.where(employee_id: params[:q][:employee_id_eq]) if params[:q][:employee_id_eq].present?
         reimbursements = reimbursements.where(category_id: params[:q][:category_id]) if params[:q][:category_id].present?
         reimbursements = reimbursements.where(status: params[:q][:status_eq]) if params[:q][:status_eq].present?
 
@@ -269,7 +269,7 @@ ActiveAdmin.register Reimbursement do
       reimbursements = Reimbursement.where.not(status: "cancelled").with_attached_image
 
       if params.present?
-        reimbursements = reimbursements.where(employee_id: params[:employee_id]) if params[:employee_id_eq].present?
+        reimbursements = reimbursements.where(employee_id: params[:employee_id_eq]) if params[:employee_id_eq].present?
         reimbursements = reimbursements.where(category_id: params[:category_id]) if params[:category_id].present?
         reimbursements = reimbursements.where(status: params[:status_eq]) if params[:status_eq].present?
 
@@ -277,7 +277,7 @@ ActiveAdmin.register Reimbursement do
           start_date = Date.parse(params[:activity_date_gteq])
           end_date = params[:activity_date_lteq].present? ? Date.parse(params[:activity_date_lteq]) : Date.today
 
-          reimbursements = Reimbursement.where(activity_date: start_date..end_date)
+          reimbursements = reimbursements.where(activity_date: start_date..end_date)
         end
       end
 
