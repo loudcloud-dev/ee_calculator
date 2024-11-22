@@ -15,7 +15,7 @@ ActiveAdmin.register Reimbursement do
 
   # Actions
   before_action :participated_employees, only: [ :create, :update ]
-  before_action :load_collections, only: [ :index, :new, :edit, :update ]
+  before_action :load_collections, only: [ :index, :new, :create, :edit, :update ]
   actions :all, except: [ :destroy ]
 
   # Filters
