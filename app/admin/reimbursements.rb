@@ -182,7 +182,7 @@ ActiveAdmin.register Reimbursement do
       f.input :category_id, as: :select, collection: categories, prompt: "Select a category"
       f.input :activity_date, as: :datepicker, input_html: { max: Date.today }
       f.input :invoice_reference_number
-      f.input :invoice_amount
+      f.input :invoice_amount, input_html: { min: 1, max: 1000000, step: 1 }
       f.input :reimbursable_amount
       f.input :reimbursed_amount
       f.input :supplier

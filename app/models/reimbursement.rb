@@ -10,7 +10,7 @@ class Reimbursement < ApplicationRecord
   validates :category_id, presence: true
   validates :activity_date, presence: true
   validates :invoice_reference_number, presence: true
-  validates :invoice_amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :invoice_amount, presence: true, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 10**6 } # 1,000,000
   validates :supplier, presence: true
   validate :unique_invoice_reference_number
   validates :image, attached: true,
