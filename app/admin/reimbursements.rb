@@ -15,20 +15,31 @@ ActiveAdmin.register Reimbursement do
 
   # Actions
   before_action :participated_employees, only: [ :create, :update ]
-  before_action :load_collections, only: [ :index, :new, :edit ]
+  before_action :load_collections, only: [ :index, :new, :edit, :update ]
   actions :all, except: [ :destroy ]
 
   # Filters
   preserve_default_filters!
-  remove_filter :image_attachment, :image_blob, :reimbursement_items
+  remove_filter :image_attachment, :image_blob, :reimbursement_items, :participated_employee_ids
 
   filter :employee, as: :select, collection: -> { @employees }
   filter :status, as: :select, collection: -> { @status }
 
   config.sort_order = "activity_date_desc"
 
+  batch_action :update_status, confirm: "Are you sure you want to update the selected reimbursements?", form: {
+    status: [ [ "Pending", "pending" ], [ "Reimbursed", "reimbursed" ], [ "Cancelled", "cancelled" ] ]
+  } do |ids, inputs|
+    batch_action_collection.find(ids).each do |reimbursement|
+      reimbursement.update(status: inputs[:status])
+    end
+
+    redirect_to admin_reimbursements_path, notice: "Selected reimbursements have been updated to #{inputs[:status]}."
+  end
+
   index do
     id_column
+    selectable_column
     column "Activity", :category_id, class: "admin-table-width-150 text-truncate" do |reimbursement|
       category = Category.find_by(id: reimbursement.category_id, status: "active")
       div do
@@ -81,6 +92,36 @@ ActiveAdmin.register Reimbursement do
     column :status do |employee| employee.status.capitalize end
 
     actions
+
+    div class: "index-footer-summary" do
+      reimbursements = Reimbursement.all
+
+      if params[:q].present?
+        reimbursements = reimbursements.where(employee_id: params[:q][:employee_id]) if params[:q][:employee_id].present?
+        reimbursements = reimbursements.where(category_id: params[:q][:category_id]) if params[:q][:category_id].present?
+        reimbursements = reimbursements.where(status: params[:q][:status_eq]) if params[:q][:status_eq].present?
+
+        if params[:q][:activity_date_gteq].present? || params[:q][:activity_date_lteq].present?
+          start_date = Date.parse(params[:q][:activity_date_gteq])
+          end_date = params[:q][:activity_date_lteq].present? ? Date.parse(params[:q][:activity_date_lteq]) : Date.today
+
+          reimbursements = reimbursements.where(activity_date: start_date..end_date)
+        end
+      end
+
+      total_invoice_amount = reimbursements.sum(:invoice_amount)
+      total_reimbursable_amount = reimbursements.sum(:reimbursable_amount)
+
+      div do
+        span "Total Invoice Amount: ", class: "amount-sum"
+        span number_to_currency(total_invoice_amount, unit: "₱")
+      end
+
+      div do
+        span "Total Reimbursable Amount: ", class: "amount-sum"
+        span number_to_currency(total_reimbursable_amount, unit: "₱")
+      end
+    end
   end
 
   show do
@@ -214,6 +255,10 @@ ActiveAdmin.register Reimbursement do
       @employees = Employee.where(status: "active").pluck(:nickname, :id)
       @categories = Category.where(status: "active").pluck(:name, :id)
       @status = { "Pending" => "pending", "Reimbursed" => "reimbursed", "Cancelled" => "cancelled" }
+
+      if params[:q].present?
+        @amounts = Reimbursement.select("SUM(invoice_amount), SUM(reimbursable_amount)")
+      end
     end
 
     def participated_employees
@@ -224,17 +269,9 @@ ActiveAdmin.register Reimbursement do
       reimbursements = Reimbursement.where.not(status: "cancelled").with_attached_image
 
       if params.present?
-        if params[:employee_id].present?
-          reimbursements = reimbursements.where(employee_id: params[:employee_id])
-        end
-
-        if params[:category_id].present?
-          reimbursements = reimbursements.where(category_id: params[:category_id])
-        end
-
-        if params[:status_eq].present?
-          reimbursements = reimbursements.where(status: params[:status_eq])
-        end
+        reimbursements = reimbursements.where(employee_id: params[:employee_id]) if params[:employee_id].present?
+        reimbursements = reimbursements.where(category_id: params[:category_id]) if params[:category_id].present?
+        reimbursements = reimbursements.where(status: params[:status_eq]) if params[:status_eq].present?
 
         if params[:activity_date_gteq].present? && params[:activity_date_lteq].present?
           start_date = Date.parse(params[:activity_date_gteq])
