@@ -23,7 +23,7 @@ ActiveAdmin.register Category do
     f.inputs do
       f.input :name
       f.input :description
-      f.input :icon
+      f.input :icon, label: "Icon (FontAwesome, Bootstrap)"
       f.input :icon_color
 
       f.input :status, as: :select, collection: [ "active", "inactive" ], include_blank: false
