@@ -71,12 +71,21 @@ module ReimbursementServices
     # Check if there's an excess amount. Distribute the excess amount to those employees that still have available budget.
     def allocate_excess_amount(invoice_amount, employee_budgets, distributions)
       total_allocated = distributions.sum { |item| item[:shared_amount] }
-      if total_allocated < invoice_amount
-        excess_amount = invoice_amount - total_allocated
+      excess_amount = invoice_amount - total_allocated
 
-        distributions.each do |item|
+      if total_allocated < invoice_amount
+        eligible_employees = distributions.select do |item|
+          remaining_budget = employee_budgets[item[:employee_id]] - item[:shared_amount]
+          remaining_budget > 0 
+        end
+
+        excess_share = excess_amount / eligible_employees.length
+
+        eligible_employees.each do |item|
           employee_id = item[:employee_id]
-          additional_share = [ excess_amount, employee_budgets[employee_id] - item[:shared_amount] ].min
+          remaining_budget = employee_budgets[employee_id] - item[:shared_amount]
+
+          additional_share = [ excess_share, remaining_budget ].min
 
           item[:shared_amount] += additional_share
           excess_amount -= additional_share
