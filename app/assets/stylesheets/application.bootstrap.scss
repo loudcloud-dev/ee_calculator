@@ -14,3 +14,18 @@ $fa-font-path: ".";
 body {
   font-family: 'Open Sans', sans-serif;
 }
+
+.btn-primary {
+  color: white;
+  background-color: rgb(48, 146, 192);
+
+  &:hover {
+    background-color: rgb(23, 119, 163);
+  }
+}
+
+.custom-popover {
+  --bs-popover-border-color: rgb(48, 146, 192);
+  --bs-popover-header-bg: rgb(48, 146, 192);
+  --bs-popover-header-color: var(--bs-white);
+}

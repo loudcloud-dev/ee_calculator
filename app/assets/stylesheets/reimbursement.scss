@@ -71,19 +71,11 @@
   padding-right: 10px;
 }
 
-.btn-primary {
-  color: white;
-  background-color: rgb(48, 146, 192);
-
-  &:hover {
-    background-color: rgb(23, 119, 163);
-  }
-}
-
-.custom-popover {
-  --bs-popover-border-color: rgb(48, 146, 192);
-  --bs-popover-header-bg: rgb(48, 146, 192);
-  --bs-popover-header-color: var(--bs-white);
+.participated-employee-cell {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @media only screen and (min-width: 992px) {
@@ -96,5 +88,12 @@
 
   .item-breakdown-card{
     min-height: 317px;
+  }
+
+  .participated-employee-cell {
+    max-width: 200px;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
   }
 }

@@ -13,9 +13,9 @@ class Reimbursement < ApplicationRecord
   validates :invoice_amount, presence: true, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 10**6 } # 1,000,000
   validates :supplier, presence: true
   validate :unique_invoice_reference_number
-  # validates :image, attached: true,
-  #                   content_type: [ "image/png", "image/jpeg" ],
-  #                   size: { less_than: 10.megabytes, message: "is too large. Maximum size is 10 MB." }
+  validates :image, attached: true,
+                    content_type: [ "image/png", "image/jpeg" ],
+                    size: { less_than: 10.megabytes, message: "is too large. Maximum size is 10 MB." }
 
   def participated_employees
     order_by_clause = participated_employee_ids.each_with_index.map { |id, index| "WHEN #{id} THEN #{index}" }.join(" ")
