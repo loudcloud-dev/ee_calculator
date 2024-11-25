@@ -9,7 +9,12 @@ RSpec.describe ReimbursementServices::CreateReimbursement do
     )
   }
 
-  let(:category) { Category.create!(name: 'Eat Takes Two') }
+  let(:category) { 
+    Category.create!(
+      name: 'Eat Takes Two',
+      icon: 'fa-solid fa-cookie-bite fa-3x'
+    ) 
+  }
 
   let(:reimbursement_params) do
     image_path = Rails.root.join('app', 'assets', 'images', 'loudcloud_logo.png')
