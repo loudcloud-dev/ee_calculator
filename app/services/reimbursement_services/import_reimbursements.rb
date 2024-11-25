@@ -1,6 +1,7 @@
 module ReimbursementServices
   class ImportReimbursements < ApplicationService
     require "open-uri"
+    require "csv"
 
     def initialize(csv_link)
       @csv_link = csv_link
