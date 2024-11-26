@@ -8,11 +8,16 @@
     <div class="col-12 col-md-7 mx-auto">
       <div class="row d-flex justify-content-center">
         <div class="col-12 col-md-7 mb-2 mb-md-0">
-          <%= form.select :employee_id, @employees, { selected: params[:employee_id], prompt: "Select an employee" }, { id: 'employee_select', data: { controller: 'employee_select' } } %>
+          <%= form.select :employee_id, @employees, { prompt: "Select an employee", selected: params[:employee_id] }, { id: 'employee_select', data: { controller: 'employee_select' }, required: true } %>
         </div>
         
         <div class="col-12 col-md-3 px-md-0 mb-2 mb-md-0">
-          <%= select_month(params.dig(:date, :month)&.to_i || Date.today, { prompt: 'Choose month', field_name: 'month' }, { id: 'month_select', data: { controller: 'employee_select' } }) %>
+          <%
+            month = params.dig(:date, :month)&.to_i
+            selected_month = (1..12).include?(month) ? month : Date.today.month
+          %>
+
+          <%= select_month(selected_month, { prompt: 'Choose month', field_name: 'month' }, { id: 'month_select', data: { controller: 'employee_select' }, required: true }) %>
         </div>
 
         <div class="d-none d-md-block col-auto">

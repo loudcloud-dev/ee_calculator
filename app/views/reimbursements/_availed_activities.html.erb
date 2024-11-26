@@ -1,46 +1,48 @@
-<div class="col-12 col-md-6 mt-3 mt-md-0 card card-body card-box-shadow availed-activities-container">
-<% if @item_breakdown.present? %>
-  <div class="table-responsive">
-      <table class="table caption-top">
-        <caption class="pt-0">Availed Activities</caption>
-        <thead class="table-light">
-          <tr>
-            <th scope="col">Activity</th>
-            <th scope="col">Engaged Employees</th>
-            <th class="text-end" scope="col">Consumption</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @item_breakdown.each do |item| %>
-            <% participated_employees = item.participated_employees.map(&:nickname).join(", ") %>
-            <tr>
-              <td class="text-truncate table-width-150">
-                <div class="d-flex">
-                  <div>
-                    <%= item.name %>
-                    <div class="text-muted fs-7">
-                      <%= item.formatted_activity_date %>
+<div class="col-12 col-md-6 mt-3 mt-md-0 card card-body card-box-shadow availed-activities-container equal-height">
+  <% if @item_breakdown.present? %>
+    <div class="equal-height">
+      <div class="table-responsive">
+          <table class="table caption-top">
+            <caption class="pt-0">Availed Activities</caption>
+            <thead class="table-light">
+              <tr>
+                <th scope="col">Activity</th>
+                <th scope="col">Engaged Employees</th>
+                <th class="text-end" scope="col">Consumption</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @item_breakdown.each do |item| %>
+                <% participated_employees = item.participated_employees.map(&:nickname).join(", ") %>
+                <tr>
+                  <td class="text-truncate table-width-150">
+                    <div class="d-flex">
+                      <div>
+                        <%= item.name %>
+                        <div class="text-muted fs-7">
+                          <%= item.formatted_activity_date %>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </td>
-              <td class="text-truncate table-width-180" title="<%= participated_employees %>"><%= participated_employees %></td>
-              <td class="text-end"><%= item.formatted_shared_amount %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-  </div>
-<% else %>
-  <div class="d-flex justify-content-center">
-    <%= image_tag("Robot_Working.gif", height: 200, width: 240 )%>
-  </div>
-  
-  <div class="d-flex flex-column mx-auto my-2">
-    <p class="text-center fw-bold me-2 mb-0">Nothing to display yet.</p>
-    <%= link_to new_reimbursement_path(employee_id: params[:employee_id]), class: "btn btn-sm btn-primary rounded-pill" do %>
-      File Reimbursement <i class="bi bi-arrow-right-circle"></i>
-    <% end %>
-  </div>
-<% end %>
+                  </td>
+                  <td class="text-truncate table-width-180" title="<%= participated_employees %>"><%= participated_employees %></td>
+                  <td class="text-end"><%= item.formatted_shared_amount %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+      </div>
+    </div>
+  <% else %>
+    <div class="d-flex justify-content-center">
+      <%= image_tag("Robot_Working.gif", height: 200, width: 240 )%>
+    </div>
+    
+    <div class="d-flex flex-column mx-auto my-2">
+      <p class="text-center fw-bold me-2 mb-0">Nothing to display yet.</p>
+      <%= link_to new_reimbursement_path(employee_id: params[:employee_id]), class: "btn btn-sm btn-primary rounded-pill" do %>
+        File Reimbursement <i class="bi bi-arrow-right-circle"></i>
+      <% end %>
+    </div>
+  <% end %>
 </div>
