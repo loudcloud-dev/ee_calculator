@@ -1,6 +1,6 @@
-<% if @item_breakdown.present? %>
-  <div class="col-12 col-md-6 mt-3 mt-md-0">
-    <div class="card card-body equal-height item-breakdown-card card-box-shadow">
+<div class="col-12 col-md-6 mt-3 mt-md-0 card card-body card-box-shadow availed-activities-container equal-height">
+  <% if @item_breakdown.present? %>
+    <div class="equal-height">
       <div class="table-responsive">
           <table class="table caption-top">
             <caption class="pt-0">Availed Activities</caption>
@@ -33,20 +33,16 @@
           </table>
       </div>
     </div>
-  </div>
-<% else %>
-  <div class="col-12 col-md-6 mt-3 mt-md-0">
-    <div class="card card-body equal-height item-breakdown-card">
-      <div class="d-flex justify-content-center">
-        <%= image_tag("Robot_Working.gif", height: 200, width: 240 )%>
-      </div>
-      
-      <div class="d-flex flex-column mx-auto my-2">
-        <p class="text-center fw-bold me-2 mb-0">Nothing to display yet.</p>
-        <%= link_to new_reimbursement_path(employee_id: params[:employee_id]), class: "btn btn-sm btn-primary rounded-pill" do %>
-          File Reimbursement <i class="bi bi-arrow-right-circle"></i>
-        <% end %>
-      </div>
+  <% else %>
+    <div class="d-flex justify-content-center">
+      <%= image_tag("Robot_Working.gif", height: 200, width: 240 )%>
     </div>
-  </div>
-<% end %>
+    
+    <div class="d-flex flex-column mx-auto my-2">
+      <p class="text-center fw-bold me-2 mb-0">Nothing to display yet.</p>
+      <%= link_to new_reimbursement_path(employee_id: params[:employee_id]), class: "btn btn-sm btn-primary rounded-pill" do %>
+        File Reimbursement <i class="bi bi-arrow-right-circle"></i>
+      <% end %>
+    </div>
+  <% end %>
+</div>

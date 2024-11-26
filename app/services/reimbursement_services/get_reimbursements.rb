@@ -27,7 +27,10 @@ module ReimbursementServices
     end
 
     def start_date
-      Date.new(Date.today.year, @reimbursement.dig(:date, :month)&.to_i || Date.today.month, 6)
+      month = @reimbursement.dig(:date, :month)&.to_i
+      valid_month = (1..12).include?(month) ? month : Date.today.month
+
+      Date.new(Date.today.year, valid_month, 6)
     end
 
     def end_date
