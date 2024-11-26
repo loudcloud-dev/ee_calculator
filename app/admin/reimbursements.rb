@@ -302,7 +302,7 @@ ActiveAdmin.register Reimbursement do
             date = reimbursement.activity_date.strftime("%m%d%Y")
 
             image_path = ActiveStorage::Blob.service.path_for(reimbursement.image.key)
-            image_filename = "#{date}_#{reimbursement.supplier.upcase}.#{reimbursement.image.filename.extension}"
+            image_filename = "#{date}_#{reimbursement.supplier.upcase}_#{reimbursement.invoice_reference_number}.#{reimbursement.image.filename.extension}"
 
             zipfile.add(image_filename, image_path)
           end
