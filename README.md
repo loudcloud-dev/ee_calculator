@@ -31,3 +31,17 @@ $ rails db:seed
 $ bin/dev
 ```
 
+## Others
+### Run rspec
+```bash
+$ bundle exec rspec
+```
+
+### Run rubocop
+```bash
+$ bundle exec rubocop
+```
+
+
+
+
