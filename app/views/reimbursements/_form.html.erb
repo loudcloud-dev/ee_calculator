@@ -51,10 +51,15 @@
         <%= form.text_field :supplier, class: "form-control", placeholder: "Enter supplier", required: true %>
       </div>
 
-      <div>
-        <%= form.label :image, "Invoice Image", class: "form-label" %>
-        <%= form.file_field :image, accept:"image/*", class: "form-control", required: true %>
-        <span class="form-text text-muted fst-italic">Maximum file size: 10mb<span>
+      <div data-controller="image-validation">
+        <%= form.label :image, "Invoice Image", class: "form-label" %>        
+        <%= form.file_field :image, accept: "image/*", class: "form-control", required: true, data: { image_validation_target: "fileInput" } %>
+
+        <div id="invoice_image_validation" class="invalid-feedback" data-image-validation-target="errorMessage">
+          Please upload an image file (JPG, PNG, JPEG, etc.).
+        </div>
+
+        <span class="form-text text-muted fst-italic">Maximum file size: 10mb</span>
       </div>
 
       <div class="d-flex justify-content-end my-3">
