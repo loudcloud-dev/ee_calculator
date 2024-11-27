@@ -8,6 +8,7 @@ class Reimbursement < ApplicationRecord
 
   validates :employee_id, presence: true
   validates :category_id, presence: true
+  validates :participated_employee_ids, presence: true
   validates :activity_date, presence: true
   validates :invoice_reference_number, presence: true
   validates :invoice_amount, presence: true, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 10**6 } # 1,000,000

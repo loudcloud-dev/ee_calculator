@@ -94,7 +94,7 @@ ActiveAdmin.register Reimbursement do
     actions
 
     div class: "index-footer-summary" do
-      reimbursements = Reimbursement.all
+      reimbursements = Reimbursement.where.not(status: "cancelled")
 
       if params[:q].present?
         reimbursements = reimbursements.where(employee_id: params[:q][:employee_id_eq]) if params[:q][:employee_id_eq].present?
@@ -182,7 +182,13 @@ ActiveAdmin.register Reimbursement do
       f.input :category_id, as: :select, collection: categories, prompt: "Select a category"
       f.input :activity_date, as: :datepicker, input_html: { max: Date.today }
       f.input :invoice_reference_number
-      f.input :invoice_amount, input_html: { min: 1, max: 1000000, step: 1 }
+
+      if f.object.new_record?
+        f.input :invoice_amount, input_html: { min: 1, max: 1000000, step: 1 }
+      else
+        f.input :invoice_amount, input_html: { readonly: true, class: "disabled" }
+      end
+
       f.input :reimbursable_amount
       f.input :reimbursed_amount
       f.input :supplier

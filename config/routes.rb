@@ -14,4 +14,6 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "reimbursements#index"
   resources :reimbursements, only: [ :index, :new, :create ]
+
+  get "*path" => redirect("/")
 end

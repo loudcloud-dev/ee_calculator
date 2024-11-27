@@ -1,6 +1,6 @@
 ActiveAdmin.register ReimbursementItem do
-  actions :all, except: [ :new, :destroy ]
-  before_action :load_collections, only: [ :index, :edit ]
+  actions :all, except: [ :new, :destroy, :edit ]
+  before_action :load_collections, only: [ :index ]
 
   preserve_default_filters!
   remove_filter :reimbursement
