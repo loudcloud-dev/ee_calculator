@@ -5,6 +5,7 @@ ActiveAdmin.register Category do
                 :icon_color,
                 :status
 
+  actions :all, except: [ :destroy ]
   remove_filter :reimbursement
 
   index do
