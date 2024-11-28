@@ -4,11 +4,19 @@ export default class extends Controller {
   static targets = ["employee"];
 
   connect() {
-    this.initializeTomSelect();
+    if (!this.element.tomselect) {
+      this.initializeTomSelect();
+    }
+  }
+
+  disconnect() {
+    if (this.element.tomselect) {
+      this.element.tomselect.destroy();
+    }
   }
 
   initializeTomSelect() {
-    new TomSelect(this.element, {
+    this.element.tomselect = new TomSelect(this.element, {
       onItemAdd: () => this.validate(),
       onItemRemove: () => this.validate(),
     });
