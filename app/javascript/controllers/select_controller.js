@@ -17,7 +17,11 @@ export default class extends Controller {
 
   initializeTomSelect() {
     this.element.tomselect = new TomSelect(this.element, {
-      onItemAdd: () => this.validate(),
+      onItemAdd:function(){
+        this.setTextboxValue('');
+        this.refreshOptions();
+      },
+      onDropdownClose: () => this.validate(),
       onItemRemove: () => this.validate(),
     });
   }
