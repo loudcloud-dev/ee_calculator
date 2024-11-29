@@ -187,7 +187,6 @@ ActiveAdmin.register Reimbursement do
         f.input :invoice_amount, input_html: { readonly: true, class: "disabled" }
       end
 
-      f.input :reimbursable_amount
       f.input :reimbursed_amount
       f.input :supplier
       f.input :image, as: :file, hint: f.object.image.attached? ? image_tag(url_for(f.object.image), style: "width: 300px; height: auto;") : content_tag(:span, "No image uploaded")
@@ -256,6 +255,21 @@ ActiveAdmin.register Reimbursement do
   end  
 
   controller do
+    def create
+      reimbursement_params = params.require(:reimbursement).permit!
+      service = ReimbursementServices::CreateReimbursement.call(reimbursement_params)
+
+      if service[:success]
+        redirect_to admin_reimbursements_path, notice: "Reimbursement created successfully."
+      else
+        @reimbursement = Reimbursement.new(reimbursement_params)
+        flash.now[:error] = service[:errors].join(", ")
+    
+        render :new
+      end
+    end
+
+    # 
     def load_collections
       @employees = Employee.where(status: "active").pluck(:nickname, :id)
       @categories = Category.where(status: "active").pluck(:name, :id)
