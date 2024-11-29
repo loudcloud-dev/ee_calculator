@@ -5,14 +5,23 @@ module ReimbursementServices
     end
 
     def perform
+      return validate unless validate[:success]
+
       process
     end
 
     private
 
-    def process
+    def validate
+      employee_budgets = calculate_employee_budget(@reimbursement)
+      
+      return { success: false, errors: ["Selected employees have no balance left to reimburse."] } if employees_balance(employee_budgets)
       return { success: false, errors: @reimbursement.errors.full_messages } unless @reimbursement.save
 
+      { success: true }
+    end
+
+    def process
       employee_budgets = calculate_employee_budget(@reimbursement)
       distributions = distribute_expenses(@reimbursement.invoice_amount.to_f, employee_budgets)
 
@@ -22,6 +31,10 @@ module ReimbursementServices
       create_reimbursement_items(distributions)
 
       { success: true, reimbursement: @reimbursement }
+    end
+
+    def employees_balance(employee_budgets)
+      employee_budgets.values.all? { |balance| balance == 0 }
     end
 
     # Find the participating employees to calculate and save their remaining budget for the current month (from the 6th of the current month to the 5th of the next month)
@@ -40,7 +53,7 @@ module ReimbursementServices
         used_budget = ReimbursementItem.used_budget_sum(
           employee_id: employee.id,
           category_id: category_id,
-          activity_date: @reimbursement.activity_date
+          activity_date: reimbursement.activity_date
         )
 
         employee_budget = monthly_budget - used_budget
