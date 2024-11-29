@@ -76,7 +76,7 @@ module ReimbursementServices
       if total_allocated < invoice_amount
         eligible_employees = distributions.select do |item|
           remaining_budget = employee_budgets[item[:employee_id]] - item[:shared_amount]
-          remaining_budget > 0 
+          remaining_budget > 0
         end
 
         excess_share = excess_amount / eligible_employees.length

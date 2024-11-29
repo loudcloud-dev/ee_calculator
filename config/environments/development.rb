@@ -47,9 +47,9 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     user_name: ENV["SMTP_USERNAME"],
     password: ENV["SMTP_PASSWORD"],
-    address: 'smtp-pulse.com',
-    host: 'smtp-pulse.com',
-    port: '2525',
+    address: "smtp-pulse.com",
+    host: "smtp-pulse.com",
+    port: "2525",
     authentication: :login
   }
   # Print deprecation notices to the Rails logger.

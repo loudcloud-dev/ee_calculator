@@ -9,11 +9,11 @@ RSpec.describe ReimbursementServices::CreateReimbursement do
     )
   }
 
-  let(:category) { 
+  let(:category) {
     Category.create!(
-      name: 'Eat Takes Two',
-      icon: 'fa-solid fa-cookie-bite fa-3x'
-    ) 
+      name: 'Category Sample',
+      icon: 'category-icon-sample'
+    )
   }
 
   let(:reimbursement_params) do

@@ -247,12 +247,12 @@ ActiveAdmin.register Reimbursement do
   action_item :export_images, only: :index do
     link_to "Export Images", export_images_admin_reimbursements_path(filter_params: params.permit(q: {}).to_h[:q])
   end
-  
+
   collection_action :export_images, method: :get do
     zip_file_path = ReimbursementServices::ExportReimbursementImages.call(params[:filter_params])
 
     send_file zip_file_path, type: "application/zip", disposition: "attachment", filename: "Invoice Images.zip"
-  end  
+  end
 
   controller do
     def create
@@ -264,12 +264,12 @@ ActiveAdmin.register Reimbursement do
       else
         @reimbursement = Reimbursement.new(reimbursement_params)
         flash.now[:error] = service[:errors].join(", ")
-    
+
         render :new
       end
     end
 
-    # 
+    #
     def load_collections
       @employees = Employee.where(status: "active").pluck(:nickname, :id)
       @categories = Category.where(status: "active").pluck(:name, :id)
