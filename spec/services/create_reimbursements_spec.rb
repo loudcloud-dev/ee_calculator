@@ -50,7 +50,7 @@ RSpec.describe ReimbursementServices::CreateReimbursement do
       end
     end
 
-    context 'when saving the reimbursement fails' do      
+    context 'when saving the reimbursement fails' do
       before do
         reimbursement_params[:invoice_reference_number] = nil
       end
