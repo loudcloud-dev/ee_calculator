@@ -189,7 +189,7 @@ ActiveAdmin.register Reimbursement do
 
       f.input :reimbursed_amount
       f.input :supplier
-      f.input :image, as: :file, hint: f.object.image.attached? ? image_tag(url_for(f.object.image), style: "width: 300px; height: auto;") : content_tag(:span, "No image uploaded")
+      f.input :image, as: :file, hint: f.object.image.attached? && !f.object.new_record? ? image_tag(url_for(f.object.image), style: "width: 300px; height: auto;") : content_tag(:span, "No image uploaded")
       f.input :status, as: :select, collection: [ [ "Pending", "pending" ], [ "Reimbursed", "reimbursed" ], [ "Cancelled", "cancelled" ] ], include_blank: false
     end
 

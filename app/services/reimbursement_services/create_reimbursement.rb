@@ -15,7 +15,7 @@ module ReimbursementServices
     def validate
       employee_budgets = calculate_employee_budget(@reimbursement)
 
-      return { success: false, errors: [ "Selected employees have no balance left to reimburse." ] } if employees_balance(employee_budgets)
+      return { success: false, errors: [ "Selected employees have no balance left to reimburse." ] } if employees_balance(employee_budgets) && @reimbursement.participated_employee_ids.any?
       return { success: false, errors: @reimbursement.errors.full_messages } unless @reimbursement.save
 
       { success: true }
