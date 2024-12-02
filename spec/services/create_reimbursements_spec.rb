@@ -43,24 +43,23 @@ RSpec.describe ReimbursementServices::CreateReimbursement do
         reimbursement = Reimbursement.create!(reimbursement_params)
         ReimbursementItem.create!(employee: employee, reimbursement: reimbursement, shared_amount: 200)
 
-        # service = ReimbursementServices::CreateReimbursement.new(reimbursement_params)
         service.perform
-
         employee_budget = service.send(:calculate_employee_budget, service.instance_variable_get(:@reimbursement))
 
         expect(employee_budget[employee.id]).to eq(800)
       end
     end
 
-    context 'when saving the reimbursement fails' do
-      it 'returns an error' do
-        invalid_params = reimbursement_params[:activity_date] = nil
+    context 'when saving the reimbursement fails' do      
+      before do
+        reimbursement_params[:invoice_reference_number] = nil
+      end
 
-        # service = ReimbursementServices::CreateReimbursement.new(reimbursement_params)
+      it 'returns an error' do
         result = service.perform
 
         expect(result[:success]).to be false
-        expect(result[:errors]).to include("Activity date can't be blank")
+        expect(result[:errors]).to include("Invoice reference number can't be blank")
       end
     end
   end
