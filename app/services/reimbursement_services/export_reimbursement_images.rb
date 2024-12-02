@@ -49,18 +49,29 @@ module ReimbursementServices
     end
 
     def download_zip(file_path, reimbursements)
+      max_filename_length = 255
+    
       Zip::File.open(file_path, Zip::File::CREATE) do |zipfile|
         reimbursements.each_with_index do |reimbursement, index|
           if reimbursement.image.attached?
             date = reimbursement.activity_date.strftime("%m%d%Y")
-
+            supplier = reimbursement.supplier.upcase
+            invoice_reference_number = reimbursement.invoice_reference_number
+            extension = reimbursement.image.filename.extension
+    
             image_path = ActiveStorage::Blob.service.path_for(reimbursement.image.key)
-            image_filename = "#{date}_#{reimbursement.supplier.upcase}_#{reimbursement.invoice_reference_number}.#{reimbursement.image.filename.extension}"
-
+            image_filename = "#{date}_#{supplier}_#{invoice_reference_number}.#{extension}"
+    
+            if image_filename.length > max_filename_length
+              supplier = reimbursement.supplier.upcase[0, 50]
+              invoice_reference = reimbursement.invoice_reference_number[0, 50]
+              image_filename = "#{date}_#{supplier}_#{invoice_reference}.#{extension}"
+            end
+    
             zipfile.add(image_filename, image_path)
           end
         end
       end
-    end
+    end         
   end
 end

@@ -39,7 +39,7 @@ ActiveAdmin.register Reimbursement do
     id_column
     selectable_column
     column "Activity", :category_id, class: "admin-table-width-150 text-truncate" do |reimbursement|
-      category = Category.find_by(id: reimbursement.category_id, status: "active")
+      category = Category.find_by(id: reimbursement.category_id)
       div do
         span category.name
         div class: "text-muted" do
