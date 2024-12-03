@@ -82,12 +82,12 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    user_name: ENV["SMTP_USERNAME"],
-    password: ENV["SMTP_PASSWORD"],
+    user_name: Rails.application.credentials.smtp[:username],
+    password: Rails.application.credentials.smtp[:password],
     address: "smtp-pulse.com",
-    host: "smtp-pulse.com",
-    port: "2525",
-    authentication: :login
+    port: 2525,
+    authentication: :login,
+    enable_starttls_auto: true
   }
 
   # Ignore bad email addresses and do not raise email delivery errors.
