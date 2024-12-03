@@ -17,3 +17,7 @@
 // For example, to change the default status-tag color:
 //
 //   .status_tag { background: #6090DB; }
+
+body.index #sidebar:before {
+    color: rgb(48, 146, 192);
+}
