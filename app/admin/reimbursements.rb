@@ -175,8 +175,15 @@ ActiveAdmin.register Reimbursement do
 
   form do |f|
     f.inputs do
-      f.input :employee_id, as: :select, collection: employees, prompt: "Select Assigned Employee"
-      f.input :participated_employee_ids, as: :select, collection: employees, input_html: { multiple: true }
+      f.input :employee_id, as: :select, collection: active_employees, prompt: "Select Assigned Employee"
+      f.input :participated_employee_ids,
+              label: "Participated Employees",
+              as: :select,
+              collection: employees.map { |employee|
+                nickname = employee.active ? employee.nickname : "#{employee.nickname} (Inactive)"
+                [nickname, employee.id]
+              },
+              input_html: { multiple: true }
       f.input :category_id, as: :select, collection: categories, prompt: "Select a category"
       f.input :activity_date, as: :datepicker, input_html: { max: Date.today }
       f.input :invoice_reference_number
@@ -277,7 +284,8 @@ ActiveAdmin.register Reimbursement do
 
     #
     def load_collections
-      @employees = Employee.where(status: "active").pluck(:nickname, :id)
+      @employees = Employee.where(status: "active")
+      @active_employees = Employee.where(status: "active", active: true).order(:nickname).pluck(:nickname, :id)
       @categories = Category.where(status: "active").pluck(:name, :id)
       @status = { "Pending" => "pending", "Reimbursed" => "reimbursed", "Cancelled" => "cancelled" }
 

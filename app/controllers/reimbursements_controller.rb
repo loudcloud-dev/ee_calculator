@@ -3,6 +3,7 @@ class ReimbursementsController < InheritedResources::Base
 
   before_action :categories, only: [ :index, :new, :create ]
   before_action :employees, only: [ :index, :new, :create ]
+  before_action :active_employees, only: [ :index, :new, :create ]
   before_action :participated_employees, only: [ :create, :update ]
 
   def index
@@ -46,6 +47,10 @@ class ReimbursementsController < InheritedResources::Base
   end
 
   def employees
-    @employees = Employee.where(status: "active").order(:nickname).pluck(:nickname, :id)
+    @employees = Employee.where(status: "active").order(:nickname)
+  end
+
+  def active_employees
+    @active_employees = Employee.where(status: "active", active: true).order(:nickname).pluck(:nickname, :id)
   end
 end

@@ -14,7 +14,11 @@
           <tbody>
             <% @filed_reimbursements.each do |reimbursement| %>
               <% participated_employees_shares = reimbursement.participated_employees_shares.map { |item| "#{item.employee.nickname}: #{format_amount(item.shared_amount)}" }.join("<br>").html_safe %>
-              <% participated_employees = reimbursement.participated_employees.map(&:nickname).join(", ") %>
+              <%
+                participated_employees = reimbursement.participated_employees.map do |employee|
+                  employee.active ? employee.nickname : "#{employee.nickname} (Inactive)"
+                end.join(", ")
+              %>
               <tr>
                 <td class="text-truncate table-width-150">
                   <div class="d-flex">

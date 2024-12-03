@@ -19,7 +19,7 @@
     <div class="row">
       <div class="col-6">
         <%= form.label :employee_id, class: "form-label" %>
-        <%= form.select :employee_id, options_for_select(@employees, selected: params[:employee_id] || nil), { prompt: "Select an employee" }, id: 'employee_select', data: { controller: 'employee_select' }, required: true %>
+        <%= form.select :employee_id, options_for_select(@active_employees, selected: params[:employee_id] || nil), { prompt: "Select an employee" }, id: 'employee_select', data: { controller: 'employee_select' }, required: true %>
       </div>
 
       <div class="col-6">
@@ -45,7 +45,11 @@
       <div>
         <%= form.label :participated_employee_ids, "Participated Employees", class: "form-label" %>
         <%= form.select :participated_employee_ids, 
-              options_for_select(@employees, selected: params[:employee_id] || nil), 
+              options_for_select(@employees.map { |employee|
+                nickname = employee.active ? employee.nickname : "#{employee.nickname} (Inactive)"
+                [nickname, employee.id]
+              },
+              selected: params[:employee_id] || nil), 
               { prompt: "Select employees" }, 
               { 
                 id: 'employee_select',
