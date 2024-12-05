@@ -263,6 +263,15 @@ ActiveAdmin.setup do |config|
   #     end
   #   end
 
+  config.namespace :admin do |admin|
+    admin.build_menu do |menu|
+      menu.add label: "Reimbursement" do |reimbursement_menu|
+        reimbursement_menu.add label: "List", priority: 1, url: "/admin/reimbursements"
+        reimbursement_menu.add label: "Items", priority: 2, url: "/admin/reimbursement_items"
+      end
+    end
+  end
+
   # == Download Links
   #
   # You can disable download links on resource listing pages,

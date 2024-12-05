@@ -24,6 +24,7 @@ ActiveAdmin.register Reimbursement do
   filter :status, as: :select, collection: -> { @status }
 
   config.sort_order = "activity_date_desc"
+  menu false
 
   batch_action :update_status, confirm: "Are you sure you want to update the selected reimbursements?", form: {
     status: [ [ "Pending", "pending" ], [ "Reimbursed", "reimbursed" ], [ "Cancelled", "cancelled" ] ]
@@ -265,7 +266,7 @@ ActiveAdmin.register Reimbursement do
     zip_file_path = ReimbursementServices::ExportReimbursementImages.call(params[:filter_params])
 
     send_file zip_file_path, type: "application/zip", disposition: "attachment", filename: "Invoice Images.zip"
-  end
+  end  
 
   controller do
     def create
