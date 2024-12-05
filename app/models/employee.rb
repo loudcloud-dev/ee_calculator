@@ -3,12 +3,18 @@ class Employee < ApplicationRecord
   has_many :reimbursement_items
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable
 
   validates :nickname, presence: true, uniqueness: true
   validates :email, uniqueness: true, allow_nil: true
 
   before_validation :convert_blank_to_nil
+
+  # override trackable method
+  def update_tracked_fields(request)
+    self.sign_in_count ||= 0
+    self.sign_in_count += 1
+  end
 
   private
 
@@ -20,6 +26,7 @@ class Employee < ApplicationRecord
 
   protected
 
+  # override validatable methods to allow blank emails
   def password_required?
     # TODO: validate this later on with employee_type
     false
