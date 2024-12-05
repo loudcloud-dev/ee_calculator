@@ -5,7 +5,9 @@ ActiveAdmin.register Employee do
                 :active,
                 :status,
                 :employee_type,
-                :email
+                :email,
+                :password,
+                :password_confirmation
 
   actions :all, except: [ :destroy ]
 
@@ -56,6 +58,10 @@ ActiveAdmin.register Employee do
       f.input :nickname
       f.input :active
       f.input :email
+      if f.employee.new_record?
+        f.input :password
+        f.input :password_confirmation
+      end
       f.input :employee_type, as: :select, collection: [ [ "Regular", "regular" ], [ "Contractual", "contractual" ], [ "Probationary", "probationary" ] ], include_blank: false
       f.input :status, as: :select, collection: [ [ "Active", "active" ], [ "Inactive", "inactive" ] ], include_blank: false
 

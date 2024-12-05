@@ -36,7 +36,7 @@ class AddDeviseToEmployees < ActiveRecord::Migration[8.0]
       # t.timestamps null: false
     end
 
-    add_index :employees, :email,                unique: true
+    add_index :employees, :email,                unique: true, where: "email != '' AND email IS NOT NULL"
     add_index :employees, :reset_password_token, unique: true
     # add_index :users, :confirmation_token,   unique: true
   end

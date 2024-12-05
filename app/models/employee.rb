@@ -8,7 +8,22 @@ class Employee < ApplicationRecord
   validates :nickname, presence: true, uniqueness: true
   validates :email, uniqueness: true, allow_nil: true
 
+  before_validation :convert_blank_to_nil
+
+  private
+
+  def convert_blank_to_nil
+    if email.blank?
+      self.email = nil
+    end
+  end
+
   protected
+
+  def password_required?
+    # TODO: validate this later on with employee_type
+    false
+  end
 
   def email_required?
     # TODO: validate this later on with employee_type
