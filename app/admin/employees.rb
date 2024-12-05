@@ -57,11 +57,9 @@ ActiveAdmin.register Employee do
       f.input :last_name
       f.input :nickname
       f.input :active
-      f.input :email
-      if f.employee.new_record?
-        f.input :password
-        f.input :password_confirmation
-      end
+      f.input :email, { required: false }
+      f.input :password, { required: false }
+      f.input :password_confirmation
       f.input :employee_type, as: :select, collection: [ [ "Regular", "regular" ], [ "Contractual", "contractual" ], [ "Probationary", "probationary" ] ], include_blank: false
       f.input :status, as: :select, collection: [ [ "Active", "active" ], [ "Inactive", "inactive" ] ], include_blank: false
 
