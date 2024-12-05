@@ -7,6 +7,8 @@ ActiveAdmin.register ReimbursementItem do
   filter :employee, as: :select, collection: -> { @employees }
   config.sort_order = "id_asc"
 
+  menu false
+
   index do
     id_column
     column :reimbursement_id do |item|
