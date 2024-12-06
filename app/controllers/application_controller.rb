@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
 
   # prompt change password after first time sign in
   def after_sign_in_path_for(resource)
-    if current_employee.sign_in_count == 1
+    if !current_employee.nil? && current_employee.sign_in_count == 1
       edit_employee_registration_path
     else
       root_path
