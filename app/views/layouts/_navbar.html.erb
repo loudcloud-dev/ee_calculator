@@ -4,7 +4,7 @@
       <a class="navbar-brand" href="/">
         <%= image_tag("loudcloud_logo.png", width: 90, height: 35) %>
       </a>
-    </div>
+  </div>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
@@ -15,7 +15,14 @@
       </ul>
     </div>
     <div class="">
-      <a class="btn btn-outline-primary" href="<%= admin_user_session_path %>">Sign In</a>
+      <% if employee_signed_in? %>
+        Hello, <%= current_employee.nickname %>
+        <a class="btn btn-outline-primary" href="<%= destroy_employee_session_path  %>" data-turbo-method="delete">Sign out</a>
+      <% else %>
+        <a class="btn btn-outline-primary" href="<%= new_employee_session_path %>">Sign in</a>
+      <% end %>
+      
+      <a class="btn btn-outline-primary" href="<%= admin_user_session_path %>">Sign in as admin</a>
     </div>
   </div>
 </nav>
