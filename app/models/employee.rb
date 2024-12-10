@@ -1,6 +1,7 @@
 class Employee < ApplicationRecord
   has_many :reimbursements
   has_many :reimbursement_items
+  has_many :leaves
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
