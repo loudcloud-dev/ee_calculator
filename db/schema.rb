@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_04_064203) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_11_073622) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -119,10 +119,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_04_064203) do
     t.string "status", default: "pending"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "transaction_id"
     t.index ["activity_date"], name: "index_reimbursements_on_activity_date"
     t.index ["category_id"], name: "index_reimbursements_on_category_id"
     t.index ["employee_id"], name: "index_reimbursements_on_employee_id"
     t.index ["status"], name: "index_reimbursements_on_status"
+    t.index ["transaction_id"], name: "index_reimbursements_on_transaction_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
