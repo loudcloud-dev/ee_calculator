@@ -182,7 +182,7 @@ ActiveAdmin.register Reimbursement do
               as: :select,
               collection: employees.map { |employee|
                 nickname = employee.active ? employee.nickname : "#{employee.nickname} (Inactive)"
-                [nickname, employee.id]
+                [ nickname, employee.id ]
               },
               input_html: { multiple: true }
       f.input :category_id, as: :select, collection: categories, prompt: "Select a category"
@@ -197,9 +197,10 @@ ActiveAdmin.register Reimbursement do
 
       f.input :reimbursed_amount
       f.input :supplier
-      f.input :image, 
-        as: :file, 
-        hint: f.object.image.attached? && !f.object.new_record? ? image_tag(url_for(f.object.image), style: "width: 300px; height: auto;") : content_tag(:span, "No image uploaded"), 
+      f.input :image,
+        label: "Invoice Image",
+        as: :file,
+        hint: f.object.image.attached? && !f.object.new_record? ? image_tag(url_for(f.object.image), style: "width: 300px; height: auto;") : content_tag(:span, "No image uploaded"),
         input_html: { accept: "image/*" }
       f.input :status,
         as: :select,
@@ -262,11 +263,30 @@ ActiveAdmin.register Reimbursement do
     link_to "Export Images", export_images_admin_reimbursements_path(filter_params: params.permit(q: {}).to_h[:q])
   end
 
+  action_item :export_vouchers, only: :index do
+    link_to "Export to Voucher", export_voucher_form_admin_reimbursements_path
+  end
+
   collection_action :export_images, method: :get do
     zip_file_path = ReimbursementServices::ExportReimbursementImages.call(params[:filter_params])
 
     send_file zip_file_path, type: "application/zip", disposition: "attachment", filename: "Invoice Images.zip"
-  end  
+  end
+
+  collection_action :export_voucher_form, method: :get do
+    @available_months = Reimbursement.select("EXTRACT(MONTH FROM activity_date) AS month, EXTRACT(YEAR FROM activity_date) AS year")
+                                     .distinct
+                                     .where(status: "reimbursed")
+
+    render "admin/reimbursements/export_vouchers_form"
+  end
+
+  collection_action :export_vouchers, method: :get do
+    zipfile = ReimbursementServices::ExportReimbursementVoucher.call(params)
+    month = Date::MONTHNAMES[params[:activity_date].to_i]
+
+    send_file zipfile, filename: "LoudCloud EE Availment Reimbursement Forms (#{month}).zip", type: "application/zip", disposition: "attachment"
+  end
 
   controller do
     def create
