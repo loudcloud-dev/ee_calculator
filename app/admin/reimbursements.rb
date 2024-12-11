@@ -9,6 +9,7 @@ ActiveAdmin.register Reimbursement do
                 :reimbursed_amount,
                 :supplier,
                 :status,
+                :transaction_id,
                 participated_employee_ids: []
 
   # Actions
@@ -157,6 +158,8 @@ ActiveAdmin.register Reimbursement do
         reimbursement.formatted_reimbursed_amount
       end
 
+      row :transaction_id
+
       row "Invoice Image", :image do |reimbursement|
         if reimbursement.image.attached?
           div do
@@ -196,6 +199,7 @@ ActiveAdmin.register Reimbursement do
       end
 
       f.input :reimbursed_amount
+      f.input :transaction_id
       f.input :supplier
       f.input :image,
         label: "Invoice Image",
@@ -263,8 +267,8 @@ ActiveAdmin.register Reimbursement do
     link_to "Export Images", export_images_admin_reimbursements_path(filter_params: params.permit(q: {}).to_h[:q])
   end
 
-  action_item :export_vouchers, only: :index do
-    link_to "Export to Voucher", export_voucher_form_admin_reimbursements_path
+  action_item :export_reimbursement_forms, only: :index do
+    link_to "Export to Reimbursement Forms", export_reimbursement_form_admin_reimbursements_path
   end
 
   collection_action :export_images, method: :get do
@@ -273,16 +277,16 @@ ActiveAdmin.register Reimbursement do
     send_file zip_file_path, type: "application/zip", disposition: "attachment", filename: "Invoice Images.zip"
   end
 
-  collection_action :export_voucher_form, method: :get do
+  collection_action :export_reimbursement_form, method: :get do
     @available_months = Reimbursement.select("EXTRACT(MONTH FROM activity_date) AS month, EXTRACT(YEAR FROM activity_date) AS year")
                                      .distinct
                                      .where(status: "reimbursed")
 
-    render "admin/reimbursements/export_vouchers_form"
+    render "admin/reimbursements/export_reimbursement_form"
   end
 
-  collection_action :export_vouchers, method: :get do
-    zipfile = ReimbursementServices::ExportReimbursementVoucher.call(params)
+  collection_action :export_reimbursement_forms, method: :get do
+    zipfile = ReimbursementServices::ExportReimbursementForm.call(params)
     month = Date::MONTHNAMES[params[:activity_date].to_i]
 
     send_file zipfile, filename: "LoudCloud EE Availment Reimbursement Forms (#{month}).zip", type: "application/zip", disposition: "attachment"

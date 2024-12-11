@@ -1,5 +1,5 @@
 module ReimbursementServices
-  class ExportReimbursementVoucher < ApplicationService
+  class ExportReimbursementForm < ApplicationService
     include ActionView::Helpers::NumberHelper
 
     require "prawn"
@@ -92,6 +92,14 @@ module ReimbursementServices
         end
         pdf.move_down 15
 
+        transaction_ids = reimbursements.map(&:transaction_id).join(", ")
+        unique_transaction_ids = transaction_ids.split(",").map(&:strip).uniq.join(", ")
+
+        pdf.bounding_box([ 0, pdf.cursor ], width: pdf.bounds.width) do
+          pdf.text_box "Transaction ID:", size: 10, style: :bold, at: [ 0, pdf.cursor ], width: 90
+          pdf.text_box unique_transaction_ids, size: 10, at: [ 90, pdf.cursor ], width: pdf.bounds.width - 90
+        end
+        pdf.move_down 15
 
         # Item breakdown
         total_amount = reimbursements.sum { |reimbursement| reimbursement.invoice_amount || 0 }

@@ -1,6 +1,6 @@
-<h3>Export to Voucher</h3>
+<h3>Export Reimbursement Form</h3>
 
-<%= form_with url: export_vouchers_admin_reimbursements_path, method: :get, class: "export-voucher-form" do |form| %>
+<%= form_with url: export_reimbursement_forms_admin_reimbursements_path, method: :get, class: "export-reimbursement-form" do |form| %>
   <div>
     <div class="form-group">
       <%= form.label :activity_date, 'Month*', class: "form-label" %>
@@ -11,7 +11,7 @@
                       required: true %>
     </div>
 
-    <div class="export-voucher-btns">
+    <div class="export-reimbursement-btns">
       <%= link_to "Cancel", admin_reimbursements_path, class: "btn btn-secondary", style: "margin: 3px 5px" %>
       <%= form.submit "Export", class: "btn btn-primary", style: "width: 50%;" %>
     </div>
