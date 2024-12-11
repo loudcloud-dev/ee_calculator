@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "reimbursements#index"
   resources :reimbursements, only: [ :index, :new, :create ]
+  resources :leaves, only: [ :index, :new, :create ]
 
   get "*path" => redirect("/"), constraints: lambda { |req| !req.path.starts_with?("/rails/active_storage") }
 end
