@@ -18,7 +18,7 @@ module ReimbursementServices
 
     def process
       reimbursements = reimbursements(@filter_params)
-      generate_pdfs(reimbursements, @filter_params[:activity_date])
+      generate_pdfs(reimbursements)
     end
 
     def reimbursements(params)
@@ -39,7 +39,7 @@ module ReimbursementServices
       reimbursements
     end
 
-    def generate_pdfs(reimbursements, month)
+    def generate_pdfs(reimbursements)
       pdfs = []
       reimbursements.group_by(&:employee_id).each do |id, reimbursements|
         employee = Employee.find(id)
@@ -48,13 +48,13 @@ module ReimbursementServices
 
         # Set pdf font
         pdf.font_families.update(
-          "DejaVu" => {
-            normal: Rails.root.join("app", "assets", "fonts", "DejaVuSans.ttf").to_s,
-            bold: Rails.root.join("app", "assets", "fonts", "DejaVuSans-Bold.ttf").to_s,
-            italic: Rails.root.join("app", "assets", "fonts", "DejaVuSans-Oblique.ttf").to_s
+          "Nunito" => {
+            normal: Rails.root.join("app", "assets", "fonts", "Nunito-Regular.ttf").to_s,
+            bold: Rails.root.join("app", "assets", "fonts", "Nunito-Bold.ttf").to_s,
+            italic: Rails.root.join("app", "assets", "fonts", "Nunito-Italic.ttf").to_s
           }
         )
-        pdf.font "DejaVu"
+        pdf.font "Nunito"
 
         # Header: Logo, Address, and Email
         pdf.bounding_box([ 0, pdf.cursor ], width: pdf.bounds.width) do
@@ -80,15 +80,15 @@ module ReimbursementServices
         # Employee
         employee_name = employee.first_name ? "#{employee.first_name} #{employee.last_name}" : employee.nickname
         pdf.bounding_box([ 0, pdf.cursor ], width: pdf.bounds.width) do
-          pdf.text_box "Employee:", size: 10, style: :bold, at: [ 0, pdf.cursor ], width: 63
-          pdf.text_box employee_name, size: 10, at: [ 63, pdf.cursor ], width: pdf.bounds.width - 63
+          pdf.text_box "Employee:", size: 10, style: :bold, at: [ 0, pdf.cursor ], width: 52
+          pdf.text_box employee_name, size: 10, at: [ 52, pdf.cursor ], width: pdf.bounds.width - 52
         end
         pdf.move_down 15
 
         # Month
         pdf.bounding_box([ 0, pdf.cursor ], width: pdf.bounds.width) do
-          pdf.text_box "Availments for the Month of:", size: 10, style: :bold, at: [ 0, pdf.cursor ], width: 168
-          pdf.text_box Date::MONTHNAMES[month.to_i], size: 10, at: [ 168, pdf.cursor ], width: pdf.bounds.width - 168
+          pdf.text_box "Availments for the Month of:", size: 10, style: :bold, at: [ 0, pdf.cursor ], width: 137
+          pdf.text_box @month, size: 10, at: [ 137, pdf.cursor ], width: pdf.bounds.width - 137
         end
         pdf.move_down 15
 
@@ -96,8 +96,8 @@ module ReimbursementServices
         unique_transaction_ids = transaction_ids.split(",").map(&:strip).uniq.join(", ")
 
         pdf.bounding_box([ 0, pdf.cursor ], width: pdf.bounds.width) do
-          pdf.text_box "Transaction ID:", size: 10, style: :bold, at: [ 0, pdf.cursor ], width: 90
-          pdf.text_box unique_transaction_ids, size: 10, at: [ 90, pdf.cursor ], width: pdf.bounds.width - 90
+          pdf.text_box "Transaction ID:", size: 10, style: :bold, at: [ 0, pdf.cursor ], width: 75
+          pdf.text_box unique_transaction_ids, size: 10, at: [ 75, pdf.cursor ], width: pdf.bounds.width - 75
         end
         pdf.move_down 15
 
