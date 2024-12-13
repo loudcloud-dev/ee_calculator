@@ -78,7 +78,7 @@ module ReimbursementServices
         pdf.move_down 3
 
         # Employee
-        employee_name = employee.first_name ? "#{employee.first_name} #{employee.last_name}" : employee.nickname
+        employee_name = employee.first_name.present? ? "#{employee.first_name} #{employee.last_name}" : employee.nickname
         pdf.bounding_box([ 0, pdf.cursor ], width: pdf.bounds.width) do
           pdf.text_box "Employee:", size: 10, style: :bold, at: [ 0, pdf.cursor ], width: 52
           pdf.text_box employee_name, size: 10, at: [ 52, pdf.cursor ], width: pdf.bounds.width - 52
