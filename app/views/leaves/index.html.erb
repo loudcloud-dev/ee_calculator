@@ -1,2 +1,18 @@
-<h1>Leaves#index</h1>
-<p>Find me in app/views/leaves/index.html.erb</p>
+<h1>My Leaves</h1>
+
+<% @leaves.each do |leave| %>
+  <div class="border">
+    <div>
+      <div>From: <%= leave.start_date %></div>
+      <div>To: <%= leave.end_date %></div>
+      <div>Duration: <%= leave.day_count %> days</div>
+      <div>Type: <%= leave.leave_type.capitalize %> Leave</div>
+      <div>Reason: <%= leave.reason %></div>
+    </div>
+    <div>
+      <div>Approver: <%= leave.approver.email %></div>
+      <div>Status: <%= leave.status%></div>
+    </div>
+  </div>
+<% end %>
+

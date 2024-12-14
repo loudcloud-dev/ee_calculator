@@ -1,2 +1,36 @@
-<h1>Leaves#new</h1>
-<p>Find me in app/views/leaves/new.html.erb</p>
+<h1>File Leave Request</h1>
+
+<%= form_with(model: @leave) do |f| %>
+  <div>
+    <div>
+      <%= f.label :approver_id %>
+      <%= f.collection_select :approver_id, @approvers, :id, :email, prompt: "Select an approver", required: true %>
+    </div>
+    <div>
+      <%= f.label :start_date %>
+      <%= f.date_field :start_date, min: Date.today, required: true %>
+    </div>
+    <div>
+      <%= f.label :end_date %>
+      <%= f.date_field :end_date, min: Date.today, required: true %>
+    </div>
+    <div>
+      <%= f.label :day_count %>
+      <%= f.number_field :day_count, required: true %>
+    </div>
+    <div>
+      <%= f.label :leave_type %>
+      <%= f.radio_button :leave_type, "sick" %>
+      <%= f.label :leave_type_sick, "Sick" %>
+      <%= f.radio_button :leave_type, "vacation" %>
+      <%= f.label :leave_type_vacation, "Vacation" %>
+    </div>
+    <div>
+      <%= f.label :reason %>
+      <%= f.text_area :reason %>
+    </div>
+  </div>
+  <div>
+    <%= f.submit 'File Leave' %>
+  </div>
+<% end %>
