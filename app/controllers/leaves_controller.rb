@@ -1,12 +1,13 @@
 class LeavesController < ApplicationController
   before_action :authenticate_employee!, only: [ :index, :new, :create ]
+  before_action :approvers, only: [ :new, :create ]
+
   def index
     @leaves = current_employee.leaves
   end
 
   def new
     @leave = Leave.new
-    @approvers = AdminUser.order(:email)
   end
 
   def create
@@ -14,7 +15,7 @@ class LeavesController < ApplicationController
     if @leave.save
       redirect_to leaves_path, notice: "Leave request created successfully!"
     else
-      render :new, alert: "Failed to create leave request."
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -22,5 +23,9 @@ class LeavesController < ApplicationController
 
   def leave_params
     params.require(:leave).permit(:approver_id, :start_date, :end_date, :day_count, :leave_type, :reason)
+  end
+
+  def approvers
+    @approvers = AdminUser.order(:email)
   end
 end
