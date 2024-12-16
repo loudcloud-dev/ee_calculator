@@ -41,7 +41,7 @@
     </div>
     <div class="row my-2">
       <div class="col-5">
-        <%= f.label :leave_type, class: "form-label" %>
+        <%= f.label :leave_type, class: "form-label", required: true %>
         <div class="border rounded">
           <div class="px-3 py-1 border-bottom">
             <%= f.radio_button :leave_type, "sick", class: "form-check-input" %>
