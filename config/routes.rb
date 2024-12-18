@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-
+  devise_for :admin_users, ActiveAdmin::Devise.config
   devise_for :employees
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -16,7 +16,12 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "reimbursements#index"
   resources :reimbursements, only: [ :index, :new, :create ]
-  resources :leaves, only: [ :index, :new, :create ]
+  resources :leaves, only: [ :index, :new, :create ] do
+    member do
+      put :approve
+      put :reject
+    end
+  end
 
   get "*path" => redirect("/"), constraints: lambda { |req| !req.path.starts_with?("/rails/active_storage") }
 end

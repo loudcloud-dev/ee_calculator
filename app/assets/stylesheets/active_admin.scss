@@ -21,3 +21,7 @@
 body.index #sidebar:before {
     color: rgb(48, 146, 192);
 }
+
+body.active_admin {
+    .status_tag.orange { background: #ffc107 }
+}
