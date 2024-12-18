@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_13_095121) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_16_081920) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -108,8 +108,10 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_13_095121) do
     t.string "status", default: "pending"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "processed_by_id"
     t.index ["approver_id"], name: "index_leaves_on_approver_id"
     t.index ["employee_id"], name: "index_leaves_on_employee_id"
+    t.index ["processed_by_id"], name: "index_leaves_on_processed_by_id"
   end
 
   create_table "reimbursement_items", force: :cascade do |t|
@@ -145,5 +147,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_13_095121) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "leaves", "admin_users", column: "approver_id"
+  add_foreign_key "leaves", "admin_users", column: "processed_by_id"
   add_foreign_key "leaves", "employees"
 end
