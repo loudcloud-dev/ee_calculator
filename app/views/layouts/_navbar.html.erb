@@ -23,9 +23,9 @@
             Leaves Tracker
           </a>
           <div class="dropdown-menu">
-            <a class="dropdown-item disabled" href="/">Dashboard</a>
-            <a class="dropdown-item disabled" href="<%= new_reimbursement_path(employee_id: params[:employee_id]) %>">
-              File Leave
+            <a class="dropdown-item" href="<%= leaves_path %>">My Leaves</a>
+            <a class="dropdown-item" href="<%= new_leave_path() %>">
+              File Leave Request
             </a>
           </div>
         </li>

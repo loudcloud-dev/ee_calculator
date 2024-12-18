@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  employee: one
+  approver: one
+  state_date: 2024-12-10
+  end_date: 2024-12-10
+  day_count: 1
+  type: 
+  reason: MyString
+  status: MyString
+
+two:
+  employee: two
+  approver: two
+  state_date: 2024-12-10
+  end_date: 2024-12-10
+  day_count: 1
+  type: 
+  reason: MyString
+  status: MyString

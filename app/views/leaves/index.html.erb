@@ -1,0 +1,22 @@
+<h1>My Leaves</h1>
+<h4>(temporary UI, will update in next PR)</h4>
+
+<%= render 'shared/flashes' %>
+<%= render 'shared/toast' %>
+
+<% @leaves.each do |leave| %>
+  <div class="border">
+    <div>
+      <div>From: <%= leave.start_date %></div>
+      <div>To: <%= leave.end_date %></div>
+      <div>Duration: <%= leave.day_count %> days</div>
+      <div>Type: <%= leave.leave_type.capitalize %> Leave</div>
+      <div>Reason: <%= leave.reason %></div>
+    </div>
+    <div>
+      <div>Approver: <%= leave.approver.email %></div>
+      <div>Status: <%= leave.status%></div>
+    </div>
+  </div>
+<% end %>
+
