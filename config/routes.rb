@@ -16,10 +16,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "reimbursements#index"
   resources :reimbursements, only: [ :index, :new, :create ]
-  resources :leaves, only: [ :index, :new, :create ] do
+  resources :leaves, only: [ :index, :new, :create, :edit, :update ] do
     member do
       put :approve
       put :reject
+      patch :cancel
     end
   end
 
