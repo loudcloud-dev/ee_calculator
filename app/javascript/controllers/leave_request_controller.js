@@ -13,9 +13,7 @@ export default class extends Controller {
     if (startDate) {
       this.endDateTarget.min = startDate;
     } else {
-      const today = new Date();
-      today.setHours(today.getHours() + 8);
-      this.endDateTarget.min = today.toISOString().slice(0, 10);
+      this.endDateTarget.removeAttribute("min");
     }
 
     if (startDate && endDate)
