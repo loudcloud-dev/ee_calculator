@@ -2,9 +2,20 @@ import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="leave-request"
 export default class extends Controller {
-  static targets = ["startDate", "endDate", "dayCount"];
+  static targets = [
+    "startDate",
+    "endDate",
+    "dayCount",
+    "remainingSL",
+    "remainingVL",
+  ];
 
-  connect() {}
+  connect() {
+    this.selectedType = document.querySelector(
+      "input[type='radio']:checked",
+    )?.value;
+    this.errors = [];
+  }
 
   handleStartDateChange() {
     const startDate = this.startDateTarget.value;
@@ -55,6 +66,40 @@ export default class extends Controller {
     )
       .toISOString()
       .slice(0, 10);
+  }
+
+  handleTypeSelect(event) {
+    this.selectedType = event.target.value;
+  }
+
+  validateForm(event) {
+    const selectedType = this.selectedType;
+    const dayCount = this.dayCountTarget.value;
+    let remainingLeaves = 15;
+
+    if (selectedType == "sick") {
+      remainingLeaves = parseInt(this.remainingSLTarget.innerHTML);
+    } else if (selectedType == "vacation") {
+      remainingLeaves = parseInt(this.remainingVLTarget.innerHTML);
+    }
+
+    if (dayCount > remainingLeaves) {
+      event.preventDefault();
+      this.errors.push(
+        "Day count cannot be greater than your remaining leaves.",
+      );
+    }
+
+    this.showErrors();
+  }
+
+  showErrors() {
+    if (this.errors.length > 0) {
+      let errorText = "";
+      this.errors.forEach((error) => (errorText += error + "<br />"));
+      document.getElementById("frontendErrors").innerHTML = errorText;
+      document.getElementById("frontendErrors").removeAttribute("hidden");
+    }
   }
 
   getWeekdayCount(startDate, endDate) {
