@@ -28,8 +28,8 @@ ActiveAdmin.register Leave do
     redirect_to admin_leaves_path, notice: "Leave rejected!"
   end
 
-  filter :employee, as: :select, collection: Employee.joins(:leaves).distinct.pluck(:nickname, :id)
-  filter :approver_id, as: :select, collection: AdminUser.all.pluck(:email, :id)
+  filter :employee, as: :select, collection: -> { Employee.joins(:leaves).distinct.pluck(:nickname, :id) }
+  filter :approver_id, as: :select, collection: -> { AdminUser.all.pluck(:email, :id) }
   filter :start_date, as: :date_range
   filter :end_date, as: :date_range
   filter :leave_type, as: :select, collection: { "Sick" => "sick", "Vacation" => "vacation" }
