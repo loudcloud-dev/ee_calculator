@@ -1,13 +1,4 @@
-
 <div class="container col-12 col-md-6 my-4">
-  <%= render 'shared/flashes' %>
-  <%= render 'shared/toast' %>
-  <% if @leave.errors.any? %>
-    <% @leave.errors.full_messages.each do |message| %>
-      <div><%= message %></div>
-    <% end %>
-  <% end %>
-
   <h2>Edit Leave Request</h2>
   <%= render "form", leave: @leave %>
 </div>

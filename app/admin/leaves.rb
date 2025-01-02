@@ -8,7 +8,7 @@ ActiveAdmin.register Leave do
                 :reason,
                 :status
 
-  actions :all, except: [ :new, :create, :destroy ]
+  actions :all, except: [ :destroy ]
 
   action_item :approve, only: :show, if: proc { resource.status == "pending" } do
     link_to "Approve", approve_admin_leave_path(resource), method: :put, class: "button"

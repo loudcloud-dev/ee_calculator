@@ -10,4 +10,12 @@ module LeavesHelper
       "text-bg-secondary"
     end
   end
+
+  def get_type_border(type)
+    if type == "sick"
+      "border-warning"
+    elsif type == "vacation"
+      "border-info"
+    end
+  end
 end
