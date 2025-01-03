@@ -28,9 +28,9 @@ module ReimbursementServices
                                     .order(activity_date: "desc")
 
       if params[:activity_date].present?
-        month = params[:activity_date].to_i
+        month, year = params[:activity_date].split(",").map(&:to_i)
 
-        start_date = Date.new(Date.today.year, month, 6)
+        start_date = Date.new(year, month, 6)
         end_date = (start_date + 1.month) - 1.day
 
         reimbursements = reimbursements.where(activity_date: start_date..end_date)

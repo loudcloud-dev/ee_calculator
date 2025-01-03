@@ -1,6 +1,5 @@
 <div class="col-12">
   <%= render 'employee_search_form' %>
-
   <% if params[:employee_id].present? %>
     <div class="col-11 mx-auto">
       <div class="row my-3">
@@ -11,11 +10,9 @@
               month = params[:date][:month].to_i
               selected_month = (1..12).include?(month) ? month : Date.today.month
             %>
-
-            <%= "#{@employee.nickname}#{@employee.nickname.end_with?('s') ? '’' : '’s'} activity in #{Date::MONTHNAMES[selected_month]} #{Date.today.year}" %>
+            <%= "#{@employee.nickname}#{@employee.nickname.end_with?('s') ? '’' : '’s'} activity in #{Date::MONTHNAMES[selected_month]} #{params.dig(:date, :year)&.to_i}" %>
           </p>
         </div>
-
         <div class="row p-0 m-0 col-12">
           <%= render 'program_balance' %>
           <%= render 'availed_activities' %>

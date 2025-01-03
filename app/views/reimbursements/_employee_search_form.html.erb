@@ -3,29 +3,28 @@
     <%= image_tag("loudcloud_logo.png", width: 230, height: 95) %>
     <h1 class="display-6 fw-bold">EE Program - Budget Tracker</h1>
   </div>
-
   <%= form_with(url: reimbursements_path, method: :get) do |form| %>
     <div class="col-12 col-md-7 mx-auto">
       <div class="row d-flex justify-content-center">
-        <div class="col-12 col-md-7 mb-2 mb-md-0">
+        <div class="col-12 col-md-5 px-md-0 mb-2 mb-md-0">
           <%= form.select :employee_id, @active_employees, { prompt: "Select an employee", selected: params[:employee_id] }, { id: 'employee_select', data: { controller: 'employee_select' }, required: true } %>
         </div>
-        
-        <div class="col-12 col-md-3 px-md-0 mb-2 mb-md-0">
+        <div class="col-7 col-md-3 pe-0 mb-2 mb-md-0">
           <%
             month = params.dig(:date, :month)&.to_i
             selected_month = (1..12).include?(month) ? month : Date.today.month
           %>
-
           <%= select_month(selected_month, { prompt: 'Choose month', field_name: 'month' }, { id: 'month_select', data: { controller: 'employee_select' }, required: true }) %>
         </div>
-
+        <div class="col-5 col-md-2 mb-2 mb-md-0">
+          <% selected_year = params.dig(:date, :year)&.to_i || Date.today.year %>
+          <%= select_year(selected_year, { start_year: 2024, end_year: Date.today.year, prompt: 'Choose year', field_name: 'year' }, { id: 'year_select', data: { controller: 'employee_select' }, required: true }) %>
+        </div>
         <div class="d-none d-md-block col-auto">
           <%= form.button class: "btn btn-success rounded-circle" do %>
             <i class="fa-solid fa-magnifying-glass"></i>
           <% end %>
         </div>
-
         <div class="d-md-none col-12">
           <%= form.submit "Search", class: "btn btn-success col-12" %>
         </div>

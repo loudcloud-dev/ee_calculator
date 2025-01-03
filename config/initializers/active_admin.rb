@@ -234,6 +234,9 @@ ActiveAdmin.setup do |config|
   # To load a javascript file:
   #   config.register_javascript 'my_javascript.js'
 
+  config.register_stylesheet "https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css"
+  config.register_javascript "https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"
+
   # == CSV options
   #
   # Set the CSV builder separator
