@@ -179,15 +179,23 @@ ActiveAdmin.register Reimbursement do
 
   form do |f|
     f.inputs do
-      f.input :employee_id, as: :select, collection: active_employees, prompt: "Select Assigned Employee"
+      f.input :employee_id, 
+              as: :select, 
+              collection: active_employees, 
+              prompt: "Select Assigned Employee"
+    
       f.input :participated_employee_ids,
               label: "Participated Employees",
               as: :select,
               collection: employees.map { |employee|
                 nickname = employee.active ? employee.nickname : "#{employee.nickname} (Inactive)"
-                [ nickname, employee.id ]
+                [nickname, employee.id]
               },
-              input_html: { multiple: true }
+              input_html: { 
+                multiple: true,
+                class: "tom-select"
+              }
+
       f.input :category_id, as: :select, collection: categories, prompt: "Select a category"
       f.input :activity_date, as: :datepicker, input_html: { max: Date.today }
       f.input :invoice_reference_number

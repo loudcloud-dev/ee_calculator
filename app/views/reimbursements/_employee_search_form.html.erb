@@ -9,14 +9,14 @@
         <div class="col-12 col-md-5 px-md-0 mb-2 mb-md-0">
           <%= form.select :employee_id, @active_employees, { prompt: "Select an employee", selected: params[:employee_id] }, { id: 'employee_select', data: { controller: 'employee_select' }, required: true } %>
         </div>
-        <div class="col-7 col-md-3 mb-2 mb-md-0">
+        <div class="col-7 col-md-3 pe-0 mb-2 mb-md-0">
           <%
             month = params.dig(:date, :month)&.to_i
             selected_month = (1..12).include?(month) ? month : Date.today.month
           %>
           <%= select_month(selected_month, { prompt: 'Choose month', field_name: 'month' }, { id: 'month_select', data: { controller: 'employee_select' }, required: true }) %>
         </div>
-        <div class="col-5 col-md-2 px-md-0 mb-2 mb-md-0">
+        <div class="col-5 col-md-2 mb-2 mb-md-0">
           <% selected_year = params.dig(:date, :year)&.to_i || Date.today.year %>
           <%= select_year(selected_year, { start_year: 2024, end_year: Date.today.year, prompt: 'Choose year', field_name: 'year' }, { id: 'year_select', data: { controller: 'employee_select' }, required: true }) %>
         </div>
