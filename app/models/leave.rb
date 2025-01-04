@@ -10,7 +10,7 @@ class Leave < ApplicationRecord
   validates :day_count, presence: true
   validates :leave_type, presence: true
 
-  validate :end_date_must_be_after_start_date, :day_count_must_be_in_range, :no_overlapping_dates
+  validate :end_date_must_be_after_start_date, :day_count_must_be_countable, :no_overlapping_dates
 
   scope :sick_leaves, -> { where(leave_type: "sick") }
   scope :vacation_leaves, -> { where(leave_type: "vacation") }
@@ -27,9 +27,9 @@ class Leave < ApplicationRecord
     end
   end
 
-  def day_count_must_be_in_range
-    if day_count > 15 || day_count < 1
-      errors.add(:day_count, "must be between 1 to 15 days.")
+  def day_count_must_be_countable
+    if day_count < 1
+      errors.add(:day_count, "must be greater than 0.")
     end
   end
 

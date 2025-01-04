@@ -14,7 +14,6 @@ export default class extends Controller {
     this.selectedType = document.querySelector(
       "input[type='radio']:checked",
     )?.value;
-    this.errors = [];
   }
 
   handleStartDateChange() {
@@ -55,7 +54,6 @@ export default class extends Controller {
     const startDate = this.startDateTarget.value;
     let dayCount = this.dayCountTarget.value;
 
-    if (dayCount > 15) this.dayCountTarget.value = 15;
     if (dayCount < 1) this.dayCountTarget.value = 1;
 
     dayCount = this.dayCountTarget.value;
@@ -84,21 +82,7 @@ export default class extends Controller {
     }
 
     if (dayCount > remainingLeaves) {
-      event.preventDefault();
-      this.errors.push(
-        "Day count cannot be greater than your remaining leaves.",
-      );
-    }
-
-    this.showErrors();
-  }
-
-  showErrors() {
-    if (this.errors.length > 0) {
-      let errorText = "";
-      this.errors.forEach((error) => (errorText += error + "<br />"));
-      document.getElementById("frontendErrors").innerHTML = errorText;
-      document.getElementById("frontendErrors").removeAttribute("hidden");
+      // TODO: modal
     }
   }
 

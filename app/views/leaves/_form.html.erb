@@ -5,7 +5,6 @@
     <div class="alert alert-danger"><%= message %></div>
   <% end %>
 <% end %>
-<div id="frontendErrors" class="alert alert-danger" hidden></div>
 
 <%= form_with(model: @leave, data: { controller: "leave-request", action: "submit->leave-request#validateForm" }) do |f| %>
   <div class="row my-2">
@@ -33,7 +32,7 @@
       </div>
       <div class="col-2">
       <%= f.label :day_count, class: "form-label" %>
-      <%= f.number_field :day_count, class: "form-control", min: 1, max: 15, required: true, 
+      <%= f.number_field :day_count, class: "form-control", min: 1, required: true, 
         data: {
           "leave-request-target": "dayCount",
           action: "input->leave-request#handleDayCountChange"
@@ -50,7 +49,7 @@
               action: "input->leave-request#handleTypeSelect"
             } %>
           <%= f.label :leave_type_sick, "Sick", class: "form-check-label" %>
-          (<span data-leave-request-target="remainingSL"><%= @remaining_sl %></span> left)
+          (<span data-leave-request-target="remainingSL"><%= @remaining_sl < 0 ? 0 : @remaining_sl %></span> left)
         </div>
         <div class="px-3 py-1">
           <%= f.radio_button :leave_type, "vacation", class: "form-check-input mx-1",
@@ -58,7 +57,7 @@
               action: "input->leave-request#handleTypeSelect"
             } %>
           <%= f.label :leave_type_vacation, "Vacation", class: "form-check-label" %>
-          (<span data-leave-request-target="remainingVL"><%= @remaining_vl %></span> left)
+          (<span data-leave-request-target="remainingVL"><%= @remaining_vl < 0 ? 0 : @remaining_vl %></span> left)
         </div>
       </div>
     </div>
