@@ -42,7 +42,8 @@ class LeavesController < ApplicationController
 
   def update
     if @leave.update(leave_params)
-      redirect_to leaves_path, notice: "Leave request updated successfully!"
+      flash[:success] = @leave.leave_type.capitalize + " leave request updated successfully."
+      redirect_to leaves_path
     else
       render :edit, status: :unprocessable_entity
     end

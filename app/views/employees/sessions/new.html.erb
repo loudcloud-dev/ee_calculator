@@ -4,6 +4,8 @@
       <h2 class="fw-semibold text-center">Employee Sign in</h2>
     </div>
 
+    <%= render 'shared/flashes' %>
+
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
       <div class="form-group my-3 px-3 field">
         <%= f.label :email, class: "form-label" %>

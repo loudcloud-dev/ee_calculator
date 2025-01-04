@@ -1,5 +1,4 @@
 <%= render 'shared/flashes' %>
-<%= render 'shared/toast' %>
 <% if @leave.errors.any? %>
   <% @leave.errors.full_messages.each do |message| %>
     <div class="alert alert-danger"><%= message %></div>
