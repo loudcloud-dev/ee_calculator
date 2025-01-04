@@ -33,16 +33,26 @@
     <% end %>
   </div>
 
-  <div class="my-2 d-flex flex-row">
+  <div class="my-2 d-flex flex-row" data-controller="tooltip">
     <div class="card w-50 me-2 alert alert-warning">
-      <h4>SL: <span class="fw-bold"><%= @remaining_sl %>/15</span> remaining</h4>
+      <% if @remaining_sl < 0 %>
+        <span class="position-absolute end-0 me-3 mt-1" data-bs-toggle="tooltip" data-bs-title="You've filed more than 15 SLs (<%= -@remaining_sl %> above limit)">
+          <i style="width: 24px; height: 24px;" class="fa-solid fa-circle-exclamation"></i>
+        </span>
+      <% end %>
+      <h4>SL: <span class="fw-bold"><%= @remaining_sl < 0 ? 0 : @remaining_sl %>/15</span> remaining</h4>
       <div>
         <span class="fw-bold"><%= @approved_sl %></span> approved,
         <span class="fw-bold"><%= @pending_sl %></span> pending
       </div>
     </div>
     <div class="w-50 ms-2 alert alert-info">
-      <h4>VL: <span class="fw-bold"><%= @remaining_vl %>/15</span> remaining</h4>
+      <% if @remaining_vl < 0 %>
+        <span class="position-absolute end-0 me-3 mt-1" data-bs-toggle="tooltip" data-bs-title="You've filed more than 15 VLs (<%= -@remaining_vl %> above limit)">
+          <i style="width: 24px; height: 24px;" class="fa-solid fa-circle-exclamation"></i>
+        </span>
+      <% end %>
+      <h4>VL: <span class="fw-bold"><%= @remaining_vl < 0 ? 0 : @remaining_vl %>/15</span> remaining</h4>
       <div>
         <span class="fw-bold"><%= @approved_vl %></span> approved,
         <span class="fw-bold"><%= @pending_vl %></span> pending

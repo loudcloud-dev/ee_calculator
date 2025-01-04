@@ -25,7 +25,8 @@ class LeavesController < ApplicationController
   def create
     @leave = current_employee.leaves.build(leave_params)
     if @leave.save
-      redirect_to leaves_path, notice: "Leave request created successfully!"
+      flash[:success] = @leave.leave_type.capitalize + " leave request filed successfully."
+      redirect_to leaves_path
     else
       render :new, status: :unprocessable_entity
     end

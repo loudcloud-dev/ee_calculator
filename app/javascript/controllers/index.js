@@ -7,6 +7,7 @@ import PopoverController from "./popover_controller";
 import ImageValidationController from "./image_validation_controller";
 import FormValidationController from "./form_validation_controller";
 import LeaveRequestController from "./leave_request_controller";
+import TooltipController from "./tooltip_controller";
 
 application.register("select", SelectController);
 application.register("employee_select", EmployeeSelectController);
@@ -15,3 +16,4 @@ application.register("popover", PopoverController);
 application.register("image-validation", ImageValidationController);
 application.register("form-validation", FormValidationController);
 application.register("leave-request", LeaveRequestController);
+application.register("tooltip", TooltipController);
