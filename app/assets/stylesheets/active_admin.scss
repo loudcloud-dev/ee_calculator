@@ -25,3 +25,9 @@ body.index #sidebar:before {
 body.active_admin {
     .status_tag.orange { background: #ffc107 }
 }
+
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: not-allowed;
+}

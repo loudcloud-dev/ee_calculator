@@ -194,7 +194,8 @@ ActiveAdmin.register Reimbursement do
               input_html: {
                 multiple: true,
                 class: "tom-select"
-              }
+              },
+              hint: "Please select at least 2 employees."
 
       f.input :category_id, as: :select, collection: categories, prompt: "Select a category"
       f.input :activity_date, as: :datepicker, input_html: { max: Date.today }
