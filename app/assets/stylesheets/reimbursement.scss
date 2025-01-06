@@ -78,6 +78,10 @@
   text-overflow: ellipsis;
 }
 
+#year_select-ts-control {
+  min-width: 0 !important;
+}
+
 @media only screen and (max-width: 768px) {
   .availed-activities-container {
     margin: 0 12px;

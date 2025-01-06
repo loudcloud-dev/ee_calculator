@@ -21,7 +21,7 @@ ActiveAdmin.register Reimbursement do
   preserve_default_filters!
   remove_filter :image_attachment, :image_blob, :reimbursement_items, :participated_employee_ids
 
-  filter :employee, as: :select, collection: -> { @employees }
+  filter :employee, as: :select, collection: -> { @active_employees }
   filter :status, as: :select, collection: -> { @status }
 
   config.sort_order = "activity_date_desc"
@@ -179,7 +179,11 @@ ActiveAdmin.register Reimbursement do
 
   form do |f|
     f.inputs do
-      f.input :employee_id, as: :select, collection: active_employees, prompt: "Select Assigned Employee"
+      f.input :employee_id,
+              as: :select,
+              collection: active_employees,
+              prompt: "Select Assigned Employee"
+
       f.input :participated_employee_ids,
               label: "Participated Employees",
               as: :select,
@@ -187,7 +191,12 @@ ActiveAdmin.register Reimbursement do
                 nickname = employee.active ? employee.nickname : "#{employee.nickname} (Inactive)"
                 [ nickname, employee.id ]
               },
-              input_html: { multiple: true }
+              input_html: {
+                multiple: true,
+                class: "tom-select"
+              },
+              hint: "Please select at least 2 employees."
+
       f.input :category_id, as: :select, collection: categories, prompt: "Select a category"
       f.input :activity_date, as: :datepicker, input_html: { max: Date.today }
       f.input :invoice_reference_number
