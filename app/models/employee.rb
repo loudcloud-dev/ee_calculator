@@ -8,6 +8,7 @@ class Employee < ApplicationRecord
 
   validates :nickname, presence: true, uniqueness: true
   validates :email, uniqueness: true, allow_nil: true
+  validates_confirmation_of :password
 
   before_validation :convert_blank_to_nil
 
