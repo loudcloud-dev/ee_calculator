@@ -1,0 +1,30 @@
+<div
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="false"
+  data-modal-target="modal"
+  data-action="modal-open@window->modal#open"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title fs-5" id="exampleModalLabel">
+          <%= title %>
+        </h4>
+        <button type="button" class="btn-close" data-action="modal#close" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= content %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-action="modal#close">No</button>
+        <% if !form.nil? %>
+          <%= form.submit "Yes", class: "btn btn-primary", id: "modalConfirm" %>
+        <% else %>
+          <button type="button" class="btn btn-primary">Yes</button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

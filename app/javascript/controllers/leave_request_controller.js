@@ -81,8 +81,11 @@ export default class extends Controller {
       remainingLeaves = parseInt(this.remainingVLTarget.innerHTML);
     }
 
-    if (dayCount > remainingLeaves) {
-      // TODO: modal
+    if (dayCount > remainingLeaves && event.submitter.id != "modalConfirm") {
+      event.preventDefault();
+
+      const trigger = new CustomEvent("modal-open");
+      window.dispatchEvent(trigger);
     }
   }
 

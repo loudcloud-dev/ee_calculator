@@ -8,6 +8,7 @@ import ImageValidationController from "./image_validation_controller";
 import FormValidationController from "./form_validation_controller";
 import LeaveRequestController from "./leave_request_controller";
 import TooltipController from "./tooltip_controller";
+import ModalController from "./modal_controller";
 
 application.register("select", SelectController);
 application.register("employee_select", EmployeeSelectController);
@@ -17,3 +18,4 @@ application.register("image-validation", ImageValidationController);
 application.register("form-validation", FormValidationController);
 application.register("leave-request", LeaveRequestController);
 application.register("tooltip", TooltipController);
+application.register("modal", ModalController);
