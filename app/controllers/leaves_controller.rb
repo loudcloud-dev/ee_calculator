@@ -51,7 +51,8 @@ class LeavesController < ApplicationController
 
   def cancel
     if @leave.update(status: "cancelled")
-      redirect_to leaves_path, notice: "Leave request cancelled!"
+      flash[:success] = "Leave request cancelled!"
+      redirect_to leaves_path
     else
       render :index, status: :unprocessable_entity
     end

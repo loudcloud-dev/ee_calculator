@@ -20,7 +20,9 @@ Rails.application.routes.draw do
     member do
       put :approve
       put :reject
-      patch :cancel
+    end
+    collection do
+      post :cancel
     end
   end
 

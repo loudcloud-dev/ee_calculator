@@ -2,7 +2,12 @@
 <div class="container col-12 col-lg-6 my-4">
   <%= render 'shared/flashes' %>
 
-  <h2><%= current_employee.nickname %>'s Leaves</h2>
+  <div class="row align-items-center">
+    <h2 class="col-9"><%= current_employee.nickname %>'s Leaves</h2>
+    <a class="col-3 btn btn-primary" href="<%= new_leave_path() %>">
+      File Leave Request
+    </a>
+  </div>
 
   <div class="my-4">
     <%= form_with(url: leaves_path, method: :get) do |f| %>
@@ -58,54 +63,69 @@
       </div>
     </div>
   </div>
-  
 
-  <% @leaves.each do |leave| %>
-    <div class="my-1 card">
-      <div class="card-body border-start rounded border-4 <%= get_type_border(leave.leave_type) %>">
-        <div class="card-title row align-items-center">
-          <div class="col-9">
-            <h4><%= leave.day_count %>-day <%= leave.leave_type.capitalize %> Leave</h4>
-          </div>
-          <div class="col-3 d-flex justify-content-end">
-            <% if leave.status == "pending" %>
-              <a class="btn btn-secondary mx-1" href="<%= edit_leave_path(leave) %>">Edit</a>
-            <% end %>
-            <% if ["pending", "approved"].include? leave.status %>
-              <a class="btn btn-secondary mx-1" href="<%= cancel_leave_path(leave) %>" data-turbo-method="patch">Cancel</a>
-            <% end %>
-          </div>
-        </div>
-        <div class="card-text row">
-          <div class="col-6 row">
-            <div class="col-4">
-              <div>From:</div>
-              <div>To: </div>
-              <div>Reason: </div>
+  <div data-controller="modal">
+    <%= form_with(url: cancel_leaves_path, method: :post) do |f| %>
+      <%= f.hidden_field :id, class: "form-control" %>
+      <%= render "modal",
+            title: "Cancel",
+            content: "Are you sure you want to cancel this leave request?",
+            form: f
+      %>
+      <% @leaves.each do |leave| %>
+        <div class="my-1 card">
+          <div class="card-body border-start rounded border-4 <%= get_type_border(leave.leave_type) %>">
+            <div class="card-title row align-items-center">
+              <div class="col-9">
+                <%= leave.id %>
+                <h4><%= leave.day_count %>-day <%= leave.leave_type.capitalize %> Leave</h4>
+              </div>
+              <div class="col-3 d-flex justify-content-end">
+                <% if leave.status == "pending" %>
+                  <a class="btn btn-secondary mx-1" href="<%= edit_leave_path(leave) %>">Edit</a>
+                <% end %>
+                <% if ["pending", "approved"].include? leave.status %>
+                  <button class="btn btn-secondary mx-1"
+                          data-action="modal#open"
+                          onclick="event.preventDefault(); document.getElementById('id').value = <%= leave.id %>"
+                  >
+                    Cancel
+                  </button>
+                <% end %>
+              </div>
             </div>
-            <div class="col-8">
-              <div><%= leave.start_date.strftime("%Y %b %-d") %></div>
-              <div><%= leave.end_date.strftime("%Y %b %-d") %></div>
-              <div class="<%= "text-muted" if !leave.reason? %>"><%= leave.reason? ? leave.reason : "none" %></div>
-            </div>
-          </div>
-          <div class="col-6 row">
-            <div class="col-4">
-              <div>Updated: </div>
-              <div>Approver: </div>
-              <div>Status: </div>
-            </div>
-            <div class="col-8">
-              <div><%= leave.updated_at.strftime("%Y %b %-d, %I:%M%p") %></div>
-              <div><%= leave.approver.email %></div>
-              <div>
-                <span class="badge <%= get_status_badge(leave.status)%>"><%= leave.status.capitalize %></span>
+            <div class="card-text row">
+              <div class="col-6 row">
+                <div class="col-4">
+                  <div>From:</div>
+                  <div>To: </div>
+                  <div>Reason: </div>
+                </div>
+                <div class="col-8">
+                  <div><%= leave.start_date.strftime("%Y %b %-d") %></div>
+                  <div><%= leave.end_date.strftime("%Y %b %-d") %></div>
+                  <div class="<%= "text-muted" if !leave.reason? %>"><%= leave.reason? ? leave.reason : "none" %></div>
+                </div>
+              </div>
+              <div class="col-6 row">
+                <div class="col-4">
+                  <div>Updated: </div>
+                  <div>Approver: </div>
+                  <div>Status: </div>
+                </div>
+                <div class="col-8">
+                  <div><%= leave.updated_at.strftime("%Y %b %-d, %I:%M%p") %></div>
+                  <div><%= leave.approver.email %></div>
+                  <div>
+                    <span class="badge <%= get_status_badge(leave.status)%>"><%= leave.status.capitalize %></span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  <% end %>
+      <% end %>
+    <% end %>
+  </div>
 </div>
 
