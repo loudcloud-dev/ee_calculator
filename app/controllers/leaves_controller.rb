@@ -18,7 +18,7 @@ class LeavesController < ApplicationController
     @leaves = @leaves.where("extract(year from start_date) = ? or extract(year from end_date) = ?", params[:year], params[:year]) if params[:year].present?
 
     @past_leaves = @leaves.where(start_date: ..(Date.today-1.day)).order("start_date desc")
-    @upcoming_leaves = @leaves.where(start_date: (Date.today)..)
+    @upcoming_leaves = @leaves.where(start_date: (Date.today)..).order("start_date asc")
   end
 
   def new
@@ -76,7 +76,7 @@ class LeavesController < ApplicationController
   end
 
   def leave_counts
-    @all_leaves = current_employee.leaves.order("start_date asc")
+    @all_leaves = current_employee.leaves
 
     @pending_sl = @all_leaves.sick_leaves.pending_leaves.sum(:day_count)
     @pending_vl = @all_leaves.vacation_leaves.pending_leaves.sum(:day_count)
