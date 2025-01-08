@@ -16,6 +16,9 @@ class LeavesController < ApplicationController
     @leaves = @leaves.where(status: params[:status].downcase) if params[:status].present?
     @leaves = @leaves.where("extract(month from start_date) = ? or extract(month from end_date) = ?", params[:month], params[:month]) if params[:month].present?
     @leaves = @leaves.where("extract(year from start_date) = ? or extract(year from end_date) = ?", params[:year], params[:year]) if params[:year].present?
+
+    @past_leaves = @leaves.where(start_date: ..(Date.today-1.day)).order("start_date desc")
+    @upcoming_leaves = @leaves.where(start_date: (Date.today)..).order("start_date asc")
   end
 
   def new
@@ -25,7 +28,8 @@ class LeavesController < ApplicationController
   def create
     @leave = current_employee.leaves.build(leave_params)
     if @leave.save
-      redirect_to leaves_path, notice: "Leave request created successfully!"
+      flash[:success] = @leave.leave_type.capitalize + " leave request filed successfully."
+      redirect_to leaves_path
     else
       render :new, status: :unprocessable_entity
     end
@@ -41,7 +45,8 @@ class LeavesController < ApplicationController
 
   def update
     if @leave.update(leave_params)
-      redirect_to leaves_path, notice: "Leave request updated successfully!"
+      flash[:success] = @leave.leave_type.capitalize + " leave request updated successfully."
+      redirect_to leaves_path
     else
       render :edit, status: :unprocessable_entity
     end
@@ -49,7 +54,8 @@ class LeavesController < ApplicationController
 
   def cancel
     if @leave.update(status: "cancelled")
-      redirect_to leaves_path, notice: "Leave request cancelled!"
+      flash[:success] = "Leave request cancelled!"
+      redirect_to leaves_path
     else
       render :index, status: :unprocessable_entity
     end
@@ -70,7 +76,7 @@ class LeavesController < ApplicationController
   end
 
   def leave_counts
-    @all_leaves = current_employee.leaves.order("start_date asc")
+    @all_leaves = current_employee.leaves
 
     @pending_sl = @all_leaves.sick_leaves.pending_leaves.sum(:day_count)
     @pending_vl = @all_leaves.vacation_leaves.pending_leaves.sum(:day_count)
