@@ -16,6 +16,9 @@ class LeavesController < ApplicationController
     @leaves = @leaves.where(status: params[:status].downcase) if params[:status].present?
     @leaves = @leaves.where("extract(month from start_date) = ? or extract(month from end_date) = ?", params[:month], params[:month]) if params[:month].present?
     @leaves = @leaves.where("extract(year from start_date) = ? or extract(year from end_date) = ?", params[:year], params[:year]) if params[:year].present?
+
+    @past_leaves = @leaves.where(start_date: ..(Date.today-1.day)).order("start_date desc")
+    @upcoming_leaves = @leaves.where(start_date: (Date.today)..)
   end
 
   def new
