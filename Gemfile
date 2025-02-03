@@ -55,7 +55,7 @@ gem "jsbundling-rails", "~> 1.3"
 
 #
 gem "rspec", "~> 3.13"
-gem "rubocop", "~> 1.68"
+gem "rubocop", "~> 1.71"
 
 # Active Storage
 gem "image_processing", "~> 1.13"
