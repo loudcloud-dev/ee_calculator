@@ -3,25 +3,7 @@
     <div class="equal-height">
       <div class="table-responsive">
           <table class="table caption-top">
-
-            <% if params[:date].present? %>
-              <% month = params[:date][:month].to_i %>
-              <% year = params[:date][:year].to_i %>
-
-              <% start_date = Date.new(year, month, 6) %>
-              <% end_date = (start_date + 1.month) - 1.day %>
-
-              <div>
-                <p class="text-muted mb-0">Availed Activities</p>
-                <p class="mb-0 text-secondary fst-italic small">
-                  <%= start_date.strftime('%B %d, %Y') %> – <%= end_date.strftime('%B %d, %Y') %>
-                </p>
-              </div>
-
-            <% else %>
-              <caption class="pt-0">Availed Activities</caption>
-            <% end %>
-
+            <caption class="pt-0">Availed Activities</caption>
             <thead class="table-light">
               <tr>
                 <th scope="col">Activity</th>
