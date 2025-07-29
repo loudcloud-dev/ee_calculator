@@ -10,7 +10,11 @@
             <i class="<%= category.icon %>" style="color: <%= category.icon_color %>;"></i>
           </div>
           <div class="card-body text-end">
-            <h5 class="card-title"><%= format_amount(ENV['MONTHLY_BUDGET'].to_i - total_shared_amount) %> <span class="fs-6 fw-normal text-muted">left</span></h5>
+            <h5 class="card-title">
+              <%= format_amount([ENV['MONTHLY_BUDGET'].to_i - total_shared_amount, 0].max) %>
+              <span class="fs-6 fw-normal text-muted">left</span>
+            </h5>
+
             <p class="card-text text-muted"><%= category.name %></p>
           </div>
         </div>
