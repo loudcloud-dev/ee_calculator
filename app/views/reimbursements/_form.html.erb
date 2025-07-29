@@ -29,7 +29,7 @@
 
       <div>
         <%= form.label :activity_date, class: "form-label" %>
-        <%= form.date_field :activity_date, min: start_date(Date.today), max: Date.today, class: "form-control", required: true %>
+        <%= form.date_field :activity_date, max: Date.today, class: "form-control", required: true %>
       </div>
 
       <div class="col-6">
