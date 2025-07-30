@@ -17,7 +17,7 @@ export default class extends Controller {
 
   initializeTomSelect() {
     this.element.tomselect = new TomSelect(this.element, {
-      onItemAdd:function(){
+      onItemAdd: function() {
         this.setTextboxValue('');
         this.refreshOptions();
       },
@@ -27,8 +27,7 @@ export default class extends Controller {
   }
 
   validate() {
-    const selectedOptions = this.element.selectedOptions;
-    const selectedCount = selectedOptions.length;
+    const selectedCount = this.element.tomselect.items.length;
 
     const validationMessage = document.getElementById("participated_employees_validation");
     const submitBtn = document.getElementById("submit_btn");

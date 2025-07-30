@@ -1,0 +1,37 @@
+<div class="py-2 hero-section fixed-top z-2" style="margin-top: 56px;">
+  <div class="container col-12 col-lg-6 py-4">
+    <div class="row align-items-center me-2">
+      <h2 class="col-9 fw-bold"><%= current_employee.nickname %>'s time off</h2>
+      <a class="col-3 btn btn-success" href="<%= new_leave_path() %>">
+        File Leave
+      </a>
+    </div>
+
+    <div class="mt-4">
+      <%= form_with(url: leaves_path, method: :get) do |f| %>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title mx-2">Filters</h5>
+            <div class="d-flex flex-row align-items-center">
+              <div class="mx-2">
+                <%= f.select :leave_type, options_for_select(["Sick", "Vacation"], selected: params[:leave_type]), { prompt: "Select type" }, class: "form-select" %>
+              </div>
+              <div class="mx-2">
+                <%= f.select :status, options_for_select(["Pending", "Approved", "Rejected", "Cancelled"], selected: params[:status]), { prompt: "Select status" }, class: "form-select" %>
+              </div>
+              <div class="mx-2">
+                <%= f.select :month, options_for_select(@months, selected: params[:month]), { prompt: "Select month" }, class: "form-select" %>
+              </div>
+              <div class="mx-2">
+                <%= f.select :year, options_for_select(@years, selected: params[:year]), { prompt: "Select year" }, class: "form-select" %>
+              </div>
+              <div class="mx-2 w-25">
+                <%= f.submit "Filter", class: "btn btn-primary w-100" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -9,6 +9,7 @@ ActiveAdmin.register Reimbursement do
                 :reimbursed_amount,
                 :supplier,
                 :status,
+                :transaction_id,
                 participated_employee_ids: []
 
   # Actions
@@ -157,6 +158,8 @@ ActiveAdmin.register Reimbursement do
         reimbursement.formatted_reimbursed_amount
       end
 
+      row :transaction_id
+
       row "Invoice Image", :image do |reimbursement|
         if reimbursement.image.attached?
           div do
@@ -176,15 +179,24 @@ ActiveAdmin.register Reimbursement do
 
   form do |f|
     f.inputs do
-      f.input :employee_id, as: :select, collection: active_employees, prompt: "Select Assigned Employee"
+      f.input :employee_id,
+              as: :select,
+              collection: active_employees,
+              prompt: "Select Assigned Employee"
+
       f.input :participated_employee_ids,
               label: "Participated Employees",
               as: :select,
               collection: employees.map { |employee|
                 nickname = employee.active ? employee.nickname : "#{employee.nickname} (Inactive)"
-                [nickname, employee.id]
+                [ nickname, employee.id ]
               },
-              input_html: { multiple: true }
+              input_html: {
+                multiple: true,
+                class: "tom-select"
+              },
+              hint: "Please select at least 2 employees."
+
       f.input :category_id, as: :select, collection: categories, prompt: "Select a category"
       f.input :activity_date, as: :datepicker, input_html: { max: Date.today }
       f.input :invoice_reference_number
@@ -196,10 +208,12 @@ ActiveAdmin.register Reimbursement do
       end
 
       f.input :reimbursed_amount
+      f.input :transaction_id
       f.input :supplier
-      f.input :image, 
-        as: :file, 
-        hint: f.object.image.attached? && !f.object.new_record? ? image_tag(url_for(f.object.image), style: "width: 300px; height: auto;") : content_tag(:span, "No image uploaded"), 
+      f.input :image,
+        label: "Invoice Image",
+        as: :file,
+        hint: f.object.image.attached? && !f.object.new_record? ? image_tag(url_for(f.object.image), style: "width: 300px; height: auto;") : content_tag(:span, "No image uploaded"),
         input_html: { accept: "image/*" }
       f.input :status,
         as: :select,
@@ -262,11 +276,30 @@ ActiveAdmin.register Reimbursement do
     link_to "Export Images", export_images_admin_reimbursements_path(filter_params: params.permit(q: {}).to_h[:q])
   end
 
+  action_item :export_reimbursement_forms, only: :index do
+    link_to "Export to Reimbursement Forms", export_reimbursement_form_admin_reimbursements_path
+  end
+
   collection_action :export_images, method: :get do
     zip_file_path = ReimbursementServices::ExportReimbursementImages.call(params[:filter_params])
 
     send_file zip_file_path, type: "application/zip", disposition: "attachment", filename: "Invoice Images.zip"
-  end  
+  end
+
+  collection_action :export_reimbursement_form, method: :get do
+    @available_months = Reimbursement.select("EXTRACT(MONTH FROM activity_date) AS month, EXTRACT(YEAR FROM activity_date) AS year")
+                                     .distinct
+                                     .where(status: "reimbursed")
+
+    render "admin/reimbursements/export_reimbursement_form"
+  end
+
+  collection_action :export_reimbursement_forms, method: :get do
+    zipfile = ReimbursementServices::ExportReimbursementForm.call(params)
+    month = Date::MONTHNAMES[params[:activity_date].to_i]
+
+    send_file zipfile, filename: "LoudCloud EE Availment Reimbursement Forms (#{month}).zip", type: "application/zip", disposition: "attachment"
+  end
 
   controller do
     def create

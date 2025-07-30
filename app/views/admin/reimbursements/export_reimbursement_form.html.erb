@@ -1,0 +1,17 @@
+<h3>Export Reimbursement Form</h3>
+<%= form_with url: export_reimbursement_forms_admin_reimbursements_path, method: :get, class: "export-reimbursement-form" do |form| %>
+  <div>
+    <div class="form-group">
+      <%= form.label :activity_date, 'Month*', class: "form-label" %>
+      <%= form.select :activity_date, 
+                      options_for_select(@available_months.map { |m| ["#{Date::MONTHNAMES[m.month.to_i]} #{m.year.to_i}", "#{m.month.to_i},#{m.year.to_i}"] }),
+                      prompt: "Select a month", 
+                      class: "form-select", 
+                      required: true %>
+    </div>
+    <div class="export-reimbursement-btns">
+      <%= link_to "Cancel", admin_reimbursements_path, class: "btn btn-secondary", style: "margin: 3px 5px" %>
+      <%= form.submit "Export", class: "btn btn-primary", style: "width: 50%;" %>
+    </div>
+  </div>
+<% end %>

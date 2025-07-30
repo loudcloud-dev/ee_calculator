@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_03_030155) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_16_081920) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -86,6 +86,32 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_03_030155) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active", default: true, null: false
+    t.string "employee_type"
+    t.string "email"
+    t.string "encrypted_password"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.index ["email"], name: "index_employees_on_email", unique: true, where: "(((email)::text <> ''::text) AND (email IS NOT NULL))"
+    t.index ["reset_password_token"], name: "index_employees_on_reset_password_token", unique: true
+  end
+
+  create_table "leaves", force: :cascade do |t|
+    t.bigint "employee_id", null: false
+    t.bigint "approver_id", null: false
+    t.date "start_date"
+    t.date "end_date"
+    t.integer "day_count"
+    t.string "leave_type"
+    t.string "reason"
+    t.string "status", default: "pending"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "processed_by_id"
+    t.index ["approver_id"], name: "index_leaves_on_approver_id"
+    t.index ["employee_id"], name: "index_leaves_on_employee_id"
+    t.index ["processed_by_id"], name: "index_leaves_on_processed_by_id"
   end
 
   create_table "reimbursement_items", force: :cascade do |t|
@@ -110,12 +136,17 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_03_030155) do
     t.string "status", default: "pending"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "transaction_id"
     t.index ["activity_date"], name: "index_reimbursements_on_activity_date"
     t.index ["category_id"], name: "index_reimbursements_on_category_id"
     t.index ["employee_id"], name: "index_reimbursements_on_employee_id"
     t.index ["status"], name: "index_reimbursements_on_status"
+    t.index ["transaction_id"], name: "index_reimbursements_on_transaction_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "leaves", "admin_users", column: "approver_id"
+  add_foreign_key "leaves", "admin_users", column: "processed_by_id"
+  add_foreign_key "leaves", "employees"
 end

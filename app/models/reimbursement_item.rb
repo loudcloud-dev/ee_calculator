@@ -5,13 +5,8 @@ class ReimbursementItem < ApplicationRecord
   belongs_to :reimbursement
 
   def self.used_budget_sum(employee_id:, category_id:, activity_date:)
-    start_date = if activity_date.day < 6
-      (activity_date.beginning_of_month - 1.month).change(day: 6)
-    else
-      activity_date.beginning_of_month.change(day: 6)
-    end
-
-    end_date = (start_date + 1.month - 1.day)
+    start_date = activity_date.beginning_of_month
+    end_date = activity_date.end_of_month
 
     self.joins(:reimbursement)
         .where(employee_id: employee_id)

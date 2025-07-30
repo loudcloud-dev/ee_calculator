@@ -60,7 +60,11 @@ gem "rubocop", "~> 1.68"
 # Active Storage
 gem "image_processing", "~> 1.13"
 gem "active_storage_validations", "~> 1.3"
+
+# Export
 gem "rubyzip", "~> 2.3", ">= 2.3.2"
+gem "prawn", "~> 2.5"
+gem "prawn-table", "~> 0.2.2"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

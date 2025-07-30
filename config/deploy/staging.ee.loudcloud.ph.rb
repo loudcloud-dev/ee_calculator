@@ -10,7 +10,7 @@ set :application, "ee_staging"
 set :linked_files, %w[ config/database.yml ]
 set :linked_dirs, %w[ log tmp/pids tmp/cache tmp/sockets system public/system storage solr vendor .bundle ]
 
-server "159.65.140.204", user: "ee_staging", roles: %w[web app db]
+server "staging.ee.loudcloud.ph", user: "ee_staging", roles: %w[web app db]
 
 set :ssh_options, {
   forward_agent: true

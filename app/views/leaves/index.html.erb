@@ -1,0 +1,179 @@
+<%= render "header" %>
+
+<div class="container col-lg-6 py-2 z-1" style="margin-top: 300px;" data-controller="tooltip">
+  <%= render "shared/flashes" %>
+
+  <div class="my-2 d-flex flex-row">
+    <div class="card w-50 me-2 alert alert-warning">
+      <% if @remaining_sl < 0 %>
+        <span class="position-absolute end-0 me-3 mt-1" data-bs-toggle="tooltip" data-bs-title="You've filed more than 15 SLs (<%= -@remaining_sl %> above limit)">
+          <i style="width: 24px; height: 24px;" class="fa-solid fa-circle-exclamation"></i>
+        </span>
+      <% end %>
+      <h3>SL: <span class="fw-bold"><%= @remaining_sl < 0 ? 0 : @remaining_sl %>/15</span> remaining</h3>
+      <div>
+        <span class="fw-bold"><%= @approved_sl %></span> approved,
+        <span class="fw-bold"><%= @pending_sl %></span> pending
+      </div>
+    </div>
+    <div class="w-50 ms-2 alert alert-info">
+      <% if @remaining_vl < 0 %>
+        <span class="position-absolute end-0 me-3 mt-1" data-bs-toggle="tooltip" data-bs-title="You've filed more than 15 VLs (<%= -@remaining_vl %> above limit)">
+          <i style="width: 24px; height: 24px;" class="fa-solid fa-circle-exclamation"></i>
+        </span>
+      <% end %>
+      <h3>VL: <span class="fw-bold"><%= @remaining_vl < 0 ? 0 : @remaining_vl %>/15</span> remaining</h3>
+      <div>
+        <span class="fw-bold"><%= @approved_vl %></span> approved,
+        <span class="fw-bold"><%= @pending_vl %></span> pending
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container col-lg-6 py-2 z-1">
+  <div class="row">
+    <div class="col-6" data-controller="modal">
+      <%= form_with(url: cancel_leaves_path, method: :post) do |f| %>
+        <%= f.hidden_field :id, class: "form-control" %>
+        <%= render "modal",
+              title: "Cancel",
+              content: "Are you sure you want to cancel this leave request?",
+              form: f
+        %>
+        
+        <h4 class="fw-bold pb-2">Upcoming Leaves</h4>
+        <% if @upcoming_leaves.size == 0 %>
+          None
+        <% else %>
+          <% @upcoming_leaves.each do |leave| %>
+            <div class="my-1 card">
+              <div class="card-body border-start rounded border-4 <%= get_type_border(leave.leave_type) %>">
+                <div class="card-title row">
+                  <div class="col-9 d-flex flex-column justify-content-center">
+                    <h5><span class="fw-bold"><%= leave.leave_type.capitalize %></span> (<%= leave.day_count %> day<%= "s" if leave.day_count > 1 %>)</h5>
+                    <h6>
+                      <%= leave.start_date.strftime("%b %-d") %><%= ", " + leave.start_date.year.to_s if leave.start_date.year != leave.end_date.year %>
+                      - <%= leave.end_date.strftime("%b %-d, %Y") %>
+                    </h6>
+                  </div>
+                  <div class="col-3 d-flex flex-column align-items-end justify-content-start">
+                    <div class="badge <%= get_status_badge(leave.status)%> me-1">
+                      <%= leave.status.upcase %>
+                    </div>
+                    <div class="d-flex align-items-center my-1">
+                      <% if leave.status == "pending" %>
+                        <div class="col-6">
+                          <a class="btn btn-secondary mx-1"
+                              href="<%= edit_leave_path(leave) %>"
+                              data-bs-toggle="tooltip"
+                              data-bs-title="Edit"
+                          >
+                            <i class="fa-solid fa-pen-to-square"></i>
+                          </a>
+                        </div>
+                      <% end %>
+                      <% if ((["pending", "approved"].include? leave.status) && (leave.start_date - Date.today >= 0)) %>
+                        <div class="col-6">
+                          <button class="btn btn-secondary mx-1"
+                                  data-action="modal#open"
+                                  onclick="event.preventDefault(); document.getElementById('id').value = <%= leave.id %>"
+                                  data-bs-toggle="tooltip"
+                                  data-bs-title="Cancel"
+                          >
+                            <i class="fa-solid fa-ban"></i>
+                          </button>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-text row">
+                  <div class="col-9">
+                    <div class="row">
+                      <div class="col-4">
+                        <div>Approver: </div>
+                        <div>Reason: </div>
+                      </div>
+                      <div class="col-8">
+                        <div><%= leave.approver.email %></div>
+                        <div class="<%= "text-muted" if !leave.reason? %>"><%= leave.reason? ? leave.reason : "none" %></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="col-6">    
+      <h4 class="fw-bold pb-2">Past leaves</h4>
+      <% if @past_leaves.size == 0 %>
+        None
+      <% else %>
+          <% @past_leaves.each do |leave| %>
+            <div class="my-1 card">
+              <div class="card-body border-start rounded border-4 bg-body-secondary <%= get_type_border(leave.leave_type) %>">
+                <div class="card-title row">
+                  <div class="col-9 d-flex flex-column justify-content-center">
+                    <h5><span class="fw-bold"><%= leave.leave_type.capitalize %></span> (<%= leave.day_count %> day<%= "s" if leave.day_count > 1 %>)</h5>
+                    <h6>
+                      <%= leave.start_date.strftime("%b %-d") %><%= ", " + leave.start_date.year.to_s if leave.start_date.year != leave.end_date.year %>
+                      - <%= leave.end_date.strftime("%b %-d, %Y") %>
+                    </h6>
+                  </div>
+                  <div class="col-3 d-flex flex-column align-items-end justify-content-start">
+                    <div class="badge <%= get_status_badge(leave.status)%> me-1">
+                      <%= leave.status.upcase %>
+                    </div>
+                    <div class="d-flex align-items-center my-1">
+                      <% if leave.status == "pending" %>
+                        <div class="col-6">
+                          <a class="btn btn-secondary mx-1"
+                              href="<%= edit_leave_path(leave) %>"
+                              data-bs-toggle="tooltip"
+                              data-bs-title="Edit"
+                          >
+                            <i class="fa-solid fa-pen-to-square"></i>
+                          </a>
+                        </div>
+                      <% end %>
+                      <% if ((["pending", "approved"].include? leave.status) && (leave.start_date - Date.today >= 0)) %>
+                        <div class="col-6">
+                          <button class="btn btn-secondary mx-1"
+                                  data-action="modal#open"
+                                  onclick="event.preventDefault(); document.getElementById('id').value = <%= leave.id %>"
+                                  data-bs-toggle="tooltip"
+                                  data-bs-title="Cancel"
+                          >
+                            <i class="fa-solid fa-ban"></i>
+                          </button>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-text row">
+                  <div class="col-9">
+                    <div class="row">
+                      <div class="col-4">
+                        <div>Approver: </div>
+                        <div>Reason: </div>
+                      </div>
+                      <div class="col-8">
+                        <div><%= leave.approver.email %></div>
+                        <div class="<%= "text-muted" if !leave.reason? %>"><%= leave.reason? ? leave.reason : "none" %></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+    </div>
+  </div>
+</div>

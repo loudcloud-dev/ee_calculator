@@ -20,3 +20,33 @@
   color: #6c757d !important;
   cursor: not-allowed;
 }
+
+.export-reimbursement-form {
+  display: flex;
+  justify-content: center;
+}
+
+.export-reimbursement-btns {
+  display: flex;
+  justify-content: end;
+  margin: 5px 0;
+}
+
+.tom-select {
+  display: flex;
+  width: 50%;
+}
+
+.ts-control {
+  padding: 0 5px !important;
+  align-items: center;
+  cursor: pointer !important;
+}
+
+.ts-wrapper.multi .ts-control .item {
+  margin: 0 3px 0;
+}
+
+#reimbursement_participated_employee_ids-ts-control {
+  cursor: pointer;
+}

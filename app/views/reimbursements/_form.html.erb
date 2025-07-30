@@ -1,45 +1,79 @@
 <%= form_with(model: reimbursement, data: { controller: "form-validation", action: "submit->form-validation#validateForm" }) do |form| %>
-  <div class="container col-12 col-md-6 my-2">
+  <div class="container col-12 col-md-8 col-lg-6 pt-4">
     <%= render 'shared/flashes' %>
     <%= render 'shared/toast' %>
-
-    <h2>Before we begin</h2>
-    <p>Please ensure all requirements are fulfilled before filing your benefit request:</p>
-
-    <ol>
-      <li>Have an invoice from the establishment ready. This invoice must be named to  <strong>LOUDCLOUD INC.</strong>, <strong>TIN# 008-052-609-000</strong>, with address at <strong>1 Champaca St., Roxas District, Quezon City 1103</strong>.</li>
-      <li>Make sure to check the invoice date! An invoice related to the EE Program must be filed no later than the 5th day of the month following the Invoice Date.</li>
-    </ol>
-
-    <p>Note that Benefit Requests with insufficient or erroneous requirements may be denied. For questions and clarifications, contact any member of HR & Admin.</p>
-
-    <hr>
     
-    <h2>EE Program Benefit Request Form</h2>
+    <h3 class="fw-bold mb-0">EE Program Benefit Request Form</h3>
+
+    <div class="d-flex align-items-center gap-2">
+      <small class="mb-2 text-muted fst-italic">
+        Please read the
+        <a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" class="text-decoration-underline">
+          filing instructions
+        </a>
+        before submitting your request.
+      </small>
+    </div>
+
+
+    <div class="collapse" id="collapseExample">
+      <div class="card card-body">
+        <p>Please ensure all requirements are fulfilled before filing your benefit request:</p>
+
+        <ol>
+          <li>Have an invoice from the establishment ready. This invoice must be named to  <strong>LOUDCLOUD INC.</strong>, <strong>TIN# 008-052-609-000</strong>, with address at <strong>1 Champaca St., Roxas District, Quezon City 1103</strong>.</li>
+          <li>Make sure to check the invoice date! An invoice related to the EE Program must be filed no later than the 5th day of the month following the Invoice Date.</li>
+        </ol>
+
+        <p>Note that Benefit Requests with insufficient or erroneous requirements may be denied. For questions and clarifications, contact any member of HR & Admin.</p>
+      </div>
+    </div>
+
     <div class="row">
+      <div class="mb-2">
+          <%= form.label :category_id, "Select an activity", class: "form-label" %>
+
+          <div class="row g-md-3" style="max-height: 400px; overflow-y: auto;">
+            <% @categories.each do |category| %>
+              <div class="col-12 col-md-6">
+                <label class="d-flex align-items-center justify-content-between rounded p-3 mb-2 mb-lg-0 fw-bold" style="cursor: pointer; background-color: <%= rgba_color(category.icon_color, 0.15) %>; color: <%= text_color_for(category.icon_color) %>;">
+
+                  <div class="d-flex align-items-center gap-3">
+                    <i class="<%= category.icon %> fs-1" style="color: <%= category.icon_color %>;"></i>
+                    <p class="mb-0 fw-medium"><%= category.name %></p>
+                  </div>
+
+                  <%= form.radio_button :category_id, category.id, required: true, class: "form-check-input", style: "transform: scale(1.2); opacity: 0.7;" %>
+                </label>
+
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+
       <div class="col-6">
         <%= form.label :employee_id, class: "form-label" %>
         <%= form.select :employee_id, options_for_select(@active_employees, selected: params[:employee_id] || nil), { prompt: "Select an employee" }, id: 'employee_select', data: { controller: 'employee_select' }, required: true %>
       </div>
 
       <div class="col-6">
-        <%= form.label :category_id, class: "form-label" %>
-        <%= form.select :category_id, @categories.map { |category| [category.name, category.id] }, { prompt: "Select a category" }, id: 'category_select', data: { controller: 'employee_select' }, required: true %>
-      </div>
-
-      <div>
         <%= form.label :activity_date, class: "form-label" %>
-        <%= form.date_field :activity_date, min: start_date(Date.today), max: Date.today, class: "form-control", required: true %>
+        <%= form.date_field :activity_date, max: Date.today, class: "form-control", required: true %>
       </div>
 
-      <div class="col-6">
+      <div class="col-12 col-md-7">
         <%= form.label :invoice_reference_number, "Reference Number", class: "form-label" %>
         <%= form.text_field :invoice_reference_number, class: "form-control", placeholder: "e.g., INV-12345-#{Date.today.year}", required: true %>
       </div>
 
-      <div class="col-6">
+      <div class="col-12 col-md-5">
         <%= form.label :invoice_amount, class: "form-label" %>
-        <%= form.text_field :invoice_amount, class: "form-control", placeholder: "Enter invoice amount", required: true %>
+
+        <div class="input-group">
+          <span class="input-group-text">₱</span>
+          <%= form.text_field :invoice_amount, class: "form-control", placeholder: "Enter invoice amount", required: true %>
+        </div>
       </div>
 
       <div>
@@ -85,7 +119,7 @@
       </div>
 
       <div class="d-flex justify-content-end my-3">
-        <%= form.submit "Submit", id: "submit_btn", class: "btn btn-success col-12 col-md-auto", data: { form_validation_target: "submit" } %>
+        <%= form.submit "Submit", id: "submit_btn", class: "btn btn-primary col-12 col-md-auto", data: { form_validation_target: "submit" } %>
       </div>
     </div>
   </div>

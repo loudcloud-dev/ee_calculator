@@ -1,0 +1,80 @@
+<%= render 'shared/flashes' %>
+<% if @leave.errors.any? %>
+  <% @leave.errors.full_messages.each do |message| %>
+    <div class="alert alert-danger"><%= message %></div>
+  <% end %>
+<% end %>
+
+<%= form_with(model: @leave, data: { controller: "leave-request", action: "submit->leave-request#validateForm" }) do |f| %>
+  <div class="row my-2">
+    <%= f.label :approver_id, class: "form-label" %>
+    <span>
+      <%= f.collection_select :approver_id, @approvers || [], :id, :email, { prompt: "Select an approver" }, class: "form-select", required: true %>
+    </span>
+  </div>
+  <div class="row my-2">
+    <div class="col-5">
+      <%= f.label :start_date, class: "form-label" %>
+      <%= f.date_field :start_date, class: "form-control", required: true,
+        data: {
+          "leave-request-target": "startDate",
+          action: "change->leave-request#handleStartDateChange"
+        } %>
+      </div>
+      <div class="col-5">
+      <%= f.label :end_date, class: "form-label" %>
+      <%= f.date_field :end_date, class: "form-control", required: true,
+        data: {
+          "leave-request-target": "endDate",
+          action: "change->leave-request#handleEndDateChange"
+        } %>
+      </div>
+      <div class="col-2">
+      <%= f.label :day_count, class: "form-label" %>
+      <%= f.number_field :day_count, class: "form-control", min: 1, required: true, 
+        data: {
+          "leave-request-target": "dayCount",
+          action: "input->leave-request#handleDayCountChange"
+        } %>
+    </div>
+  </div>
+  <div class="row my-2">
+    <div class="col-5">
+      <%= f.label :leave_type, class: "form-label" %>
+      <div class="border rounded">
+        <div class="px-3 py-1 border-bottom">
+          <%= f.radio_button :leave_type, "sick", class: "form-check-input mx-1", required: true,
+            data: {
+              action: "input->leave-request#handleTypeSelect"
+            } %>
+          <%= f.label :leave_type_sick, "Sick", class: "form-check-label" %>
+          (<span data-leave-request-target="remainingSL"><%= @remaining_sl < 0 ? 0 : @remaining_sl %></span> left)
+        </div>
+        <div class="px-3 py-1">
+          <%= f.radio_button :leave_type, "vacation", class: "form-check-input mx-1",
+            data: {
+              action: "input->leave-request#handleTypeSelect"
+            } %>
+          <%= f.label :leave_type_vacation, "Vacation", class: "form-check-label" %>
+          (<span data-leave-request-target="remainingVL"><%= @remaining_vl < 0 ? 0 : @remaining_vl %></span> left)
+        </div>
+      </div>
+    </div>
+    <div class="col-7">
+      <%= f.label :reason, class: "form-label" %>
+      <%= f.text_area :reason, class: "form-control" %>
+    </div>
+  </div>
+
+  <div data-controller="modal">
+    <%= render "modal",
+          title: "File leave",
+          content: "Your leave's day count is greater than your remaining leaves. Are you sure you want to file it anyway?",
+          form: f
+    %>
+  </div>
+
+  <div class="d-flex my-3">
+    <%= f.submit 'File Leave', class: "btn btn-success col-12" %>
+  </div>
+<% end %>
